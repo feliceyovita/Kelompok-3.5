@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <title>WikiTrip</title>
+  </head>
+  <body>
+    <div class="auth-page-container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="#" class="sign-in-form form-auth">
+            <div class="logo-container">
+              <img src="image/logo_wikitrip.png" alt="WikiTrip Logo" class="auth-logo" />
+              <h1 class="auth-brand">
+                  <span class="wiki">WIKI</span><span class="trip">TRIP</span>
+              </h1>
+            </div>
+            <h2 class="title auth-title">Sign in</h2>
+            <div class="input-field auth-input-field">
+              <i class="fas fa-user auth-icon"></i>
+              <input type="text" class="auth-input" placeholder="Username" />
+            </div>
+            <div class="input-field auth-input-field">
+              <i class="fas fa-lock auth-icon"></i>
+              <input type="password" class="auth-input" id="sign-in-password" placeholder="Password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('sign-in-password', 'sign-in-toggle-icon')">
+                  <i class="fas fa-eye" id="sign-in-toggle-icon"></i>
+              </button>
+            </div>          
+            <input type="submit" value="Login" class="btn solid auth-btn" />
+            <p class="social-text">Or Sign in with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+
+          <form action="#" class="sign-up-form form-auth">
+            <div class="logo-container">
+              <img src="image/logo_wikitrip.png" alt="WikiTrip Logo" class="auth-logo" />
+              <h1 class="auth-brand">
+                  <span class="wiki">Wiki</span><span class="trip">Trip</span>
+              </h1>
+            </div>
+            <h2 class="title auth-title">Sign up</h2>
+            <div class="input-field auth-input-field">
+              <i class="fas fa-user auth-icon"></i>
+              <input type="text" class="auth-input" placeholder="Username" />
+            </div>
+            <div class="input-field auth-input-field">
+              <i class="fas fa-envelope auth-icon"></i>
+              <input type="email" class="auth-input" placeholder="Email" />
+            </div>
+            <div class="input-field auth-input-field">
+              <i class="fas fa-lock auth-icon"></i>
+              <input type="password" class="auth-input" id="sign-up-password" placeholder="Password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('sign-up-password', 'sign-up-toggle-icon')">
+                  <i class="fas fa-eye" id="sign-up-toggle-icon"></i>
+              </button>
+            </div>
+            <input type="submit" class="btn auth-btn" value="Register" />
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon auth-social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="panels-container auth-panels">
+        <div class="panel left-panel auth-panel">
+          <div class="content auth-content">
+            <h3 class="auth-panel-title">First time here? </h3>
+            <p class="auth-panel-text">
+              Join WikiTrip and begin your journey to endless destinations!
+            </p>
+            <button class="btn transparent auth-panel-btn" id="sign-up-btn">
+              Sign up
+            </button>
+          </div>
+          <img src="image/login.svg" class="image" alt="" />
+        </div>
+        <div class="panel right-panel auth-panel">
+          <div class="content auth-content">
+            <h3 class="auth-panel-title">Back for more? </h3>
+            <p class="auth-panel-text">
+              Sign in and let's keep exploring North Sumatera together!
+            </p>
+            <button class="btn transparent auth-panel-btn" id="sign-in-btn">
+              Sign in
+            </button>
+          </div>
+          <img src="image/register.svg" class="image" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script src="js/login.js"></script>
+  </body>
+</html>
