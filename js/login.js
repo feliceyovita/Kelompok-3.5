@@ -16,11 +16,11 @@ function togglePassword(passwordId, iconId) {
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text"; 
-        toggleIcon.classList.remove("fa-eye"); 
-        toggleIcon.classList.add("fa-eye-slash");
+        toggleIcon.classList.remove("bi-eye"); 
+        toggleIcon.classList.add("bi-eye-slash");
     } else {
         passwordInput.type = "password"; 
-        toggleIcon.classList.remove("fa-eye-slash"); 
-        toggleIcon.classList.add("fa-eye"); 
+        toggleIcon.classList.remove("bi-eye-slash"); 
+        toggleIcon.classList.add("bi-eye"); 
     }
 }
