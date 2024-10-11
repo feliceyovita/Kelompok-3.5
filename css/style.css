@@ -985,3 +985,33 @@ form.sign-in-form {
     font-size: 0.9rem; 
     color: #555; 
 }
+
+/* culinary-card */
+
+.culinary-card {
+    display: flex;
+    justify-content:space-between;
+    flex-wrap: wrap;
+  }
+  
+  .restaurant {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: 500x;
+    height: 340px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+  }
+  
+  .restaurant-img {
+    width: 400px;
+    height: 240px;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .restaurant-name {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+  }
