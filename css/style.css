@@ -119,6 +119,175 @@ li {
 }
 /* Navbar Section End */
 
+/* Card Slider For Nature Start */
+.wikit-carousel * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.carousel-header {
+    text-align: center;
+    margin-bottom: -50px;
+    color: #fff;
+    background: #343f4f;
+    padding: 90px 0;
+    /* Reduce the padding */
+}
+
+.read-more-btn {
+    display: inline-block;
+    margin-top: 50px;
+    /* Further decrease margin-top */
+    padding: 10px 20px;
+    background-color: #1c98ed;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background-color: #f8b200;
+    border-color: white;
+    color: white;
+    opacity: 1;
+}
+
+.carousel-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.carousel-header p {
+    font-size: 1.0rem;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-bottom: -20px;
+    /* Center the paragraph */
+    line-height: 1.5;
+}
+
+.wikit-carousel {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 50vh;
+    background: #343f4f;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.wikit-carousel__wrapper {
+    max-width: 1200px;
+    position: relative;
+    margin-top: 0px;
+    /* Reduce margin to bring cards closer */
+    margin-bottom: 0;
+    /* No bottom margin */
+}
+
+.wikit-carousel__wrapper i {
+    top: 50%;
+    background: #fff;
+    height: 45px;
+    width: 46px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    position: absolute;
+    text-align: center;
+    line-height: 46px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    z-index: 10;
+}
+
+.wikit-carousel__wrapper i:first-child {
+    left: -23px;
+    display: none;
+}
+
+.wikit-carousel__wrapper i:last-child {
+    right: -23px;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel {
+    display: flex;
+    gap: 14px;
+    /* Space between cards */
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel.dragging {
+    cursor: grab;
+    scroll-behavior: auto;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel.dragging .card img {
+    pointer-events: none;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel .card {
+    position: relative;
+    flex: 0 0 calc(25% - 14px);
+    /* Adjust for spacing */
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    /* Remove any extra margin */
+    background: transparent;
+    /* Set card background to transparent */
+    border: none;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel .card img {
+    height: 250px;
+    /* Set a consistent height */
+    object-fit: cover;
+    width: 100%;
+    border-radius: 8%;
+    margin: 0;
+    /* Remove margin around the image */
+    padding: 0;
+    /* Remove padding */
+    display: block;
+    /* Ensure it's a block-level element */
+}
+
+/* City name text inside the card */
+.wikit-carousel__wrapper .wikit-carousel__carousel .card .city-name {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+/* First and last card margin adjustments */
+.wikit-carousel__wrapper .wikit-carousel__carousel .card:first-child img {
+    margin-left: 0;
+}
+
+.wikit-carousel__wrapper .wikit-carousel__carousel .card:last-child img {
+    margin-right: 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 900px) {
+    .wikit-carousel__wrapper .wikit-carousel__carousel .card {
+        flex: 0 0 calc(33.33% - 14px);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .wikit-carousel__wrapper .wikit-carousel__carousel .card {
+        flex: 0 0 100%;
+    }
+}
+
 /* css slider */
 .slider {
     height: 100vh;
@@ -761,8 +930,6 @@ form.sign-in-form {
     color: black;
     line-height: 1.6;
 }
-
-/* nature destination */
 
 /* bagian main background */
 
