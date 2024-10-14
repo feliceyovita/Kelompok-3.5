@@ -67,3 +67,44 @@ carousels.forEach((carousel, index) => {
     carousel.addEventListener("mouseup", dragStop);
     carousel.addEventListener("touchend", dragStop);
 });
+
+let currentIndex = 0; 
+const cardsToShow = 4; 
+const cardWidth = 260; 
+const gap = 40; 
+const slider = document.querySelector('.slider-calendar');
+const totalCards = document.querySelectorAll('.month-card').length;
+const leftButton = document.querySelector('.nav-button.left');
+const rightButton = document.querySelector('.nav-button.right');
+
+function updateButtonVisibility() {
+    if (currentIndex === 0) {
+        leftButton.style.display = 'none'; 
+    } else {
+        leftButton.style.display = 'flex'; 
+    }
+    
+    if (currentIndex >= totalCards - cardsToShow) {
+        rightButton.style.display = 'none';
+    } else {
+        rightButton.style.display = 'flex';
+    }
+}
+
+function slideRight() {
+    if (currentIndex < totalCards - cardsToShow) {
+        currentIndex++;
+        slider.style.transform = `translateX(-${(cardWidth + gap) * currentIndex}px)`;
+        updateButtonVisibility(); 
+    }
+}
+
+function slideLeft() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        slider.style.transform = `translateX(-${(cardWidth + gap) * currentIndex}px)`;
+        updateButtonVisibility(); 
+    }
+}
+
+updateButtonVisibility();
