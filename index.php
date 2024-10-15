@@ -70,9 +70,10 @@
                                     <p>Bookmark</p>
                                 </li>
                                 <li class="sub-item">
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Logout</p>
-                                </li>
+                                    <a href="logout.php">
+                                        <i class="bi bi-box-arrow-left material-icons-outlined" ></i>
+                                        <p>Logout</p>
+                                    </li>
                             </ul>
                         </li>
                     </ul>
