@@ -1,3 +1,12 @@
+<?php
+session_start();
+include('config/conn.php');
+include('config/function.php');
+
+$isLoggedIn = isset($_SESSION['id_user']);
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -70,10 +79,18 @@
                                     <p>Bookmark</p>
                                 </li>
                                 <li class="sub-item">
+                                <?php if (isset($_SESSION['id_user'])): ?>
                                     <a href="logout.php">
-                                        <i class="bi bi-box-arrow-left material-icons-outlined" ></i>
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
                                         <p>Logout</p>
-                                    </li>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="login.php">
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <p>Login</p>
+                                    </a>
+                                <?php endif; ?>
+                                </li>
                             </ul>
                         </li>
                     </ul>
