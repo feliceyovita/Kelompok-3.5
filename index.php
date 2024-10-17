@@ -80,14 +80,14 @@ $isLoggedIn = isset($_SESSION['id_user']);
                                 </li>
                                 <li class="sub-item">
                                 <?php if (isset($_SESSION['id_user'])): ?>
-                                    <a href="logout.php">
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <p>Logout</p>
+                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                    <a href="login.php">
+                                        <p>Login</p>
                                     </a>
                                 <?php else: ?>
-                                    <a href="login.php">
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <p>Login</p>
+                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                    <a href="logout.php">
+                                        <p>Logout</p>
                                     </a>
                                 <?php endif; ?>
                                 </li>
