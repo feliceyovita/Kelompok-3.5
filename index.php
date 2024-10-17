@@ -5,6 +5,8 @@ include('config/function.php');
 
 $isLoggedIn = isset($_SESSION['id_user']);
 
+$query = "SELECT tourism_name, image_url FROM tourismplaces WHERE (tourism_id - 1) % 7 = 0 LIMIT 5";
+$result = $con->query($query);
 ?>
 
 <!doctype html>
@@ -27,7 +29,6 @@ $isLoggedIn = isset($_SESSION['id_user']);
 </head>
 
 <body id="page-top">
-
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav">
         <div class="container">
             <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
@@ -100,51 +101,32 @@ $isLoggedIn = isset($_SESSION['id_user']);
     </nav>
 
     <!-- slider -->
-    
     <div class="slider">
-        <!-- list Items -->
         <div class="list">
-            <div class="item active">
-                <img src="image/Bukit sibayak.jpg">
-                <div class="content">
-                    <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
-                    <h1>Discover </h1> <h2><span style="color:#f8b200;">Sibayak Mountain</span> </h2>
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/danau toba.jpg">
-                <div class="content">
-                    <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
-                    <h1>Discover </h1>
-                    <h2><span style="color:#f8b200;">Danau Toba</span> </h2>
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/image (1).png">
-                <div class="content">
-                    <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
-                    <h1>Discover </h1>
-                    <h2><span style="color:#f8b200;">Sipiso-piso Waterfall</span> </h2>
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/North Sumatra Adventure - 7 Days.jpeg">
-                <div class="content">
-                    <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
-                    <h1>Discover </h1>
-                    <h2><span style="color:#f8b200;">Samosir Island</span> </h2>
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/Pulau berhala.jpg">
-                <div class="content">
-                    <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
-                    <h1>Discover </h1>
-                    <h2><span style="color:#f8b200;">Berhala Island</span> </h2>
-                </div>
-            </div>
+            <?php
+            if ($result->num_rows > 0) {
+                $active = ' active';
+                while ($row = $result->fetch_assoc()) {
+                    $tourism_name = $row['tourism_name'];
+                    $image_url = $row['image_url'];
+                    ?>
+                    <div class="item<?php echo $active; ?>">
+                        <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>">
+                        <div class="content">
+                            <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
+                            <h1>Discover</h1>
+                            <h2><span style="color:#f8b200;"><?php echo $tourism_name; ?></span></h2>
+                        </div>
+                    </div>
+                    <?php
+                    $active =''; 
+                }
+            } else {
+                echo "<p>No data available</p>";
+            }
+            ?>
         </div>
-        
+
         <!-- button arrows -->
         <div class="arrows">
             <button id="prev"></button>
@@ -153,36 +135,23 @@ $isLoggedIn = isset($_SESSION['id_user']);
 
         <!-- thumbnail -->
         <div class="thumbnail">
-            <div class="item active">
-                <img src="image/Bukit sibayak.jpg">
-                <div class="content">
-                    Sibayak Mountain
+            <?php
+            $result->data_seek(0);
+            $active = ' active';
+            while ($row = $result->fetch_assoc()) {
+                $tourism_name = $row['tourism_name'];
+                $image_url = $row['image_url'];
+                ?>
+                <div class="item <?php echo $active; ?>">
+                    <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>">
+                    <div class="content">
+                        <?php echo $tourism_name; ?>
+                    </div>
                 </div>
-            </div>
-            <div class="item">
-                <img src="image/danau toba.jpg">
-                <div class="content">
-                    Danau Toba
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/image (1).png">
-                <div class="content">
-                    Sipiso-piso Waterfall
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/North Sumatra Adventure - 7 Days.jpeg">
-                <div class="content">
-                    Samosir Island
-                </div>
-            </div>
-            <div class="item">
-                <img src="image/Pulau berhala.jpg">
-                <div class="content">
-                    Berhala Island
-                </div>
-            </div>
+                <?php
+                $active ='';
+            }
+            ?>
         </div>
     </div>
 
@@ -204,7 +173,7 @@ $isLoggedIn = isset($_SESSION['id_user']);
     </section>
     <!-- About Section End -->
 
-    <!-- card slider nature start -->
+    <!-- <--card slider nature start --> 
     <div id="nature-destination" class="carousel-header">
         <h2>Nature Destination</h2>
         <p>Discover breathtaking natural wonders across various destinations. From majestic mountains to serene beaches,
@@ -215,42 +184,42 @@ $isLoggedIn = isset($_SESSION['id_user']);
         <div class="wikit-carousel__wrapper">
             <i id="left" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
             <div class="wikit-carousel__carousel">
-                <div class="card">
-                    <img src="image/background_nature.jpg" alt="img" draggable="false">
-                    <div class="city-name">Asahan</div>
-                </div>
-                <div class="card">
-                    <img src="image/Bukit sibayak.jpg" alt="img" draggable="false">
-                    <div class="city-name">Sibayak</div>
-                </div>
-                <div class="card">
-                    <img src="image/danau toba.jpg" alt="img" draggable="false">
-                    <div class="city-name">Toba</div>
-                </div>
-                <div class="card">
-                    <img src="image/North Sumatra Adventure - 7 Days.jpeg" alt="img" draggable="false">
-                    <div class="city-name">Samosir</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
+                <?php
+                // Query untuk mendapatkan semua data kota dan gambar
+                $city = "
+                    SELECT c.city_name, MIN(t.image_url) AS image_url
+                    FROM cities c
+                    LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+                    LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+                    WHERE tc.category_name = 'Nature Destination'
+                    GROUP BY c.city_name
+                ";
+                $city_result = $con->query($city);
+                if ($city_result->num_rows > 0) {
+                    $cities = [];
+
+                    while($row = $city_result->fetch_assoc()) {
+                        $cityName = $row['city_name'];
+                        $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
+                        if (!isset($cities[$cityName])) {
+                            $cities[$cityName] = [];
+                        }
+                        $cities[$cityName][] = $imageUrl;
+                    }
+                    foreach ($cities as $cityName => $images) {
+                        foreach ($images as $imageUrl) {
+                            echo '
+                                <div class="card">
+                                    <img src="' . $imageUrl . '" alt="img" draggable="false">
+                                    <div class="city-name">' . $cityName . '</div>
+                                </div>
+                            ';
+                        }
+                    }
+                } else {
+                    echo "Tidak ada kota yang ditemukan.";
+                }
+                ?>
             </div>
             <i id="right" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
         </div>
@@ -268,50 +237,42 @@ $isLoggedIn = isset($_SESSION['id_user']);
         <div class="wikit-carousel__wrapper">
             <i id="leftculture" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
             <div class="wikit-carousel__carousel">
-                <div class="card">
-                    <img src="image/Bukit sibayak.jpg" alt="img" draggable="false">
-                    <div class="city-name">Asahan</div>
-                </div>
-                <div class="card">
-                    <img src="image/danau toba.jpg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Sibayak</div>
-                </div>
-                <div class="card">
-                    <img src="image/North Sumatra Adventure - 7 Days.jpeg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Toba</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Samosir</div>
-                </div>
-                <div class="card">
-                    <img src="image/Bukit sibayak.jpg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/danau toba.jpg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/image (1).png" alt="img"
-                        draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/North Sumatra Adventure - 7 Days.jpeg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img"
-                        draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
+                <?php
+                    // Query untuk mendapatkan semua data kota dan gambar
+                    $city = "
+                        SELECT c.city_name, MIN(t.image_url) AS image_url
+                        FROM cities c
+                        LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+                        LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+                        WHERE tc.category_name = 'Cultural Destination'
+                        GROUP BY c.city_name
+                    ";
+                    $city_result = $con->query($city);
+                    if ($city_result->num_rows > 0) {
+                        $cities = [];
+
+                        while($row = $city_result->fetch_assoc()) {
+                            $cityName = $row['city_name'];
+                            $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
+                            if (!isset($cities[$cityName])) {
+                                $cities[$cityName] = [];
+                            }
+                            $cities[$cityName][] = $imageUrl;
+                        }
+                        foreach ($cities as $cityName => $images) {
+                            foreach ($images as $imageUrl) {
+                                echo '
+                                    <div class="card">
+                                        <img src="' . $imageUrl . '" alt="img" draggable="false">
+                                        <div class="city-name">' . $cityName . '</div>
+                                    </div>
+                                ';
+                            }
+                        }
+                    } else {
+                        echo "Tidak ada kota yang ditemukan.";
+                    }
+                ?>
             </div>
             <i id="rightculture" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
         </div>
@@ -328,42 +289,42 @@ $isLoggedIn = isset($_SESSION['id_user']);
         <div class="wikit-carousel__wrapper">
             <i id="leftculinary" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
             <div class="wikit-carousel__carousel">
-                <div class="card">
-                    <img src="image/background_nature.jpg" alt="img" draggable="false">
-                    <div class="city-name">Asahan</div>
-                </div>
-                <div class="card">
-                    <img src="image/Bukit sibayak.jpg" alt="img" draggable="false">
-                    <div class="city-name">Sibayak</div>
-                </div>
-                <div class="card">
-                    <img src="image/danau toba.jpg" alt="img" draggable="false">
-                    <div class="city-name">Toba</div>
-                </div>
-                <div class="card">
-                    <img src="image/North Sumatra Adventure - 7 Days.jpeg" alt="img" draggable="false">
-                    <div class="city-name">Samosir</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
-                <div class="card">
-                    <img src="image/Pulau berhala.jpg" alt="img" draggable="false">
-                    <div class="city-name">Pulau Berhala</div>
-                </div>
+                <?php
+                    // Query untuk mendapatkan semua data kota dan gambar
+                    $city = "
+                        SELECT c.city_name, MIN(t.image_url) AS image_url
+                        FROM cities c
+                        LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+                        LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+                        WHERE tc.category_name = 'Culinary Destination'
+                        GROUP BY c.city_name
+                    ";
+                    $city_result = $con->query($city);
+                    if ($city_result->num_rows > 0) {
+                        $cities = [];
+
+                        while($row = $city_result->fetch_assoc()) {
+                            $cityName = $row['city_name'];
+                            $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
+                            if (!isset($cities[$cityName])) {
+                                $cities[$cityName] = [];
+                            }
+                            $cities[$cityName][] = $imageUrl;
+                        }
+                        foreach ($cities as $cityName => $images) {
+                            foreach ($images as $imageUrl) {
+                                echo '
+                                    <div class="card">
+                                        <img src="' . $imageUrl . '" alt="img" draggable="false">
+                                        <div class="city-name">' . $cityName . '</div>
+                                    </div>
+                                ';
+                            }
+                        }
+                    } else {
+                        echo "Tidak ada kota yang ditemukan.";
+                    }
+                ?>
             </div>
             <i id="rightculinary" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
         </div>
