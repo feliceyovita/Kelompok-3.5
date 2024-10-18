@@ -86,8 +86,8 @@ $result = $con->query($query);
                                         <p>Logout</p>
                                     </a>
                                 <?php else: ?>
+                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
                                     <a href="login.php">
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
                                         <p>Login</p>
                                     </a>
                                 <?php endif; ?>
