@@ -119,17 +119,24 @@ li {
 
 .content {
     display: flex;
+    justify-content: space-between;
     padding: 20px;
     margin-top: 80px; 
 }
 
 .left-panel {
+    position: fixed;
     width: 220px;
     margin-right: 20px;
 }
-
+.main-content {
+    margin-left: 240px;
+    /* Sesuaikan dengan lebar left-panel + padding */
+    padding: 20px;
+}
 .left-panel .option {
     background-color: rgba(255, 255, 255, 0);
+    transition: background-color 0.3s ease;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -142,12 +149,53 @@ li {
     justify-content: center;
 }
 
+.left-panel .option:hover {
+    background-color: #e0e0e0;
+}
+
 .left-panel .option i {
     margin-right: 10px;
     color: #f8b200;
 }
+.search-container {
+    margin-top: 10px;
+    margin-left: 15px;
+    position: relative;
+    padding: 10px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #f0f2f5;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.search-container input:focus {
+    background-color: #fff;
+    border-color: #1c98ed;
+    outline: none;
+}
+
+.search-container .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 14px;
+}
 
 .main-content {
+    width: calc(100% - 240px);
+    /* Kurangi ruang untuk right panel */
+    margin-right: 30px;
+    /* Beri jarak dari right panel */
+    padding: 20px;
     flex: 1;
 }
 
@@ -156,7 +204,8 @@ li {
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    width: 65vw;
+    width: calc(100% - 240px);
+    margin-right: 30px;
 }
 
 .post-box .post-header {
@@ -187,13 +236,17 @@ li {
     font-weight: bold;
     cursor: pointer;
 }
-
+.post-actions div:hover {
+    color: #f8b200;
+}
 .post {
     background-color: white;
     padding: 20px;
     width: 65vw;
     border-radius: 10px;
     margin-bottom: 20px;
+    width: calc(100% - 240px);
+    margin-right: 30px;/
 }
 
 .post .post-header {
@@ -228,6 +281,62 @@ li {
     margin: 10px 0;
 }
 
+.right-panel {
+    width: 240px; 
+    padding: 15px;
+    position: fixed;
+    right: 0;
+    top: 85px;
+    background-color: #f0f2f5;
+    border-radius: 10px;
+    margin-right: 65px;
+}
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+/* Event card styling */
+.event-card {
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+    margin-top: 20px;
+    width: 270px;
+    border-radius: 10px;
+}
+
+.event-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.event-card h4 {
+    font-size: 16px;
+    color: #1c98ed;
+    margin: 10px 0;
+}
+.see-all {
+    font-size: 0.8em;
+    /* Ukuran font lebih kecil */
+    color: #777;
+    /* Warna abu-abu */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.see-all:hover {
+    color: #1c98ed;
+    /* Warna abu-abu lebih gelap saat di-hover */
+}
+.event-card p {
+    font-size: 14px;
+    color: #474545;
+    margin: 5px 0;
+}
 .post .post-actions {
     display: flex;
     justify-content: space-around;
