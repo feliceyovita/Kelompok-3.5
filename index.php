@@ -3,7 +3,7 @@ session_start();
 include('config/conn.php');
 include('config/function.php');
 
-$isLoggedIn = isset($_SESSION['id_user']);
+$isLoggedIn = isset($_SESSION['user_id']);
 
 $query = "SELECT tourism_name, image_url FROM tourismplaces WHERE (tourism_id - 1) % 7 = 0 LIMIT 5";
 $result = $con->query($query);
@@ -80,15 +80,15 @@ $result = $con->query($query);
                                     <p>Bookmark</p>
                                 </li>
                                 <li class="sub-item">
-                                <?php if (isset($_SESSION['id_user'])): ?>
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <a href="login.php">
-                                        <p>Login</p>
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <a href="logout.php">
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <p>Logout</p>
                                     </a>
                                 <?php else: ?>
                                     <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <a href="logout.php">
-                                        <p>Logout</p>
+                                    <a href="login.php">
+                                        <p>Login</p>
                                     </a>
                                 <?php endif; ?>
                                 </li>
@@ -174,161 +174,63 @@ $result = $con->query($query);
     <!-- About Section End -->
 
     <!-- <--card slider nature start --> 
-    <div id="nature-destination" class="carousel-header">
-        <h2>Nature Destination</h2>
-        <p>Discover breathtaking natural wonders across various destinations. From majestic mountains to serene beaches,
-            enjoy extraordinary experiences that will rejuvenate your soul.</p>
-        <a href="nature.html" class="read-more-btn">Read More</a> <!-- Tambahkan tombol di sini -->
-    </div>
-    <div class="wikit-carousel">
-        <div class="wikit-carousel__wrapper">
-            <i id="left" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
-            <div class="wikit-carousel__carousel">
-                <?php
-                // Query untuk mendapatkan semua data kota dan gambar
-                $city = "
-                    SELECT c.city_name, MIN(t.image_url) AS image_url
-                    FROM cities c
-                    LEFT JOIN tourismplaces t ON c.city_id = t.city_id
-                    LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-                    WHERE tc.category_name = 'Nature Destination'
-                    GROUP BY c.city_name
-                ";
-                $city_result = $con->query($city);
-                if ($city_result->num_rows > 0) {
-                    $cities = [];
+    <?php
+    $categoryQuery = "SELECT category_id, category_name, little_desc FROM tourismcategories";
+    $category_result = $con->query($categoryQuery);
 
-                    while($row = $city_result->fetch_assoc()) {
-                        $cityName = $row['city_name'];
-                        $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
-                        if (!isset($cities[$cityName])) {
-                            $cities[$cityName] = [];
-                        }
-                        $cities[$cityName][] = $imageUrl;
-                    }
-                    foreach ($cities as $cityName => $images) {
-                        foreach ($images as $imageUrl) {
-                            echo '
-                                <div class="card">
-                                    <img src="' . $imageUrl . '" alt="img" draggable="false">
-                                    <div class="city-name">' . $cityName . '</div>
-                                </div>
-                            ';
-                        }
-                    }
-                } else {
-                    echo "Tidak ada kota yang ditemukan.";
+    if ($category_result->num_rows > 0) {
+        while ($category = $category_result->fetch_assoc()) {
+            $categoryId = $category['category_id'];
+            $categoryName = $category['category_name'];
+            $description = $category['little_desc'];
+
+            echo '
+            <div id="' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="carousel-header">
+                <h2>' . $categoryName . '</h2>
+                <p>' . $description . '</p>
+                <a href="category.php?category_id=' . $categoryId . '" class="read-more-btn">Read More</a> 
+            </div>
+            <div class="wikit-carousel">
+                <div class="wikit-carousel__wrapper">
+                    <i id="left-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-left">&lt;</i> 
+                    <div class="wikit-carousel__carousel">';
+
+            $cityQuery = "
+                SELECT c.city_name, MIN(t.image_url) AS image_url
+                FROM cities c
+                LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+                LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+                WHERE tc.category_id = $categoryId
+                GROUP BY c.city_name
+            ";
+            $city_result = $con->query($cityQuery);
+
+            if ($city_result->num_rows > 0) {
+                while ($row = $city_result->fetch_assoc()) {
+                    $cityName = $row['city_name'];
+                    $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg';
+
+                    echo '
+                    <div class="card">
+                        <img src="' . $imageUrl . '" alt="img" draggable="false">
+                        <div class="city-name">' . $cityName . '</div>
+                    </div>';
                 }
-                ?>
-            </div>
-            <i id="right" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
-        </div>
-    </div>
+            } else {
+                echo "No cities found for this category.";
+            }
 
-    <!-- card slider cultural start -->
-    <div id="cultural-destination" class="carousel-header">
-        <h2>Cultural Destination</h2>
-        <p>Explore cultural destinations where rich traditions and vibrant heritage come to life. Immerse yourself in
-            experiences
-            that inspire and enrich your soul.</p>
-        <a href="cultural.html" class="read-more-btn">Read More</a> <!-- Tambahkan tombol di sini -->
-    </div>
-    <div class="wikit-carousel">
-        <div class="wikit-carousel__wrapper">
-            <i id="leftculture" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
-            <div class="wikit-carousel__carousel">
-                <?php
-                    // Query untuk mendapatkan semua data kota dan gambar
-                    $city = "
-                        SELECT c.city_name, MIN(t.image_url) AS image_url
-                        FROM cities c
-                        LEFT JOIN tourismplaces t ON c.city_id = t.city_id
-                        LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-                        WHERE tc.category_name = 'Cultural Destination'
-                        GROUP BY c.city_name
-                    ";
-                    $city_result = $con->query($city);
-                    if ($city_result->num_rows > 0) {
-                        $cities = [];
+            echo '
+                    </div>
+                    <i id="right-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-right">&gt;</i> 
+                </div>
+            </div>';
+        }
+    } else {
+        echo "No categories found.";
+    }
+    ?>
 
-                        while($row = $city_result->fetch_assoc()) {
-                            $cityName = $row['city_name'];
-                            $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
-                            if (!isset($cities[$cityName])) {
-                                $cities[$cityName] = [];
-                            }
-                            $cities[$cityName][] = $imageUrl;
-                        }
-                        foreach ($cities as $cityName => $images) {
-                            foreach ($images as $imageUrl) {
-                                echo '
-                                    <div class="card">
-                                        <img src="' . $imageUrl . '" alt="img" draggable="false">
-                                        <div class="city-name">' . $cityName . '</div>
-                                    </div>
-                                ';
-                            }
-                        }
-                    } else {
-                        echo "Tidak ada kota yang ditemukan.";
-                    }
-                ?>
-            </div>
-            <i id="rightculture" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
-        </div>
-    </div>
-
-    <!-- card slider culinary start -->
-    <div id="culinary-destination" class="carousel-header">
-        <h2>Culinary Destination</h2>
-        <p>Explore culinary destinations where rich flavors and traditions blend, offering unforgettable tastes that celebrate
-        local cultures.</p>
-        <a href="culinary.html" class="read-more-btn">Read More</a> <!-- Tambahkan tombol di sini -->
-    </div>
-    <div class="wikit-carousel">
-        <div class="wikit-carousel__wrapper">
-            <i id="leftculinary" class="fa-solid fa-angle-left">&lt;</i> <!-- Panah Kiri -->
-            <div class="wikit-carousel__carousel">
-                <?php
-                    // Query untuk mendapatkan semua data kota dan gambar
-                    $city = "
-                        SELECT c.city_name, MIN(t.image_url) AS image_url
-                        FROM cities c
-                        LEFT JOIN tourismplaces t ON c.city_id = t.city_id
-                        LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-                        WHERE tc.category_name = 'Culinary Destination'
-                        GROUP BY c.city_name
-                    ";
-                    $city_result = $con->query($city);
-                    if ($city_result->num_rows > 0) {
-                        $cities = [];
-
-                        while($row = $city_result->fetch_assoc()) {
-                            $cityName = $row['city_name'];
-                            $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg'; 
-                            if (!isset($cities[$cityName])) {
-                                $cities[$cityName] = [];
-                            }
-                            $cities[$cityName][] = $imageUrl;
-                        }
-                        foreach ($cities as $cityName => $images) {
-                            foreach ($images as $imageUrl) {
-                                echo '
-                                    <div class="card">
-                                        <img src="' . $imageUrl . '" alt="img" draggable="false">
-                                        <div class="city-name">' . $cityName . '</div>
-                                    </div>
-                                ';
-                            }
-                        }
-                    } else {
-                        echo "Tidak ada kota yang ditemukan.";
-                    }
-                ?>
-            </div>
-            <i id="rightculinary" class="fa-solid fa-angle-right">&gt;</i> <!-- Panah Kanan -->
-        </div>
-    </div>
 
 <!-- Event section start -->
 <div class="container-event" id="Event">
