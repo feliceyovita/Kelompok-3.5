@@ -15,7 +15,7 @@ if (isset($_POST['cek_login'])) {
       if (mysqli_num_rows($user) != 0) {
           $data = mysqli_fetch_array($user);
           if (password_verify($password_hash, $data['password_hash'])) {
-              $_SESSION['id_user'] = $data['id_user'];
+              $_SESSION['user_id'] = $data['user_id'];
               $_SESSION['username'] = $data['username'];
               header("Location: index.php");
               exit();
