@@ -196,25 +196,29 @@ $result = $con->query($query);
                     <div class="wikit-carousel__carousel">';
 
             $cityQuery = "
-                SELECT c.city_name, MIN(t.image_url) AS image_url
-                FROM cities c
-                LEFT JOIN tourismplaces t ON c.city_id = t.city_id
-                LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-                WHERE tc.category_id = $categoryId
-                GROUP BY c.city_name
+            SELECT c.city_id, c.city_name, MIN(t.image_url) AS image_url
+            FROM cities c
+            LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+            LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+            WHERE tc.category_id = $categoryId
+            GROUP BY c.city_id, c.city_name
             ";
             $city_result = $con->query($cityQuery);
 
             if ($city_result->num_rows > 0) {
                 while ($row = $city_result->fetch_assoc()) {
+                    $city_id = $row['city_id'];
                     $cityName = $row['city_name'];
                     $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg';
 
                     echo '
                     <div class="card">
+                       <a href="citycategory.php?city_id=' . $city_id . '&category_id=' . $categoryId . '&image_url=' . $imageUrl.'" class="discover__card">
                         <img src="' . $imageUrl . '" alt="img" draggable="false">
                         <div class="city-name">' . $cityName . '</div>
+                        </a>
                     </div>';
+
                 }
             } else {
                 echo "No cities found for this category.";

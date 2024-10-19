@@ -138,7 +138,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
         <div class="discover__grid">
             <?php while ($stmt->fetch()): ?>
                 <?php $image_url = $image_url ? $image_url : 'image/default.jpg'; ?>
-                <a href="asahan_nature.html?city_id=<?php echo $city_id; ?>" class="discover__card">
+                <a href="citycategory.php?city_id=<?php echo $city_id;  ?>&category_id=<?php echo $category_id; ?>&image_url=<?php echo $image_url?>" class="discover__card">
                     <img src="<?php echo $image_url; ?>" alt="<?php echo $city_name; ?>" class="discover__img">
                     <div class="discover__data">
                         <h2 class="discover__title"><?php echo $city_name; ?></h2>
