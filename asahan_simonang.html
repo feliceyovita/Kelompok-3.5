@@ -91,7 +91,11 @@
         </div>
     </nav>
     <div class="main-content">
-        <h1 class="content-title">Simonang-Monang Waterfall</h1>
+        <h1 class="content-title">Simonang-Monang Waterfall
+            <button class="btn btn-outline-primary ms-3">
+                <i class="fa-solid fa-bookmark"></i> Save
+            </button>
+        </h1>        
         <hr class="content-divider">
         
         <div style="display: flex; align-items: flex-start; justify-content: center;">
@@ -107,17 +111,43 @@
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Area</h2>
-                <p class="card-description">Desa Bandar Pulau Pekan, Kecamatan Bandar Pulau, Kabupaten Asahan, Sumatra Utara</p>
-                
-                <h2 class="card-title">Rating</h2>
-                <p class="card-description">★★★★☆ (4/5)</p>
-                
+                <p class="card-description">Desa Bandar Pulau Pekan, Kecamatan Bandar Pulau, Kabupaten Asahan, Sumatra Utara</p>   
                 <h2 class="card-title">Deskripsi</h2>
                 <p class="card-description" style="text-align: left;">
                     Simonang-Monang Waterfall is located in Desa Bandar Pulau Pekan, Kecamatan Bandar Pulau, approximately 73 km from Kisaran City. 
                     It is a hidden gem in North Sumatra, offering a serene and natural atmosphere. Known for its pristine waters and lush surroundings, 
                     Simonang-Monang is a perfect destination for those seeking tranquility in nature.
                 </p>
+            </div>
+        </div>
+
+        <div class="wrapper-rating">
+            <p id="message">Rate Your Experience</p>
+            <div class="container-rating">
+                <div class="star-container inactive">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">1</span>
+                </div>
+                <div class="star-container inactive">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">2</span>
+                </div>
+                <div class="star-container inactive">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">3</span>
+                </div>
+                <div class="star-container inactive">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">4</span>
+                </div>
+                <div class="star-container inactive">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">5</span>
+                </div>
+            </div>
+            <button id="submit" disabled>Submit</button>
+            <div id="submit-section" class="hide">
+                <p id="submit-message">Thanks for your feedback</p>
             </div>
         </div>
     </div>
