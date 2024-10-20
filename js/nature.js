@@ -2,6 +2,7 @@ let starContainer = document.querySelectorAll(".star-container"); //rating
 const submitButton = document.querySelector("#submit");
 const message = document.querySelector("#message");
 const submitSection = document.querySelector("#submit-section");
+const dynamicRating = document.querySelector("#dynamic-rating"); 
 
 let events = {
     mouse: {
@@ -34,6 +35,7 @@ starContainer.forEach((element, index) => {
         ratingUpdate(0, starContainer.length - 1, false);
         ratingUpdate(0, index, true);
         selectedRating = index + 1;
+        updateRatingDisplay(selectedRating); 
     });
 });
 
@@ -74,6 +76,18 @@ const ratingUpdate = (start, end, active) => {
     }
 };
 
+const updateRatingDisplay = (rating) => {
+    let starsHTML = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            starsHTML += '★';  
+        } else {
+            starsHTML += '☆';  
+        }
+    }
+    dynamicRating.innerHTML = `${starsHTML} (${rating}/5)`; 
+};
+
 submitButton.addEventListener("click", (event) => {
     event.preventDefault();
     if (selectedRating > 0) {
@@ -91,6 +105,7 @@ document.addEventListener("click", (event) => {
         message.innerText = "Rate Your Experience";
         submitButton.disabled = true;
         selectedRating = 0;
+        updateRatingDisplay(0); 
     }
 });
 
