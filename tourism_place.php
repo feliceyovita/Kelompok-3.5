@@ -112,13 +112,16 @@ if ($result->num_rows > 0) {
     </nav>
     <div class="main-content"> 
         <h1 class="content-title"><?php echo $tourism_name; ?></h1>
+            <button class="btn btn-outline-primary ms-3">
+                <i class="fa-solid fa-bookmark"></i> Save
+            </button>
+        </h1>        
         <hr class="content-divider">
         
         <div style="display: flex; align-items: flex-start; justify-content: center;">
             <div style="margin-right: 20px;">
                 <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 700px; height: 400px; margin-bottom: 20px;">
             </div>
-            
             <div>
                 <"<?php echo $map_url; ?>" width="560" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
@@ -127,12 +130,41 @@ if ($result->num_rows > 0) {
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Rating</h2>
-                <p class="card-description">★★★★☆ (4/5)</p>
-                
+                <p class="card-rating" id="dynamic-rating">☆☆☆☆☆ (0/5)</p> 
                 <h2 class="card-title">Deskripsi</h2>
                 <p class="card-description" style="text-align: left;">
                     <?php echo $description; ?>
                 </p>
+            </div>
+        </div>
+
+        <div class="wrapper-rating">
+            <p id="message">Rate Your Experience</p>
+            <div class="container-rating">
+                <div class="star-container inactive" data-value="1">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">1</span>
+                </div>
+                <div class="star-container inactive" data-value="2">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">2</span>
+                </div>
+                <div class="star-container inactive" data-value="3">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">3</span>
+                </div>
+                <div class="star-container inactive" data-value="4">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">4</span>
+                </div>
+                <div class="star-container inactive" data-value="5">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">5</span>
+                </div>
+            </div>
+            <button id="submit" disabled>Submit</button>
+            <div id="submit-section" class="hide">
+                <p id="submit-message">Thanks for your feedback</p>
             </div>
         </div>
     </div>
