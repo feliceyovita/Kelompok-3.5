@@ -1,3 +1,23 @@
+<?php
+session_start();
+include('config/conn.php');
+
+$tourism_id = isset($_GET['tourism_id']) ? (int)$_GET['tourism_id'] : 0;
+$query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $tourism_id";
+$result = $con->query($query);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $tourism_name = $row['tourism_name'];
+    $image_url = $row['image_url'];
+    $map_url = $row['map_url'];
+    $description = $row['description'];
+} else {
+    echo "Data tidak ditemukan.";
+    exit; 
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -23,7 +43,7 @@
 
 <body id="page-top">
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav" style="background-color: rgba(0, 0, 0, 0.303);">
         <div class="container">
             <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
                 <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
@@ -90,56 +110,63 @@
             </div>
         </div>
     </nav>
-
-    <div class="main_background">
-        <img src="image/asahan/asahan.jpg" alt="asahan" class="mainback_img">
-    
-        <div class="home__container container" style="align-items: center";>
-            <div class="home__data">
-                <h1 class="home__data-title" style="font-size: 4rem; text-decoration:overline underline;">ASAHAN</h1>
-            </div>
-        </div>        
-    </div>    
-
-    <div class="main-content">
-        <h2 class="content-title">Asahan</h2>
-        <p class="content-description">
-            Asahan is a regency located in North Sumatra, Indonesia. Known for its stunning natural beauty, 
-            Asahan offers a variety of attractive tourist destinations, from picturesque beaches to lush landscapes.
-        </p>
+    <div class="main-content"> 
+        <h1 class="content-title"><?php echo $tourism_name; ?></h1>
+            <button class="btn btn-outline-primary ms-3">
+                <i class="fa-solid fa-bookmark"></i> Save
+            </button>
+        </h1>        
         <hr class="content-divider">
-    
-        <h3 class="explore-title" id="explore">Explore The Nature Destination Of Asahan</h3>
-        <div class="discover_list__card">
-            <a href="asahan_simonang.html" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/airterjunsimonang2.jpg" alt="air terjun simonang" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Simonang-Monang Waterfall</h5>
-                    <p class="card-rating">Rating: ★★★★☆</p>
-                    <p class="card-description">Simonang-Monang Waterfall is located in Desa Bandar Pulau Pekan, Kecamatan Bandar Pulau, approximately 73 km from Kisaran City. It is a hidden gem in North Sumatra, offering a serene and natural atmosphere. Known for its pristine waters and lush surroundings, Simonang-Monang is a perfect destination for those seeking tranquility in nature.</p>
-                </div>
-            </a>
-
-            <a href="" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/Air Terjun Ponot.jpg" alt="Air Terjun Ponot" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Air Terjun Ponot</h5>
-                    <p class="card-rating">Rating: ★★★★☆</p>
-                    <p class="card-description">Ponot Waterfall is located in Desa Tangga, Kecamatan Aek Songsongan, Kabupaten Asahan, approximately 90 km from Kisaran City. With a height of around 250 meters, it is one of the tallest waterfalls in Indonesia, offering stunning views and a powerful flow of water. Surrounded by lush greenery and natural landscapes, Ponot Waterfall is a popular destination for nature lovers and adventurers seeking the beauty of North Sumatra’s wilderness.</p>
-                </div>
-            </a>
-
-            <a href="" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/danau teratai.jpg" alt="Sample Destination" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Danau Teratai</h5>
-                    <p class="card-rating">Rating: ★★★☆☆</p>
-                    <p class="card-description">Lotus Lake, or Danau Teratai, is a serene lake located in Asahan Regency, North Sumatra. It is renowned for its tranquil beauty, with vast expanses of lotus flowers floating on its surface, creating a mesmerizing and peaceful atmosphere. The calm waters of the lake, combined with the enchanting view of the blooming lotuses, make it an ideal spot for relaxation and nature appreciation. </p>
-                </div>
-            </a>
-        </div>                          
         
-    <button class="load-more" id="loadMoreBtn">Load More</button>
+        <div style="display: flex; align-items: flex-start; justify-content: center;">
+            <div style="margin-right: 20px;">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 700px; height: 400px; margin-bottom: 20px;">
+            </div>
+            <div>
+                <"<?php echo $map_url; ?>" width="560" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
+                <h2 class="card-title">Rating</h2>
+                <p class="card-rating" id="dynamic-rating">☆☆☆☆☆ (0/5)</p> 
+                <h2 class="card-title">Deskripsi</h2>
+                <p class="card-description" style="text-align: left;">
+                    <?php echo $description; ?>
+                </p>
+            </div>
+        </div>
+
+        <div class="wrapper-rating">
+            <p id="message">Rate Your Experience</p>
+            <div class="container-rating">
+                <div class="star-container inactive" data-value="1">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">1</span>
+                </div>
+                <div class="star-container inactive" data-value="2">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">2</span>
+                </div>
+                <div class="star-container inactive" data-value="3">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">3</span>
+                </div>
+                <div class="star-container inactive" data-value="4">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">4</span>
+                </div>
+                <div class="star-container inactive" data-value="5">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="number">5</span>
+                </div>
+            </div>
+            <button id="submit" disabled>Submit</button>
+            <div id="submit-section" class="hide">
+                <p id="submit-message">Thanks for your feedback</p>
+            </div>
+        </div>
     </div>
 
     <footer class="wikitrip-footer-section">
@@ -193,7 +220,7 @@
             </div>
         </div>
     </footer>
-
+    
     <script src="js/nature.js"></script>
 
     <!-- Bootstrap Bundle with Popper -->

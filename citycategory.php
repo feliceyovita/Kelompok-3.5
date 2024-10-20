@@ -1,3 +1,51 @@
+<?php
+session_start();
+include('config/conn.php');
+
+$city_id = isset($_GET['city_id']) ? intval($_GET['city_id']) : 0;
+$category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+$image_url = isset($_GET['image_url']) ? $_GET['image_url'] : 0;
+
+
+// Query untuk mengambil informasi kota dari tabel cities
+$city_query = "
+    SELECT city_name, description
+    FROM cities
+    WHERE city_id = ?
+";
+$stmt = $con->prepare($city_query);
+$stmt->bind_param("i", $city_id);
+$stmt->execute();
+$stmt->bind_result($city_name, $city_description);
+$stmt->fetch();
+$stmt->close();
+
+// Query untuk mengambil category_name dari tabel tourismcategories
+$category_query = "
+    SELECT category_name
+    FROM tourismcategories
+    WHERE category_id = ?
+";
+$stmt = $con->prepare($category_query);
+$stmt->bind_param("i", $category_id);
+$stmt->execute();
+$stmt->bind_result($category_name);
+$stmt->fetch();
+$stmt->close();
+
+// Query untuk mengambil tourismplaces yang sesuai dengan category_id dan city_id
+$tour_query = "
+    SELECT tourism_id, tourism_name, image_url
+    FROM tourismplaces
+    WHERE city_id = ? AND category_id = ?
+";
+$stmt = $con->prepare($tour_query);
+$stmt->bind_param("ii", $city_id, $category_id);
+$stmt->execute();
+$stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
+?>
+
+
 <!doctype html>
 <html lang="en">
 
@@ -13,10 +61,11 @@
 
     <!-- style css -->
     <link rel="stylesheet" href="css/style.css">
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
     <title>WikiTrip</title>
 </head>
@@ -94,66 +143,34 @@
         </div>
     </nav>
 
-    <div class="main_background">
-        <img src="image/asahan/asahan.jpg" alt="asahan" class="mainback_img">
-
+    <div class="main_background"> 
+        <img src="<?php echo $image_url; ?>" alt="<?php echo $city_name; ?>" class="mainback_img">
         <div class="home__container container" style="align-items: center" ;>
             <div class="home__data">
-                <h1 class="home__data-title" style="font-size: 4rem; text-decoration:overline underline;">ASAHAN</h1>
+                <h1 class="home__data-title" style="font-size: 4rem; text-decoration:overline underline;">
+                    <?php echo $city_name; ?>
+                </h1>
             </div>
         </div>
     </div>
 
     <div class="main-content">
-        <h2 class="content-title">Asahan</h2>
-        <p class="content-description">
-            Asahan is a regency located in North Sumatra, Indonesia. Known for its stunning natural beauty,
-            Asahan offers a variety of attractive tourist destinations, from picturesque beaches to lush landscapes.
-        </p>
+        <h2 class="content-title"><?php echo $city_name; ?></h2>
+        <p class="content-description"><?php echo $city_description; ?></p>
         <hr class="content-divider">
 
-        <h3 class="explore-title" id="explore">Explore The Cultural Destination Of Asahan</h3>
-        <div class="discover_list__card">
-            <a href="" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/komplek makam raja sohor.png" alt="komplek makam raja sohor" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Komplek Makam Raja Sohor</h5>
-                        <p class="card-rating">Rating: ★★★★☆</p>
-                        <p class="card-description">Komplek Makan Raja Sohor in Asahan is a historical burial site dedicated to Raja Sohor, a revered figure in the local
-                        Malay community. This cultural landmark is not only a place of rest for the former rulers but also serves as a symbol of
-                        the rich history and traditions of the Malay Sultanate in the region. Visitors come to the site to pay their respects
-                        and learn about the royal lineage and local history. The complex is surrounded by greenery, adding to its tranquil and
-                        reflective atmosphere, making it a meaningful destination for cultural and historical exploration in Asahan.</p>
-                </div>
-            </a>
-
-            <a href="" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/komplek makan.jpeg" alt="Air Terjun Ponot" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Komplek Makam Datok</h5>
-                        <p class="card-rating">Rating: ★★★★☆</p>
-                        <p class="card-description">Komplek Makan Datok in Bunut, Asahan is a historical and cultural site in North Sumatra, Indonesia. It serves as the
-                        burial ground for Datok, a respected figure in the local community. The complex attracts visitors due to its cultural
-                        significance and serene atmosphere. It is a place where people pay respects and learn about the history of the region.
-                        The area is surrounded by greenery, enhancing its peaceful vibe, making it not just a place of reflection but also a
-                        spot for cultural heritage exploration.</p>
-                </div>
-            </a>
-
-            <a href="" class="card d-flex flex-row" style="text-decoration: none;">
-                <img src="image/asahan/rumah raja siti aminah.png" alt="Sample Destination" class="card-img-left">
-                <div class="card-body">
-                    <h3 class="card-title">Rumah Raja Siti Aminah</h5>
-                        <p class="card-rating">Rating: ★★★☆☆</p>
-                        <p class="card-description">Rumah Raja Siti Aminah in Asahan is a historic Malay royal house that showcases traditional architecture with wooden
-                        structures and intricate carvings. It belonged to Raja Siti Aminah, a significant figure in the local royal lineage, and
-                        serves as a cultural heritage site reflecting the lifestyle of the Malay aristocracy. The house stands as a symbol of
-                        the region's rich history, attracting visitors who seek to explore the legacy of the Malay Sultanate in Asahan.</p>
-                </div>
-            </a>
+        <h3 class="explore-title" id="explore">Explore The <?php echo $category_name; ?> Destination Of <?php echo $city_name; ?></h3>
+        <div class="culinary-card">
+            <?php while ($stmt->fetch()): ?>
+                <a href="tourism_place.php?tourism_id=<?php echo $tourism_id; ?>" class="restaurant" style="text-decoration: none;">
+                    <img src="<?php echo $tour_image_url; ?>" class="restaurant-img">
+                    <h3 class="card-title" style="margin-top: 15px; font-size: 1.15rem; padding-left: 15px;">
+                        <?php echo $tourism_name; ?>
+                    </h3>
+                    <p class="card-rating" style="margin-top: 0%; padding-left: 15px;">Rating: ★★★★☆</p>
+                </a>
+            <?php endwhile; ?>
         </div>
-
-        <button class="load-more" id="loadMoreBtn">Load More</button>
     </div>
 
     <footer class="wikitrip-footer-section">
@@ -217,4 +234,4 @@
 
 </body>
 
-</html>
+</html> 
