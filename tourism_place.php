@@ -55,10 +55,10 @@ if ($result->num_rows > 0) {
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#About">About</a>
+                        <a class="nav-link text-white" href="index.php">About</a>
                     </li>
                     <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
@@ -72,17 +72,11 @@ if ($result->num_rows > 0) {
                         </ul>
                     </li>
                     <!-- Event Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownEvent" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Events
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownEvent">
-                            <li><a class="dropdown-item" href="#Music">Music Events</a></li>
-                            <li><a class="dropdown-item" href="#Culinary">Culinary events</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="index.php">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#Community">Community</a>
+                        <a class="nav-link text-white" href="community.html">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -91,10 +85,6 @@ if ($result->num_rows > 0) {
                         <li class="nav-item profile-dropdown">
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
-                                <li class="sub-item">
-                                    <i class="bi bi-chat-heart material-icons-outlined"></i>
-                                    <p>Activity</p>
-                                </li>
                                 <li class="sub-item">
                                     <i class="bi bi-bookmark material-icons-outlined"></i>
                                     <p>Bookmark</p>
@@ -221,7 +211,7 @@ if ($result->num_rows > 0) {
         </div>
     </footer>
     
-    <script src="js/nature.js"></script>
+    <script src="js/rating.js"></script>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
