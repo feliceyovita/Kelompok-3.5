@@ -67,7 +67,7 @@ $result = $con->query($query);
                         <a class="nav-link text-white" href="#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#Community">Community</a>
+                        <a class="nav-link text-white" href="community.html">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -76,10 +76,6 @@ $result = $con->query($query);
                         <li class="nav-item profile-dropdown">
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
-                                <li class="sub-item">
-                                    <i class="bi bi-chat-heart material-icons-outlined"></i>
-                                    <p>Activity</p>
-                                </li>
                                 <li class="sub-item">
                                     <i class="bi bi-bookmark material-icons-outlined"></i>
                                     <p>Bookmark</p>
@@ -218,7 +214,7 @@ $result = $con->query($query);
 
                     echo '
                     <div class="card">
-                       <a href="citycategory.php?city_id=' . $city_id . '&category_id=' . $categoryId . '&image_url=' . $imageUrl.'" class="discover__card">
+                        <a href="citycategory.php?city_id=' . $city_id . '&category_id=' . $categoryId . '&image_url=' . $imageUrl.'" class="discover__card">
                         <img src="' . $imageUrl . '" alt="img" draggable="false">
                         <div class="city-name">' . $cityName . '</div>
                         </a>
