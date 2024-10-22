@@ -1,9 +1,12 @@
 <?php
 session_start();
 include('config/conn.php');
+$isLoggedIn = isset($_SESSION['user_id']);
 
 $tourism_id = isset($_GET['tourism_id']) ? (int)$_GET['tourism_id'] : 0;
-$query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $tourism_id";
+
+// Mengambil data tempat wisata
+$query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $tourism_id";        
 $result = $con->query($query);
 
 if ($result->num_rows > 0) {
@@ -16,6 +19,28 @@ if ($result->num_rows > 0) {
     echo "Data tidak ditemukan.";
     exit; 
 }
+
+$averageRating = 0; // Misalkan ini hasil dari perhitungan rating
+// Hitung rata-rata rating dari database
+$query = "SELECT AVG(rating_value) as avg_rating FROM ratings WHERE tourism_id = ?";
+$stmt = $con->prepare($query);
+$stmt->bind_param("i", $tourism_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($row = $result->fetch_assoc()) {
+    $averageRating = round($row['avg_rating']);
+}
+
+// Pastikan $averageRating tidak negatif
+if ($averageRating < 0) {
+    $averageRating = 0; // Atur ke 0 jika negatif
+}
+
+// Tampilkan bintang
+$fullStars = str_repeat('★', $averageRating); // Bintang penuh
+$emptyStars = str_repeat('☆', 5 - $averageRating); // Bintang kosong
+$ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
+
 ?>
 
 <!doctype html>
@@ -58,7 +83,7 @@ if ($result->num_rows > 0) {
                         <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">About</a>
+                        <a class="nav-link text-white" href="index.php#about">About</a>
                     </li>
                     <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
@@ -66,17 +91,18 @@ if ($result->num_rows > 0) {
                             Destination
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="nature.html">Nature destinations</a></li>
-                            <li><a class="dropdown-item" href="cultural.html">Cultural destinations</a></li>
-                            <li><a class="dropdown-item" href="culinary.html">Culinary destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#nature-destination">Nature destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#cultural-destination">Cultural destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#culinary-destination">Culinary destinations</a></li>
                         </ul>
                     </li>
                     <!-- Event Dropdown -->
+
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">Event</a>
+                        <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -92,8 +118,17 @@ if ($result->num_rows > 0) {
                                     </a>
                                 </li>
                                 <li class="sub-item">
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <a href="logout.php">
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <p>Logout</p>
+                                    </a>
+                                <?php else: ?>
                                     <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Logout</p>
+                                    <a href="login.php">
+                                        <p>Login</p>
+                                    </a>
+                                <?php endif; ?>
                                 </li>
                             </ul>
                         </li>
@@ -122,7 +157,7 @@ if ($result->num_rows > 0) {
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Rating</h2>
-                <p class="card-rating" id="dynamic-rating">☆☆☆☆☆ (0/5)</p> 
+                <p class="card-rating" id="dynamic-rating">★<?php $ratingDisplay ?></p>
                 <h2 class="card-title">Deskripsi</h2>
                 <p class="card-description" style="text-align: left;">
                     <?php echo $description; ?>
@@ -159,7 +194,6 @@ if ($result->num_rows > 0) {
                 <p id="submit-message">Thanks for your feedback</p>
             </div>
         </div>
-    </div>
 
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
@@ -215,12 +249,37 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </footer>
-    
-    <script src="js/rating.js"></script>
+    <script src="js/nature.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        let selectedRating = 0;
+
+        $('.star-container').on('click', function() {
+            selectedRating = $(this).data('value');
+            $('.star-container').removeClass('active').addClass('inactive');
+            $(this).prevAll().addBack().removeClass('inactive').addClass('active');
+            $('#submit').prop('disabled', false);
+            $('#dynamic-rating').text("★".repeat(selectedRating) + "☆" + " (" + selectedRating + "/5)");
+        });
+
+        $('#submit').on('click', function() {
+            $.post('submit_rating.php', {
+                tourism_id: <?php echo $tourism_id; ?>,
+                user_id: <?php echo $_SESSION['user_id']; ?>, // Pastikan ini ada
+                rating_value: selectedRating
+            }, function(response) {
+                $('#submit-section').removeClass('hide');
+                $('#message').text("Thanks for your feedback");
+                $('#submit').prop('disabled', true);
+                // Refresh or update rating display if necessary
+            });
+        });
+    });
+    </script>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 </body>
 
 </html>
