@@ -3,7 +3,7 @@
 body {
     font-family: Poppins;
     margin: 0;
-    background-color: black;
+    background-color: white;
     color: #eee;
     margin: 0;
     padding: 0;
@@ -250,7 +250,6 @@ li {
     /* Set a consistent height */
     object-fit: cover;
     width: 100%;
-    border-radius: 8%;
     margin: 0;
     /* Remove margin around the image */
     padding: 0;
@@ -1614,4 +1613,63 @@ form.sign-in-form {
 
 #submit-section.hide {
   display: none; /* Hide when needed */
+}
+
+/* Bookmark Section Styles */
+.bookmark-section {
+    margin-top: 100px;
+    background-color: white;
+}
+
+.bookmark-section-title {
+    margin: 20px 0;
+    font-size: 50px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.655);
+    display: flex;
+    justify-content: center;
+}
+
+.bookmark-section-divider {
+    height: 2px;
+    background-color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Bookmark Card Styles */
+.bookmark-section-card {
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+.bookmark-section-card-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.bookmark-section-card-body {
+    padding: 15px;
+}
+
+.bookmark-section-card-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.bookmark-section-card-text {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.bookmark-section-card-btn {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    font-size: 15px;
+    text-align: center;
 }

@@ -1,5 +1,8 @@
-// navbar scrolled
-const navE1 = document.querySelector('.navbar');
+let starContainer = document.querySelectorAll(".star-container"); //rating
+const submitButton = document.querySelector("#submit");
+const message = document.querySelector("#message");
+const submitSection = document.querySelector("#submit-section");
+const dynamicRating = document.querySelector("#dynamic-rating"); 
 
 let events = {
     mouse: {
@@ -35,6 +38,7 @@ starContainer.forEach((element, index) => {
         updateRatingDisplay(selectedRating); 
     });
 });
+
 const ratingUpdate = (start, end, active) => {
     for (let i = start; i <= end; i++) {
         if (active) {
@@ -84,6 +88,17 @@ const updateRatingDisplay = (rating) => {
     dynamicRating.innerHTML = `${starsHTML} (${rating}/5)`; 
 };
 
+submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (selectedRating > 0) {
+        if (message.innerText !== "Thanks for your feedback!") {
+            message.innerText = "Thanks for your feedback!";
+            submitSection.classList.remove("hide");
+            submitButton.style.display = "none"; 
+        }
+    } 
+});
+
 document.addEventListener("click", (event) => {
     if (!event.target.closest(".star-container") && !event.target.closest("#submit")) {
         ratingUpdate(0, starContainer.length - 1, false);
@@ -91,41 +106,11 @@ document.addEventListener("click", (event) => {
         submitButton.disabled = true;
         selectedRating = 0;
         updateRatingDisplay(0); 
-    };
-window.addEventListener('scroll', () => {
-    if (window.scrollY >= 56) {
-        navE1.classList.add('navbar-scrolled');
-    } else {
-        navE1.classList.remove('navbar-scrolled');
     }
-    });
-    });
-        
-// Load More functionality
-let loadMoreBtn = document.getElementById('loadMoreBtn');
-let discoverCards = document.querySelectorAll('.discover__card');
-let visibleCards = 8; 
-
-// Function to show discover cards
-function showDiscoverCards() {
-    discoverCards.forEach((card, index) => {
-        card.style.display = 'none';
-    });
-
-    for (let i = 0; i < visibleCards; i++) {
-        if (discoverCards[i]) {
-            discoverCards[i].style.display = 'block';
-        }
-    }
-
-    if (visibleCards >= discoverCards.length) {
-        loadMoreBtn.style.display = 'none';
-    }
-}
-
-showDiscoverCards();
-
-loadMoreBtn.addEventListener('click', () => {
-    visibleCards += 8; 
-    showDiscoverCards(); 
 });
+
+window.onload = () => {
+    submitButton.disabled = true;
+    submitSection.classList.add("hide");
+    message.innerText = "Rate Your Experience";
+};

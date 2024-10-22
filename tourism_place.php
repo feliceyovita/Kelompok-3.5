@@ -70,7 +70,7 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav" style="background-color: rgba(0, 0, 0, 0.303);">
         <div class="container">
-            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="index.php">
                 <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
                 <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
             </a>
@@ -97,14 +97,9 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
                         </ul>
                     </li>
                     <!-- Event Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownEvent" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Events
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownEvent">
-                            <li><a class="dropdown-item" href="index.php#Music">Music Events</a></li>
-                            <li><a class="dropdown-item" href="index.php#Culinary">Culinary events</a></li>
-                        </ul>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="community.php">Community</a>
@@ -117,12 +112,10 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <i class="bi bi-chat-heart material-icons-outlined"></i>
-                                    <p>Activity</p>
-                                </li>
-                                <li class="sub-item">
-                                    <i class="bi bi-bookmark material-icons-outlined"></i>
-                                    <p>Bookmark</p>
+                                    <a href="bookmark.html" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
+                                        <i class="bi bi-bookmark material-icons-outlined"></i>
+                                        <p style="margin-left: 8px;">Bookmark</p>
+                                    </a>
                                 </li>
                                 <li class="sub-item">
                                 <?php if (isset($_SESSION['user_id'])): ?>
@@ -154,7 +147,7 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
         
         <div style="display: flex; align-items: flex-start; justify-content: center;">
             <div style="margin-right: 20px;">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 700px; height: 400px; margin-bottom: 20px;">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 560px; height: 400px; margin-bottom: 20px;">
             </div>
             <div>
                 <"<?php echo $map_url; ?>" width="560" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -205,7 +198,10 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
-                <h2>Logo</h2>
+                <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+                    <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
+                    <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
+                </a>
                 <p class="wikitrip-footer-paragraph">"Wikitrip offers insights into the beauty and culture of North
                     Sumatra,
                     guiding travelers through unforgettable experiences."</p>
@@ -253,7 +249,6 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
             </div>
         </div>
     </footer>
-    
     <script src="js/nature.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -282,8 +277,6 @@ $ratingDisplay = $fullStars . $emptyStars . " ($averageRating/5)";
         });
     });
     </script>
-
-    
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
