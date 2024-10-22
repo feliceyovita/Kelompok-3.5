@@ -1616,12 +1616,12 @@ form.sign-in-form {
 }
 
 /* Bookmark Section Styles */
-.bookmark-container {
+.bookmark-section {
     margin-top: 100px;
     background-color: white;
 }
 
-.bookmark-title {
+.bookmark-section-title {
     margin: 20px 0;
     font-size: 50px;
     font-weight: bold;
@@ -1630,31 +1630,38 @@ form.sign-in-form {
     justify-content: center;
 }
 
-/* Bookmark Card Styles */
-.bookmark-card {
+.bookmark-section-divider {
+    height: 2px;
+    background-color: #e0e0e0;
     margin-bottom: 20px;
 }
 
-.bookmark-card-img {
+/* Bookmark Card Styles */
+.bookmark-section-card {
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+.bookmark-section-card-img {
     height: 200px;
     object-fit: cover;
 }
 
-.bookmark-card-body {
+.bookmark-section-card-body {
     padding: 15px;
 }
 
-.bookmark-card-title {
+.bookmark-section-card-title {
     font-size: 20px;
     font-weight: 600;
 }
 
-.bookmark-card-text {
+.bookmark-section-card-text {
     font-size: 14px;
     color: #6c757d;
 }
 
-.bookmark-card-btn {
+.bookmark-section-card-btn {
     background-color: #007bff;
     color: white;
     text-transform: uppercase;
