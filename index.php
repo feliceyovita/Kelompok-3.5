@@ -513,11 +513,11 @@ $result = $con->query($query);
                     <div class="wikitrip-footer-underline"><span></span></div>
                 </h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Destination</a></li>
-                    <li><a href="#">Event</a></li>
-                    <li><a href="#">Community</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#nature-destination">Destination</a></li>
+                    <li><a href="#Event">Event</a></li>
+                    <li><a href="community.php">Community</a></li>
                 </ul>
             </div>
             <div class="wikitrip-footer-column">

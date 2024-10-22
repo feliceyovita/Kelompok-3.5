@@ -184,11 +184,11 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                     <div class="wikitrip-footer-underline"><span></span></div>
                 </h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Destination</a></li>
-                    <li><a href="#">Event</a></li>
-                    <li><a href="#">Community</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">About</a></li>
+                    <li><a href="index.php">Destination</a></li>
+                    <li><a href="index.php">Event</a></li>
+                    <li><a href="index.php">Community</a></li>
                 </ul>
             </div>
             <div class="wikitrip-footer-column">

@@ -1211,6 +1211,7 @@ form.sign-in-form {
     height: 150px;
     overflow: hidden;
     border-radius: 10px;
+    margin-top: 80px;
 }
 
 .event-img {
@@ -1243,8 +1244,8 @@ form.sign-in-form {
     font-size: 2.25rem;
     text-align: center;
     font-weight: 600;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* Calendar Container */
