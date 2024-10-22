@@ -3,7 +3,7 @@
 body {
     font-family: Poppins;
     margin: 0;
-    background-color: black;
+    background-color: white;
     color: #eee;
     margin: 0;
     padding: 0;
@@ -1613,4 +1613,56 @@ form.sign-in-form {
 
 #submit-section.hide {
   display: none; /* Hide when needed */
+}
+
+/* Bookmark Section Styles */
+.bookmark-container {
+    margin-top: 100px;
+    background-color: white;
+}
+
+.bookmark-title {
+    margin: 20px 0;
+    font-size: 50px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.655);
+    display: flex;
+    justify-content: center;
+}
+
+/* Bookmark Card Styles */
+.bookmark-card {
+    margin-bottom: 20px;
+}
+
+.bookmark-card-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.bookmark-card-body {
+    padding: 15px;
+}
+
+.bookmark-card-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.bookmark-card-text {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.bookmark-card-btn {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    font-size: 15px;
+    text-align: center;
 }
