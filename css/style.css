@@ -250,7 +250,6 @@ li {
     /* Set a consistent height */
     object-fit: cover;
     width: 100%;
-    border-radius: 8%;
     margin: 0;
     /* Remove margin around the image */
     padding: 0;

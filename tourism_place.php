@@ -45,7 +45,7 @@ if ($result->num_rows > 0) {
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav" style="background-color: rgba(0, 0, 0, 0.303);">
         <div class="container">
-            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="index.php">
                 <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
                 <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
             </a>
@@ -110,7 +110,7 @@ if ($result->num_rows > 0) {
         
         <div style="display: flex; align-items: flex-start; justify-content: center;">
             <div style="margin-right: 20px;">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 700px; height: 400px; margin-bottom: 20px;">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 560px; height: 400px; margin-bottom: 20px;">
             </div>
             <div>
                 <"<?php echo $map_url; ?>" width="560" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -162,7 +162,10 @@ if ($result->num_rows > 0) {
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
-                <h2>Logo</h2>
+                <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+                    <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
+                    <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
+                </a>
                 <p class="wikitrip-footer-paragraph">"Wikitrip offers insights into the beauty and culture of North
                     Sumatra,
                     guiding travelers through unforgettable experiences."</p>

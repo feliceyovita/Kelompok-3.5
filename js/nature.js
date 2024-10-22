@@ -1,3 +1,14 @@
+// navbar scrolled
+const navE1 = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY >= 56) {
+        navE1.classList.add('navbar-scrolled');
+    } else {
+        navE1.classList.remove('navbar-scrolled');
+    }
+});
+
 // Load More functionality
 let loadMoreBtn = document.getElementById('loadMoreBtn');
 let discoverCards = document.querySelectorAll('.discover__card');
@@ -25,15 +36,4 @@ showDiscoverCards();
 loadMoreBtn.addEventListener('click', () => {
     visibleCards += 8; 
     showDiscoverCards(); 
-});
-
-// navbar scrolled
-const navE1 = document.querySelector('.navbar');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY >= 56) {
-        navE1.classList.add('navbar-scrolled');
-    } else {
-        navE1.classList.remove('navbar-scrolled');
-    }
 });
