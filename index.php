@@ -46,7 +46,7 @@ $result = $con->query($query);
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#about">About</a>
@@ -486,7 +486,10 @@ $result = $con->query($query);
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
-                <h2>Logo</h2>
+                 <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+                    <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
+                    <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
+                </a>
                 <p class="wikitrip-footer-paragraph">"Wikitrip offers insights into the beauty and culture of North
                     Sumatra,
                     guiding travelers through unforgettable experiences."</p>

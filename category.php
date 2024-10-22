@@ -51,7 +51,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
 <body id="page-top">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav">
         <div class="container">
-            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+            <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="index.php">
                 <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
                 <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
             </a>
@@ -146,7 +146,10 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
-                <h2>Logo</h2>
+                <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+                    <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
+                    <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
+                </a>
                 <p class="wikitrip-footer-paragraph">"Wikitrip offers insights into the beauty and culture of North
                     Sumatra,
                     guiding travelers through unforgettable experiences."</p>
