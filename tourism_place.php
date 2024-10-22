@@ -86,8 +86,10 @@ if ($result->num_rows > 0) {
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <i class="bi bi-bookmark material-icons-outlined"></i>
-                                    <p>Bookmark</p>
+                                    <a href="bookmark.html" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
+                                        <i class="bi bi-bookmark material-icons-outlined"></i>
+                                        <p style="margin-left: 8px;">Bookmark</p>
+                                    </a>
                                 </li>
                                 <li class="sub-item">
                                     <i class="bi bi-box-arrow-left material-icons-outlined"></i>

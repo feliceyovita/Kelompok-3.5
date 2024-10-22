@@ -76,24 +76,24 @@ $result = $con->query($query);
                         <li class="nav-item profile-dropdown" >
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
-                               <li class="sub-item">
-                                    <a href="bookmark.html" class="bookmark-link" style="text-decoration: none;">
+                                <li class="sub-item">
+                                    <a href="bookmark.html" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-bookmark material-icons-outlined"></i>
-                                        <p>Bookmark</p>
+                                        <p style="margin-left: 8px;">Bookmark</p>
                                     </a>
                                 </li>
                                 <li class="sub-item">
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <a href="logout.php">
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <p>Logout</p>
-                                    </a>
-                                <?php else: ?>
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <a href="login.php">
-                                        <p>Login</p>
-                                    </a>
-                                <?php endif; ?>
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <a href="logout.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Logout</p>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Login</p>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </li>
