@@ -38,7 +38,6 @@ starContainer.forEach((element, index) => {
         updateRatingDisplay(selectedRating); 
     });
 });
-
 const ratingUpdate = (start, end, active) => {
     for (let i = start; i <= end; i++) {
         if (active) {
@@ -87,17 +86,6 @@ const updateRatingDisplay = (rating) => {
     }
     dynamicRating.innerHTML = `${starsHTML} (${rating}/5)`; 
 };
-
-submitButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    if (selectedRating > 0) {
-        if (message.innerText !== "Thanks for your feedback!") {
-            message.innerText = "Thanks for your feedback!";
-            submitSection.classList.remove("hide");
-            submitButton.style.display = "none"; 
-        }
-    } 
-});
 
 document.addEventListener("click", (event) => {
     if (!event.target.closest(".star-container") && !event.target.closest("#submit")) {

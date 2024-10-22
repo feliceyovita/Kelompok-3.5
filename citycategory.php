@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/conn.php');
+$isLoggedIn = isset($_SESSION['user_id']);
 
 $city_id = isset($_GET['city_id']) ? intval($_GET['city_id']) : 0;
 $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
@@ -85,10 +86,10 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#About">About</a>
+                        <a class="nav-link text-white" href="index.php#about">About</a>
                     </li>
                     <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
@@ -97,9 +98,9 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
                             Destination
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="nature.html">Nature destinations</a></li>
-                            <li><a class="dropdown-item" href="cultural.html">Cultural destinations</a></li>
-                            <li><a class="dropdown-item" href="culinary.html">Culinary destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#nature-destination">Nature destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#cultural-destination">Cultural destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#culinary-destination">Culinary destinations</a></li>
                         </ul>
                     </li>
                     <!-- Event Dropdown -->
@@ -109,12 +110,12 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
                             Events
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownEvent">
-                            <li><a class="dropdown-item" href="#Music">Music Events</a></li>
-                            <li><a class="dropdown-item" href="#Culinary">Culinary events</a></li>
+                            <li><a class="dropdown-item" href="index.php#Music">Music Events</a></li>
+                            <li><a class="dropdown-item" href="index.php#Culinary">Culinary events</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#Community">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -132,8 +133,17 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
                                     <p>Bookmark</p>
                                 </li>
                                 <li class="sub-item">
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <a href="logout.php">
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <p>Logout</p>
+                                    </a>
+                                <?php else: ?>
                                     <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Logout</p>
+                                    <a href="login.php">
+                                        <p>Login</p>
+                                    </a>
+                                <?php endif; ?>
                                 </li>
                             </ul>
                         </li>
