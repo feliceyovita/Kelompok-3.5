@@ -449,6 +449,15 @@ ALTER TABLE `tourismplaces`
 ALTER TABLE `wishlist`
   ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`tourism_id`) REFERENCES `tourismplaces` (`tourism_id`) ON DELETE CASCADE;
+
+CREATE TABLE `rate` (
+  `rating_id` int(11) NOT NULL,
+  `tourism_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating_value` int(5) NOT NULL,
+  `time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
