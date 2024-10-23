@@ -76,7 +76,7 @@ if ($result->num_rows > 0) {
                         <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -92,8 +92,17 @@ if ($result->num_rows > 0) {
                                     </a>
                                 </li>
                                 <li class="sub-item">
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Logout</p>
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <a href="logout.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Logout</p>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Login</p>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </li>

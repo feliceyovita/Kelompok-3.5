@@ -25,6 +25,7 @@ if ($keyword != '') {
 
 $result = mysqli_query($con, $query);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,10 +82,10 @@ $result = mysqli_query($con, $query);
                     </li>
                     <!-- Event Dropdown -->
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">Event</a>
+                        <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -98,8 +99,17 @@ $result = mysqli_query($con, $query);
                                     <p>Bookmark</p>
                                 </li>
                                 <li class="sub-item">
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Login</p>
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <a href="logout.php">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p>Logout</p>
+                                        </a>
+                                    <?php else: ?>
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <a href="login.php">
+                                            <p>Login</p>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </li>
@@ -141,50 +151,35 @@ $result = mysqli_query($con, $query);
                     </div>
                 </form>
             </div>
-            <!-- Post Example -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-author">
-                        <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="Anuska Sharma Profile Picture" height="30" width="30">
-                        <div>
-                            <div class="post-author-name">Anuska Sharma</div>
-                            <div class="post-time">12 hrs ago</div>
-                        </div>
-                    </div>
-                    <div><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <div class="post-content">
-                    Roses are red<br>Violets are blue<br>I'm ugly &amp; you are too <i class="fas fa-smile"></i>
-                </div>
-                <div class="divider"></div>
-                <div class="post-actions">
-                    <div><i class="fas fa-thumbs-up"></i> Like</div>
-                    <div><i class="fas fa-comment"></i> Comment</div>
-                    <div><i class="fas fa-share"></i> Share</div>
-                </div>
-            </div>
 
-            <!-- Another Post -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-author">
-                        <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="Ramesh GC Profile Picture" height="30" width="30">
-                        <div>
-                            <div class="post-author-name">Ramesh GC</div>
-                            <div class="post-time">2 days ago</div>
+            <div class="posts-container">
+                <?php if (mysqli_num_rows($result) > 0): ?>
+                    <?php while($row = mysqli_fetch_assoc($result)): ?>
+                        <div class="post-box">
+                            <div class="post-header">
+                                <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
+                                <div>
+                                    <div class="post-author-name"><?= $row['username']; ?></div>
+                                    <div class="post-time"><?= date('d M Y H:i', strtotime($row['created_at'])); ?></div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <p><?= nl2br($row['content']); ?></p>
+                                <!-- Display image if it exists -->
+                                <?php if ($row['image']): ?>
+                                    <img src="uploads/<?= $row['image']; ?>" alt="Post Image" style="max-width:100%; height:auto;">
+                                <?php endif; ?>
+                            </div>
+                            <div class="post-actions">
+                                <div><i class="fas fa-thumbs-up"></i> Like</div>
+                                <div><i class="fas fa-comment"></i> Comment</div>
+                                <div><i class="fas fa-share"></i> Share</div>
+                            </div>
                         </div>
-                    </div>
-                    <div><i class="fas fa-ellipsis-h"></i></div>
-                </div>
-                <div class="post-content">
-                    Mountains are so cool <img src="https://storage.googleapis.com/a1aa/image/XcPfQKyeEdsycUvHfqDGP4jO0tNYN8N0dLE1VeFaTvVus3ecC.jpg" alt="Cool Emoji" height="20" width="20">
-                </div>
-                <div class="divider"></div>
-                <div class="post-actions">
-                    <div><i class="fas fa-thumbs-up"></i> Like</div>
-                    <div><i class="fas fa-comment"></i> Comment</div>
-                    <div><i class="fas fa-share"></i> Share</div>
-                </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>Tidak ada hasil untuk pencarian: '<?= $keyword; ?>'</p>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -192,7 +187,7 @@ $result = mysqli_query($con, $query);
             <div class="event-card">
                 <div class="event-header">
                     <h4><b>Upcoming Events</b></h4>
-                    <a href="#" class="see-all">See All</a>
+                    <a href="index.php#Event" class="see-all">See All</a>
                 </div>
                 <img src="image/event.jpg" alt="Lake Toba Festival" />
                 <h4>Lake Toba Festival</h4>

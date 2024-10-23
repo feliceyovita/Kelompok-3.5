@@ -83,7 +83,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                         <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
@@ -100,8 +100,17 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                                 </li>
                                 </li>
                                 <li class="sub-item">
-                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                    <p>Logout</p>
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <a href="logout.php">
+                                            <p>Logout</p>
+                                        </a>
+                                    <?php else: ?>
+                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                        <a href="login.php">
+                                            <p>Login</p>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </li>
