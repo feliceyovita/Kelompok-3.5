@@ -65,7 +65,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                         <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">About</a>
+                        <a class="nav-link text-white" href="index.php#about">About</a>
                     </li>
                     <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
@@ -74,13 +74,13 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                             Destination
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="nature.html">Nature destinations</a></li>
-                            <li><a class="dropdown-item" href="#Cultural">Cultural destinations</a></li>
-                            <li><a class="dropdown-item" href="#Culinary">Culinary destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#nature-destination">Nature destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#cultural-destination">Cultural destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#culinary-destination">Culinary destinations</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">Event</a>
+                        <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="community.html">Community</a>
