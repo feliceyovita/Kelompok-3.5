@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('config/conn.php');
+$isLoggedIn = isset($_SESSION['user_id']);
 
 $city_id = isset($_GET['city_id']) ? intval($_GET['city_id']) : 0;
 $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
@@ -105,7 +106,7 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
                         <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>

@@ -1,3 +1,30 @@
+<?php
+session_start();
+include('config/conn.php');
+include('config/function.php');
+
+$isLoggedIn = isset($_SESSION['user_id']);
+
+$keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyword']) : '';
+
+// Jika ada keyword, lakukan pencarian
+if ($keyword != '') {
+    $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
+              FROM posts p
+              JOIN users u ON p.user_id = u.user_id
+              WHERE p.content LIKE '%$keyword%'
+              ORDER BY p.created_at DESC";
+    echo "<h6>Hasil pencarian untuk: '$keyword'</h6>";
+} else {
+    // Jika tidak ada keyword, tampilkan semua postingan
+    $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
+              FROM posts p
+              JOIN users u ON p.user_id = u.user_id
+              ORDER BY p.created_at DESC";
+}
+
+$result = mysqli_query($con, $query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,8 +112,10 @@
     <div class="content">
         <div class="left-panel">
             <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" placeholder="Search posts...">
+                <form method="GET" action="">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="keyword" placeholder="Search posts..." value="<?php if(isset($_GET['keyword'])) echo $_GET['keyword']; ?>">
+                </form>
             </div>
             <div class="option"><i class="fas fa-tree" ></i> Natural Destination</div>
             <div class="option"><i class="fas fa-utensils"></i> Culinary Destination</div>
@@ -96,14 +125,21 @@
 
         <div class="main-content">
             <div class="post-box">
-                <div class="post-header">
-                    <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
-                    <input type="text" placeholder="What's on your mind, Aashish ?">
-                </div>
-                <div class="post-actions" style="margin-top: 20px;">
-                    <div><i class="fas fa-camera"></i> Photo</div>
-                    <div><i class="fas fa-pencil-alt"></i> Post</div>
-                </div>
+            <form action="post_submit.php" method="POST" enctype="multipart/form-data">
+                    <div class="post-header">
+                        <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
+                        <input type="text" name="content" placeholder="What's on your mind?" required>
+                    </div>
+                    <div class="post-actions" style="margin-top: 20px;">
+                        <div>
+                            <label for="image-upload"><i class="fas fa-camera"></i> Photo</label>
+                            <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
+                        </div>
+                        <button type="submit" style="background:none; border:none; color:inherit;">
+                            <div><i class="fas fa-pencil-alt"></i> Post</div>
+                        </button>
+                    </div>
+                </form>
             </div>
             <!-- Post Example -->
             <div class="post">
