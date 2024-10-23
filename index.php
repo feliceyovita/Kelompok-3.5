@@ -67,7 +67,7 @@ $result = $con->query($query);
                         <a class="nav-link text-white" href="#Event">Event</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="community.html">Community</a>
+                        <a class="nav-link text-white" href="community.php">Community</a>
                     </li>
                 </ul>
                 <div>
