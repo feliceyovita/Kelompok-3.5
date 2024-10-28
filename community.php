@@ -40,7 +40,6 @@ $result = mysqli_query($con, $query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 
-
     <!-- Custom CSS File -->
     <link href="css/community.css" rel="stylesheet">
 
@@ -67,7 +66,7 @@ $result = mysqli_query($con, $query);
                         <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php">About</a>
+                        <a class="nav-link text-white" href="index.php#about">About</a>
                     </li>
                     <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
@@ -75,9 +74,9 @@ $result = mysqli_query($con, $query);
                             Destination
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#nature-destination">Nature destinations</a></li>
-                            <li><a class="dropdown-item" href="#cultural-destination">Cultural destinations</a></li>
-                            <li><a class="dropdown-item" href="#culinary-destination">Culinary destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#nature-destination">Nature destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#cultural-destination">Cultural destinations</a></li>
+                            <li><a class="dropdown-item" href="index.php#culinary-destination">Culinary destinations</a></li>
                         </ul>
                     </li>
                     <!-- Event Dropdown -->
@@ -100,14 +99,14 @@ $result = mysqli_query($con, $query);
                                 </li>
                                 <li class="sub-item">
                                     <?php if (isset($_SESSION['user_id'])): ?>
-                                        <a href="logout.php">
+                                        <a href="logout.php" style="text-decoration: none; display: flex; align-items: center;">
                                             <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                            <p>Logout</p>
+                                            <p style="margin-left: 8px;">Logout</p>
                                         </a>
                                     <?php else: ?>
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <a href="login.php">
-                                            <p>Login</p>
+                                        <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Login</p>
                                         </a>
                                     <?php endif; ?>
                                 </li>
@@ -196,9 +195,10 @@ $result = mysqli_query($con, $query);
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
