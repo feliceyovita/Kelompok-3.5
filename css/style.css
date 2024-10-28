@@ -334,11 +334,13 @@ li {
 .slider .list .item .content p:nth-child(1) {
     text-transform: uppercase;
     letter-spacing: 10px;
+    margin-left: -25px;
 }
 
 .slider .list .item .content h2 {
     font-size: 80px;
     margin: 0;
+    margin-left: -25px;
 }
 
 .slider .list .item.active {
@@ -362,6 +364,7 @@ li {
     filter: blur(20px);
     opacity: 0;
     animation: showContent .5s .7s ease-in-out 1 forwards;
+    margin-left: -25px;
 }
 
 .slider .list .item.active h1, 

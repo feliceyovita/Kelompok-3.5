@@ -195,7 +195,7 @@ $result = $con->query($query);
             </div>
             <div class="wikit-carousel">
                 <div class="wikit-carousel__wrapper">
-                    <i id="left-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-left">&lt;</i> 
+                    <i id="left-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-left"></i> 
                     <div class="wikit-carousel__carousel">';
 
             $cityQuery = "
@@ -229,7 +229,7 @@ $result = $con->query($query);
 
             echo '
                     </div>
-                    <i id="right-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-right">&gt;</i> 
+                    <i id="right-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa-solid fa-angle-right"></i> 
                 </div>
             </div>';
         }
