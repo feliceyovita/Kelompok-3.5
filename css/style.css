@@ -131,8 +131,8 @@ li {
 .carousel-header {
     text-align: center;
     margin-bottom: -50px;
-    color: #fff;
-    background: #343f4f;
+    color: #343f4f;
+    background: #fff;
     padding: 90px 0;
     /* Reduce the padding */
 }
@@ -175,7 +175,7 @@ li {
     align-items: flex-start;
     justify-content: center;
     min-height: 50vh;
-    background: #343f4f;
+    background: #fff;
     margin: 0;
     overflow: hidden;
     position: relative;
@@ -192,7 +192,7 @@ li {
 
 .wikit-carousel__wrapper i {
     top: 50%;
-    background: #fff;
+    background: #1c98ed;
     height: 45px;
     width: 46px;
     font-size: 1.2rem;
@@ -201,7 +201,8 @@ li {
     text-align: center;
     line-height: 46px;
     border-radius: 50%;
-    color: #333;
+    transform: translateY(-50%);
+    color: white;
     z-index: 10;
 }
 
@@ -1152,7 +1153,7 @@ form.sign-in-form {
 .card-title {
     font-size: 1.25rem;
     margin: 0; 
-    color: #000000;
+    color: black;
 }
 
 .card-rating {
@@ -1176,12 +1177,12 @@ form.sign-in-form {
 }
   
 .restaurant {
-    background-color: #fff;
+    background-color: white;
     border: 1px solid #ccc;
     border-radius: 15px;
     width: 500x;
     height: 340px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     gap: 10px;
 }
   
@@ -1193,8 +1194,8 @@ form.sign-in-form {
   
 .restaurant-name {
     margin-top: 10px;
-    font-size: 18px;
-    color: #333;
+    font-size: 1px;
+    color: #ffffff;
 }
 
 /* Event Container */
@@ -1202,7 +1203,7 @@ form.sign-in-form {
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: #343f4f;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1215,7 +1216,7 @@ form.sign-in-form {
     height: 150px;
     overflow: hidden;
     border-radius: 10px;
-    margin-top: 75px;
+    margin-top: 100px;
 }
 
 .event-img {
@@ -1250,6 +1251,7 @@ form.sign-in-form {
     font-weight: 600;
     margin-top: 25px;
     margin-bottom: 25px;
+    color: #343f4f;
 }
 
 .calendar-container {
@@ -1269,16 +1271,17 @@ form.sign-in-form {
     display: flex;
     transition: transform 0.5s ease-in-out;
     padding: 0;
+    padding-bottom: 20px;
     max-width: 100%;
     flex-wrap: nowrap;
 }
 
 .month-card {
-    background-color: #ffffff;
+    background: white;
     border-radius: 10px;
     margin: 0 20px;
     width: 260px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
     padding-bottom: 10px;
 }
@@ -1301,7 +1304,7 @@ form.sign-in-form {
 
 .event-item {
     padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #343f4f;
     display: flex;
     align-items: center;
 }
@@ -1311,8 +1314,8 @@ form.sign-in-form {
 }
 
 .event-date {
-    background-color: #1a2b4c;
-    color: #ffffff;
+    background-color: #fff;
+    color: #1a2b4c;
     border-radius: 5px;
     padding: 5px 10px;
     margin-bottom: 5px;
@@ -1324,13 +1327,13 @@ form.sign-in-form {
 
 .event-name {
     font-size: 16px;
-    color: #333333;
+    color: black;
     word-wrap: break-word;
 }
 
 /* Navigation Buttons */
 .nav-button {
-    background-color: #00d2ff;
+    background-color: #1c98ed;
     border: none;
     border-radius: 50%;
     color: #ffffff;
@@ -1351,6 +1354,7 @@ form.sign-in-form {
 
 .nav-button.left {
     left: 10px;
+    z-index: 2;
 }
 
 .nav-button.right {
@@ -1366,8 +1370,9 @@ form.sign-in-form {
     font-size: 2.25rem;
     text-align: center;
     font-weight: 600;
-    margin-top: 30px;
+    margin-top: 25px;
     margin-bottom: 50px;
+    color: #343f4f
 }
 
 .event-grid {
@@ -1380,8 +1385,9 @@ form.sign-in-form {
 .event-card {
     background-color: #f9f9f9;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     margin: 10px;
+    margin-bottom: 50px;
     padding: 0px;
     flex-basis: 22%; 
     text-align: center;
