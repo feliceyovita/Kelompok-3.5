@@ -13,13 +13,13 @@ carousels.forEach((carousel, index) => {
     }
 
     arrowIcons[index * 2].addEventListener("click", () => {
-        let firstImgWidth = firstImg.clientWidth + 14; // Getting first img width & adding 14 margin value
+        let firstImgWidth = firstImg.clientWidth; // Getting first img width
         carousel.scrollLeft -= firstImgWidth; // Scroll to the left
         setTimeout(() => showHideIcons(), 60);
     });
 
     arrowIcons[index * 2 + 1].addEventListener("click", () => {
-        let firstImgWidth = firstImg.clientWidth + 14; // Getting first img width & adding 14 margin value
+        let firstImgWidth = firstImg.clientWidth; // Getting first img width
         carousel.scrollLeft += firstImgWidth; // Scroll to the right
         setTimeout(() => showHideIcons(), 60);
     });
@@ -50,7 +50,7 @@ carousels.forEach((carousel, index) => {
 
     const autoSlide = () => {
         positionDiff = Math.abs(positionDiff);
-        let firstImgWidth = firstImg.clientWidth + 14;
+        let firstImgWidth = firstImg.clientWidth;
         let valDifference = firstImgWidth - positionDiff;
         if (carousel.scrollLeft > prevScrollLeft) {
             return carousel.scrollLeft += positionDiff > firstImgWidth / 3 ? valDifference : -positionDiff;
