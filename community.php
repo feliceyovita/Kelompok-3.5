@@ -171,7 +171,7 @@ $result = mysqli_query($con, $query);
                                 <?php endif; ?>
                             </div>
                             <div class="post-actions">
-                                <div><i class="fas fa-thumbs-up"></i> Like</div>
+                                <div> <i class="fas fa-thumbs-up" id="like-icon-<?= $postId; ?>" style="color: <?= userLikedPost($postId, $userId) ? 'red' : 'black'; ?>"></i> Like</div>
                                 <div><i class="fas fa-comment"></i> Comment</div>
                                 <div><i class="fas fa-share"></i> Share</div>
                             </div>
