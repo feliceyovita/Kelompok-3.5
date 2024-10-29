@@ -101,14 +101,14 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                                 </li>
                                 <li class="sub-item">
                                     <?php if (isset($_SESSION['user_id'])): ?>
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <a href="logout.php">
-                                            <p>Logout</p>
+                                        <a href="logout.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Logout</p>
                                         </a>
                                     <?php else: ?>
-                                        <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                        <a href="login.php">
-                                            <p>Login</p>
+                                        <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
+                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                            <p style="margin-left: 8px;">Login</p>
                                         </a>
                                     <?php endif; ?>
                                 </li>
@@ -124,7 +124,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
         <div class="home__container container">
             <div class="home__data">
                 <span class="home__data-subtitle">Discover your place</span>
-                <h1 class="home__data-title">Explore The <br> Best <b><?php echo strtoupper($category_name); ?><br> DESTINATIONS</b></h1>
+                <h1 class="home__data-title">EXPLORE THE<br> BEST <b><?php echo strtoupper($category_name); ?></h1>
                 <a href="#explore" class="button">Explore</a>
             </div>
         </div>

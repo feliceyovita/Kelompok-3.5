@@ -1170,8 +1170,9 @@ form.sign-in-form {
 
 .culinary-card {
     display: flex;
-    justify-content: flex-start;
+    justify-content:flex-start;
     flex-wrap: wrap;
+    margin-bottom: 20px;
     gap: 50px;
 }
   
