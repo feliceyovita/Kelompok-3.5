@@ -93,7 +93,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <a href="bookmark.html" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
+                                    <a href="bookmark.php" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-bookmark material-icons-outlined"></i>
                                         <p style="margin-left: 8px;">Bookmark</p>
                                     </a>
