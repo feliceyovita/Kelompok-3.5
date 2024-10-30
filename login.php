@@ -1,7 +1,6 @@
 <?php
 session_start(); // Pastikan session dimulai di awal
 include('config/conn.php');
-include('config/function.php');
 
 // Cek login
 if (isset($_POST['cek_login'])) {
