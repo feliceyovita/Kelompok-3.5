@@ -100,21 +100,6 @@ if (isset($_POST['signup'])) {
             </button>
           </div>
           <input type="submit" value="Login" name="cek_login" class="btn solid auth-btn" />
-          <p class="social-text">Or Sign in with social platforms</p>
-          <div class="social-media">
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-facebook"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-twitter"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-google"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-linkedin"></i>
-            </a>
-          </div>
         </form>
 
         <form action="" method="POST" class="sign-up-form form-auth">
@@ -142,21 +127,6 @@ if (isset($_POST['signup'])) {
             </button>
           </div>
           <input type="submit" class="btn auth-btn" name="signup" value="Register" />
-          <p class="social-text">Or Sign up with social platforms</p>
-          <div class="social-media">
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-facebook"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-twitter"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-google"></i>
-            </a>
-            <a href="#" class="social-icon auth-social-icon">
-              <i class="bi bi-linkedin"></i>
-            </a>
-          </div>
         </form>
       </div>
     </div>

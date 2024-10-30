@@ -362,39 +362,3 @@ li {
     font-weight: bold;
     cursor: pointer;
 }
-
-.navbar-nav .nav-item {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.profile-dropdown {
-    display: flex;
-    align-items: center;
-}
-
-.profile-dropdown ul {
-    display: none;
-    position: absolute;
-    right: 10px;
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    list-style-type: none;
-}
-
-.profile-dropdown:hover ul {
-    display: block;
-}
-
-.sub-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.sub-item i {
-    margin-right: 10px;
-}
