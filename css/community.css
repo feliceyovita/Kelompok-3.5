@@ -91,6 +91,10 @@ li {
     flex: 1;
 }
 
+.post-time {
+    font-size: 12px;
+}
+
 .dropdown-menu {
     position: absolute;
     background-color: white;
