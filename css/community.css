@@ -115,13 +115,14 @@ li {
 .dropdown-item:hover {
     background-color: #5555550f;
 }
+
 /* Navbar Section End */
 
 .content {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    margin-top: 80px; 
+    margin-top: 80px;
 }
 
 .left-panel {
@@ -129,11 +130,13 @@ li {
     width: 220px;
     margin-right: 20px;
 }
+
 .main-content {
     margin-left: 240px;
     /* Sesuaikan dengan lebar left-panel + padding */
     padding: 20px;
 }
+
 .left-panel .option {
     background-color: rgba(255, 255, 255, 0);
     transition: background-color 0.3s ease;
@@ -142,7 +145,7 @@ li {
     margin-bottom: 10px;
     text-align: center;
     cursor: pointer;
-    font-weight:520;
+    font-weight: 520;
     color: #212121;
     display: flex;
     align-items: center;
@@ -157,6 +160,7 @@ li {
     margin-right: 10px;
     color: #f8b200;
 }
+
 .search-container {
     margin-top: 10px;
     margin-left: 15px;
@@ -236,9 +240,11 @@ li {
     font-weight: bold;
     cursor: pointer;
 }
+
 .post-actions div:hover {
     color: #f8b200;
 }
+
 .post {
     background-color: white;
     padding: 20px;
@@ -282,7 +288,7 @@ li {
 }
 
 .right-panel {
-    width: 240px; 
+    width: 240px;
     padding: 15px;
     position: fixed;
     right: 0;
@@ -291,6 +297,7 @@ li {
     border-radius: 10px;
     margin-right: 65px;
 }
+
 .event-header {
     display: flex;
     justify-content: space-between;
@@ -319,6 +326,7 @@ li {
     color: #1c98ed;
     margin: 10px 0;
 }
+
 .see-all {
     font-size: 0.8em;
     /* Ukuran font lebih kecil */
@@ -332,11 +340,13 @@ li {
     color: #1c98ed;
     /* Warna abu-abu lebih gelap saat di-hover */
 }
+
 .event-card p {
     font-size: 14px;
     color: #474545;
     margin: 5px 0;
 }
+
 .post .post-actions {
     display: flex;
     justify-content: space-around;
