@@ -440,6 +440,101 @@ li {
     }
 }
 
+/* CSS untuk ukuran layar tablet dan lebih kecil */
+@media screen and (max-width: 992px) {
+    .slider .list .item .content h2 {
+        font-size: 50px;
+        /* Kurangi ukuran font */
+    }
+
+    .slider .list .item .content {
+        width: 400px;
+        max-width: 90%;
+    }
+
+    .thumbnail .item {
+        width: 100px;
+        /* Ubah ukuran thumbnail */
+        height: 140px;
+    }
+}
+
+/* CSS untuk ukuran layar smartphone */
+@media screen and (max-width: 768px) {
+    .slider .list .item .content h2 {
+        font-size: 40px;
+    }
+
+    .slider .list .item .content p:nth-child(1) {
+        font-size: 12px;
+        /* Kurangi ukuran teks */
+    }
+
+    .thumbnail .item {
+        width: 80px;
+        height: 120px;
+    }
+
+    .thumbnail {
+        justify-content: start;
+        gap: 10px;
+        /* Kurangi jarak antar thumbnail */
+    }
+
+    .slider .list .item .content {
+        width: 300px;
+        top: 20%;
+        /* Sesuaikan posisi konten */
+    }
+}
+
+/* CSS untuk layar sangat kecil (seperti smartphone kecil) */
+@media screen and (max-width: 480px) {
+    .slider .list .item .content h2 {
+        font-size: 30px;
+    }
+
+    .slider .list .item .content {
+        width: 250px;
+        top: 15%;
+    }
+
+    .thumbnail .item {
+        width: 60px;
+        height: 100px;
+    }
+
+    .slider .list .item .content p:nth-child(1) {
+        letter-spacing: 5px;
+        /* Kurangi jarak antar huruf */
+        font-size: 10px;
+    }
+}
+
+/* Untuk layar kecil */
+@media screen and (max-width: 678px) {
+    .slider .list .item .content h2 {
+        font-size: 24px;
+        /* Ukuran teks utama lebih kecil */
+    }
+
+    .slider .list .item .content p {
+        font-size: 14px;
+        /* Ukuran teks lainnya lebih kecil */
+    }
+}
+
+/* Untuk layar yang lebih kecil lagi */
+@media screen and (max-width: 480px) {
+    .slider .list .item .content h2 {
+        font-size: 18px;
+    }
+
+    .slider .list .item .content p {
+        font-size: 12px;
+    }
+}
+
 /* login and register mode */
 .auth-page-container {
     position: relative;
@@ -1118,51 +1213,222 @@ form.sign-in-form {
     background-color: #1176ba; 
     color: white; 
 }
+/* General responsive adjustments */
+@media screen and (max-width: 1200px) {
+    .main-content {
+        padding: 3rem 4rem;
+    }
+
+    .content-title {
+        font-size: 3.5rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .main_background {
+        height: 70vh;
+    }
+
+    .home__container {
+        padding-left: 1.5rem;
+    }
+
+    .home__data-title {
+        font-size: 3.5rem;
+    }
+
+    .main-content {
+        padding: 2.5rem 3rem;
+    }
+
+    .content-title {
+        font-size: 3rem;
+    }
+
+    .discover__grid {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main_background {
+        height: 60vh;
+    }
+
+    .home__data-title {
+        font-size: 2.5rem;
+    }
+
+    .button {
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .main-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .content-title {
+        font-size: 2.5rem;
+    }
+
+    .explore-title {
+        font-size: 1.5rem;
+    }
+
+    .discover__card {
+        width: 100%;
+        height: 180px;
+    }
+
+    .discover__title {
+        font-size: 1.25rem;
+    }
+
+    .discover__description {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .home__container {
+        padding-left: 1rem;
+    }
+
+    .home__data-subtitle {
+        font-size: 1rem;
+    }
+
+    .home__data-title {
+        font-size: 2rem;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .content-title {
+        font-size: 2rem;
+    }
+
+    .content-description {
+        font-size: 1rem;
+    }
+
+    .discover__card {
+        height: 150px;
+    }
+
+    .discover__title {
+        font-size: 1.15rem;
+    }
+
+    .discover__description {
+        font-size: 0.75rem;
+    }
+
+    .button,
+    .load-more {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}
 
 /* city list style */
 
 .discover_list__card {
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    gap: 20px; 
-    justify-content:flex-start; 
+    gap: 20px;
+    justify-content: flex-start;
 }
 
 .card {
     display: flex;
     border: 1px solid #ddd;
-    border-radius: 10px; 
-    overflow: hidden; 
-    transition: transform 0.2s; 
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    flex-direction: row;
 }
 
+/* Gambar di sebelah kiri kartu */
 .card-img-left {
-    width: 200px; 
-    height: 200px; 
-    object-fit: cover; 
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
 }
 
 .card-body {
-    padding: 15px; 
+    padding: 15px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
 }
 
 .card-title {
     font-size: 1.25rem;
-    margin: 0; 
+    margin: 0;
     color: black;
 }
 
 .card-rating {
     color: #f8b200;
-    margin: 5px 0; 
+    margin: 5px 0;
 }
 
 .card-description {
-    font-size: 0.9rem; 
-    color: #555; 
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        /* Stack image and content vertically */
+    }
+
+    .card-img-left {
+        width: 100%;
+        /* Full width for small screens */
+        height: auto;
+        /* Adjust height to maintain aspect ratio */
+    }
+
+    .card-body {
+        align-items: center;
+        /* Center-align content */
+        text-align: center;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        /* Smaller title font for small screens */
+    }
+
+    .card-description {
+        font-size: 0.85rem;
+        /* Adjust font size */
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-description {
+        font-size: 0.8rem;
+    }
+
+    .card {
+        gap: 10px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
 }
 
 /* culinary-card */
@@ -1677,4 +1943,160 @@ form.sign-in-form {
     height: 40px;
     font-size: 15px;
     text-align: center;
+}
+/* Responsiveness for Footer Section */
+@media screen and (max-width: 992px) {
+    .wikitrip-footer-container {
+        flex-direction: column;
+        padding: 40px 5%;
+    }
+
+    .wikitrip-footer-column {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .wikitrip-footer-column h2 {
+        font-size: 1.5em;
+    }
+
+    .wikitrip-footer-underline {
+        width: 50px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wikitrip-footer-container {
+        padding: 30px 3%;
+    }
+
+    .wikitrip-footer-column h2 {
+        font-size: 1.2em;
+    }
+
+    .wikitrip-footer-social-icons i {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Responsiveness for Rating Section */
+@media screen and (max-width: 768px) {
+    .wrapper-rating {
+        width: 20em;
+        padding: 15px;
+        font-size: 1em;
+    }
+
+    .wrapper-rating p {
+        font-size: 20px;
+    }
+
+    .fa-star {
+        font-size: 1.2em;
+        padding: 4px;
+    }
+
+    #submit {
+        font-size: 1em;
+        padding: 0.6em 1.5em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .wrapper-rating {
+        width: 18em;
+    }
+
+    .wrapper-rating p {
+        font-size: 18px;
+    }
+
+    .fa-star {
+        font-size: 1em;
+        padding: 3px;
+    }
+
+    #submit {
+        font-size: 0.9em;
+        padding: 0.5em 1.2em;
+    }
+}
+
+/* Responsiveness for Bookmark Section */
+@media screen and (max-width: 992px) {
+    .bookmark-section-title {
+        font-size: 40px;
+        margin: 15px 0;
+    }
+
+    .bookmark-section-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .bookmark-section-card-body {
+        padding: 10px;
+    }
+
+    .bookmark-section-card-title {
+        font-size: 18px;
+    }
+
+    .bookmark-section-card-text {
+        font-size: 13px;
+    }
+
+    .bookmark-section-card-btn {
+        font-size: 14px;
+        height: 35px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .bookmark-section-title {
+        font-size: 30px;
+    }
+
+    .bookmark-section-card-body {
+        padding: 8px;
+    }
+
+    .bookmark-section-card-title {
+        font-size: 16px;
+    }
+
+    .bookmark-section-card-text {
+        font-size: 12px;
+    }
+
+    .bookmark-section-card-btn {
+        font-size: 13px;
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .bookmark-section-title {
+        font-size: 25px;
+    }
+
+    .bookmark-section-card-img {
+        height: 150px;
+    }
+
+    .bookmark-section-card-title {
+        font-size: 14px;
+    }
+
+    .bookmark-section-card-text {
+        font-size: 11px;
+    }
+
+    .bookmark-section-card-btn {
+        font-size: 12px;
+        height: 28px;
+    }
 }
