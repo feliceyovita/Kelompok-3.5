@@ -285,6 +285,10 @@ li {
     margin-top: 10px;
 }
 
+.post-content {
+    margin-top: 15px;
+}
+
 .divider {
     height: 1px;
     background-color: #ddd;
