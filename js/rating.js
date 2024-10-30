@@ -55,19 +55,19 @@ const ratingUpdate = (start, end, active) => {
     let activeElements = document.getElementsByClassName("active");
     if (activeElements.length > 0) {
         switch (activeElements.length) {
-            case 1:
-                message.innerText = "Terrible";
+            case 5:
+                message.innerText = "Satisfied";
                 break;
             case 2:
-                message.innerText = "Bad";
+                message.innerText = "Terrible";
                 break;
             case 3:
-                message.innerText = "Satisfied";
+                message.innerText = "Bad";
                 break;
             case 4:
                 message.innerText = "Good";
                 break;
-            case 5:
+            case 1:
                 message.innerText = "Excellent";
                 break;
         }
