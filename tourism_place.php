@@ -208,14 +208,9 @@ if ($result->num_rows > 0) {
             </div>
             <div class="wikitrip-footer-column">
                 <h3>
-                    Newsletter
+                    Social Media
                     <div class="wikitrip-footer-underline"><span></span></div>
                 </h3>
-                <form action="">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="text" placeholder="Enter Your Email">
-                    <a href=""><i class="fa-solid fa-arrow-right"></i></a>
-                </form>
                 <div class="wikitrip-footer-social-icons">
                     <a href="#"><i class="fa-brands fa-facebook"></i></a>
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
