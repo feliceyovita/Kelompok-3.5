@@ -1735,7 +1735,7 @@ form.sign-in-form {
 }
 
 .wikitrip-footer-underline {
-    width: 70px;
+    width: 183px;
     height: 3px;
     position: relative;
     background-color: white;
@@ -1750,19 +1750,7 @@ form.sign-in-form {
     height: 100%;
     position: absolute;
     left: 10px;
-    background-color: rgb(63, 63, 63);
     border-radius: 3px;
-    animation: wikitrip-footer-moving 1.5s linear infinite;
-}
-
-@keyframes wikitrip-footer-moving {
-    0% {
-        left: -20px;
-    }
-
-    100% {
-        left: 100%;
-    }
 }
 
 .wikitrip-footer-column ul {
