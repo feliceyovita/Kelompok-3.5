@@ -1438,39 +1438,57 @@ form.sign-in-form {
         padding: 10px;
     }
 }
-
-/* culinary-card */
-
+/* Ini untuk card di city-category */
 .culinary-card {
     display: flex;
-    justify-content:flex-start;
+    justify-content: flex-start;
     flex-wrap: wrap;
     margin-bottom: 20px;
-    gap: 50px;
+    gap: 20px;
 }
-  
+
 .restaurant {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 15px;
-    width: 500x;
+    width: calc(33.33% - 20px);
+    /* Membuat lebar card agar muat 3 dalam satu baris dengan jarak */
     height: 340px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
 }
-  
+
 .restaurant-img {
-    width: 400px;
+    width: 100%;
+    /* Agar gambar mengikuti lebar card */
     height: 240px;
     border-radius: 15px 15px 0 0;
 }
-  
-.restaurant-name {
-    margin-top: 10px;
-    font-size: 1px;
-    color: #ffffff;
+
+.card-title {
+    font-size: 1.15rem;
+    padding-left: 15px;
+    margin-top: 15px;
 }
 
+.card-rating {
+    padding-left: 15px;
+    margin-top: 5px;
+}
+@media (max-width: 992px) {
+    .restaurant {
+        width: calc(50% - 20px);
+        /* 2 card per baris pada layar sedang */
+    }
+}
+
+@media (max-width: 600px) {
+    .restaurant {
+        width: 100%;
+        /* 1 card per baris pada layar kecil */
+    }
+}
 /* Event Container */
 .container-event {
     width: 100%;
