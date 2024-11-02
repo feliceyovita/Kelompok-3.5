@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('config/conn.php');
-
 $tourism_id = isset($_GET['tourism_id']) ? (int)$_GET['tourism_id'] : 0;
 $query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $tourism_id";
 $result = $con->query($query);
@@ -16,6 +15,20 @@ if ($result->num_rows > 0) {
     echo "Data tidak ditemukan.";
     exit; 
 }
+
+// Cek apakah user sudah menyimpan tempat ini dalam database
+$isBookmarked = false;
+$userId = $_SESSION['user_id']; // Pastikan sesi sudah dimulai dan user_id disimpan
+$tourismId = $tourism_id; // Pastikan ini adalah ID tempat wisata yang sedang dilihat
+
+// Query untuk memeriksa apakah data sudah ada di wishlist
+$wishlist = "SELECT * FROM wishlist WHERE user_id = $userId AND tourism_id = $tourismId";
+$hasilwishlist = mysqli_query($con, $wishlist);
+
+if (mysqli_num_rows($hasilwishlist) > 0) {
+    $isBookmarked = true;
+}
+
 ?>
 
 <!doctype html>
@@ -114,10 +127,9 @@ if ($result->num_rows > 0) {
     
     <div class="main-content"> 
         <h1 class="content-title"><?php echo $tourism_name; ?></h1>
-            <button class="btn btn-outline-primary ms-3">
-                <i class="fa-solid fa-bookmark"></i> Save
-            </button>
-        </h1>        
+            <button id="bookmarkButton" class="btn btn-outline-primary" data-tourism-id="<?php echo $tourismId; ?>">
+                <i class="fa-solid fa-bookmark"></i> <?php echo $isBookmarked ? 'Unsave' : 'Save'; ?>
+            </button>      
         <hr class="content-divider">
         
         <div style="display: flex; align-items: flex-start; justify-content: center;">
@@ -222,6 +234,7 @@ if ($result->num_rows > 0) {
     </footer>
     
     <script src="js/rating.js"></script>
+    <script src="js/bookmark.js"></script>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
