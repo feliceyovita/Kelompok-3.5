@@ -127,34 +127,38 @@ if (mysqli_num_rows($hasilwishlist) > 0) {
     
     <div class="main-content"> 
         <h1 class="content-title"><?php echo $tourism_name; ?></h1>
-            <button id="bookmarkButton" class="btn btn-outline-primary" data-tourism-id="<?php echo $tourismId; ?>">
-                <i class="fa-solid fa-bookmark"></i> <?php echo $isBookmarked ? 'Unsave' : 'Save'; ?>
-            </button>      
+        <button id="bookmarkButton" class="btn btn-outline-primary" data-tourism-id="<?php echo $tourismId; ?>">
+            <i class="fa-solid fa-bookmark"></i> <?php echo $isBookmarked ? 'Unsave' : 'Save'; ?>
+        </button>      
         <hr class="content-divider">
         
-        <div style="display: flex; align-items: flex-start; justify-content: center;">
-            <div style="margin-right: 20px;">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 560px; height: 400px; margin-bottom: 20px;">
+        <div class="image-map-container" style="display: flex; gap: 20px; margin-bottom: 20px;">
+            <div style="flex: 1;">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 100%; height: 320px; margin-bottom: 20px;">
             </div>
-            <div>
-                <"<?php echo $map_url; ?>" width="560" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div style="flex: 1;">
+                <?php echo str_replace('<iframe', '<iframe style="width: 100%; height: 320px;"', $map_url); ?>
             </div>
         </div>
 
+    <!-- Separate container for the card -->
+    <div class="card-container" style="max-width: 1200px; margin: auto;">
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Rating</h2>
                 <p class="card-rating" id="dynamic-rating">☆☆☆☆☆ (0/5)</p> 
                 <h2 class="card-title">Deskripsi</h2>
-                <p class="card-description" style="text-align: left;">
+                <p class="card-description" style="text-align: left; margin-top: 6px; margin-left: 15px;">
                     <?php echo $description; ?>
                 </p>
             </div>
         </div>
+    </div>
 
-        <div class="wrapper-rating">
+        <!-- Rating input section -->
+        <div class="wrapper-rating" style="margin-top: 20px;">
             <p id="message">Rate Your Experience</p>
-            <div class="container-rating">
+            <div class="container-rating" style="display: flex; gap: 5px;">
                 <div class="star-container inactive" data-value="1">
                     <i class="fa-regular fa-star"></i>
                     <span class="number">1</span>
@@ -176,12 +180,13 @@ if (mysqli_num_rows($hasilwishlist) > 0) {
                     <span class="number">5</span>
                 </div>
             </div>
-            <button id="submit" disabled>Submit</button>
-            <div id="submit-section" class="hide">
+            <button id="submit" disabled style="margin-top: 10px;">Submit</button>
+            <div id="submit-section" class="hide" style="margin-top: 10px;">
                 <p id="submit-message">Thanks for your feedback</p>
             </div>
         </div>
     </div>
+
 
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
