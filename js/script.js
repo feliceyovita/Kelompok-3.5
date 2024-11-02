@@ -24,29 +24,6 @@ carousels.forEach((carousel, index) => {
         setTimeout(() => showHideIcons(), 60);
     });
 
-    const dragStart = (e) => {
-        isDragStart = true;
-        prevPageX = e.pageX || e.touches[0].pageX;
-        prevScrollLeft = carousel.scrollLeft;
-    }
-
-    const dragging = (e) => {
-        if (!isDragStart) return;
-        e.preventDefault();
-        isDragging = true;
-        carousel.classList.add("dragging");
-        positionDiff = (e.pageX || e.touches[0].pageX) - prevPageX;
-        carousel.scrollLeft = prevScrollLeft - positionDiff;
-        showHideIcons();
-    }
-
-    const dragStop = () => {
-        isDragStart = false;
-        carousel.classList.remove("dragging");
-        if (!isDragging) return;
-        isDragging = false;
-        autoSlide();
-    }
 
     const autoSlide = () => {
         positionDiff = Math.abs(positionDiff);
@@ -58,14 +35,6 @@ carousels.forEach((carousel, index) => {
         carousel.scrollLeft -= positionDiff > firstImgWidth / 3 ? valDifference : -positionDiff;
     }
 
-    carousel.addEventListener("mousedown", dragStart);
-    carousel.addEventListener("touchstart", dragStart);
-
-    carousel.addEventListener("mousemove", dragging);
-    carousel.addEventListener("touchmove", dragging);
-
-    carousel.addEventListener("mouseup", dragStop);
-    carousel.addEventListener("touchend", dragStop);
 });
 
 let currentIndex = 0; 
