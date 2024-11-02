@@ -131,14 +131,14 @@ li {
 
 .left-panel {
     position: fixed;
-    width: 220px;
+    width: 200px;
     margin-right: 20px;
 }
 
 .main-content {
-    margin-left: 240px;
+    margin-left: 220px;
     /* Sesuaikan dengan lebar left-panel + padding */
-    padding: 20px;
+    margin-top: -18px;
 }
 
 .left-panel .option {
@@ -199,7 +199,7 @@ li {
 }
 
 .main-content {
-    width: calc(100% - 240px);
+    width: calc(100% - 260px);
     /* Kurangi ruang untuk right panel */
     margin-right: 30px;
     /* Beri jarak dari right panel */
@@ -296,14 +296,12 @@ li {
 }
 
 .right-panel {
-    width: 240px;
-    padding: 15px;
+    width: 200px;
     position: fixed;
     right: 0;
-    top: 85px;
+    top: 100px;
     background-color: #f0f2f5;
-    border-radius: 10px;
-    margin-right: 65px;
+    margin-right: 70px;
 }
 
 .event-header {
@@ -319,7 +317,7 @@ li {
     padding: 15px;
     text-align: center;
     margin-top: 20px;
-    width: 270px;
+    width: 250px;
     border-radius: 10px;
 }
 

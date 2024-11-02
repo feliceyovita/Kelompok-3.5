@@ -127,30 +127,36 @@ $result = mysqli_query($con, $query);
                     <input type="text" name="keyword" placeholder="Search posts..." value="<?php if(isset($_GET['keyword'])) echo $_GET['keyword']; ?>">
                 </form>
             </div>
-            <div class="option"><i class="fas fa-tree" ></i> Natural Destination</div>
-            <div class="option"><i class="fas fa-utensils"></i> Culinary Destination</div>
-            <div class="option"><i class="fas fa-landmark"></i> Cultural Destination</div>
+            <a href="index.php#nature-destination" style="text-decoration: none; color: inherit;">
+                <div class="option"><i class="fas fa-tree"></i> Natural Destination</div>
+            </a>
+            <a href="index.php#culinary-destination" style="text-decoration: none; color: inherit;">
+                <div class="option"><i class="fas fa-utensils"></i> Culinary Destination</div>
+            </a>
+            <a href="index.php#cultural-destination" style="text-decoration: none; color: inherit;">
+                <div class="option"><i class="fas fa-landmark"></i> Cultural Destination</div>
+            </a>
         </div>
+    </div>
 
-
-        <div class="main-content">
-            <div class="post-box">
-            <form action="post_submit.php" method="POST" enctype="multipart/form-data">
-                    <div class="post-header">
-                        <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
-                        <input type="text" name="content" placeholder="What's on your mind?" required>
+    <div class="main-content">
+        <div class="post-box">
+        <form action="post_submit.php" method="POST" enctype="multipart/form-data">
+                <div class="post-header">
+                    <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
+                    <input type="text" name="content" placeholder="What's on your mind?" required>
+                </div>
+                <div class="post-actions" style="margin-top: 20px;">
+                    <div>
+                        <label for="image-upload"><i class="fas fa-camera"></i> Photo</label>
+                        <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
                     </div>
-                    <div class="post-actions" style="margin-top: 20px;">
-                        <div>
-                            <label for="image-upload"><i class="fas fa-camera"></i> Photo</label>
-                            <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
-                        </div>
-                        <button type="submit" style="background:none; border:none; color:inherit;">
-                            <div><i class="fas fa-pencil-alt"></i> Post</div>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    <button type="submit" style="background:none; border:none; color:inherit;">
+                        <div><i class="fas fa-pencil-alt"></i> Post</div>
+                    </button>
+                </div>
+            </form>
+        </div>
 
             <div class="posts-container">
                 <?php if (mysqli_num_rows($result) > 0): ?>
