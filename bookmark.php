@@ -123,7 +123,7 @@ $result = mysqli_query($con, $query);
                         <div class="bookmark-section-card-body card-body">
                             <h5 class="bookmark-section-card-title card-title"><?php echo $row['tourism_name']; ?></h5>
                             <p class="bookmark-section-card-text card-text">explore so you can share your own experience.</p>
-                            <a href="tourismplace.php?tourism_id=<?php echo $row['tourism_id']; ?>" class="bookmark-section-card-btn btn btn-primary">View Details</a>
+                            <a href="tourism_place.php?tourism_id=<?php echo $row['tourism_id']; ?>" class="bookmark-section-card-btn btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>
