@@ -1,6 +1,23 @@
 <?php 
-session_start()
+session_start();
+include('config/conn.php');
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
+// Query untuk mendapatkan semua tempat yang dibookmark oleh user
+$query = "
+    SELECT tp.tourism_id, tp.tourism_name, tp.image_url, tp.description 
+    FROM wishlist w
+    JOIN tourismplaces tp ON w.tourism_id = tp.tourism_id
+    WHERE w.user_id = $userId
+";
+$result = mysqli_query($con, $query);
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -99,30 +116,18 @@ session_start()
         <h2 class="bookmark-section-title">Bookmark</h2>
         <div class="bookmark-section-divider"></div>
         <div class="row">
-            <!-- Example Card -->
-            <div class="col-md-4">
-                <div class="bookmark-section-card card">
-                    <img class="bookmark-section-card-img card-img-top" src="https://via.placeholder.com/150"
-                        alt="Destination Image">
-                    <div class="bookmark-section-card-body card-body">
-                        <h5 class="bookmark-section-card-title card-title">Destination 1</h5>
-                        <p class="bookmark-section-card-text card-text">A beautiful place to visit.</p>
-                        <a href="#" class="bookmark-section-card-btn btn btn-primary">View Details</a>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <div class="col-md-4">
+                    <div class="bookmark-section-card card">
+                        <img class="bookmark-section-card-img card-img-top" src="<?php echo $row['image_url']; ?>" alt="Destination Image">
+                        <div class="bookmark-section-card-body card-body">
+                            <h5 class="bookmark-section-card-title card-title"><?php echo $row['tourism_name']; ?></h5>
+                            <p class="bookmark-section-card-text card-text">explore so you can share your own experience.</p>
+                            <a href="tourismplace.php?tourism_id=<?php echo $row['tourism_id']; ?>" class="bookmark-section-card-btn btn btn-primary">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="bookmark-section-card card">
-                    <img class="bookmark-section-card-img card-img-top" src="https://via.placeholder.com/150"
-                        alt="Destination Image">
-                    <div class="bookmark-section-card-body card-body">
-                        <h5 class="bookmark-section-card-title card-title">Destination 2</h5>
-                        <p class="bookmark-section-card-text card-text">Explore the amazing scenery.</p>
-                        <a href="#" class="bookmark-section-card-btn btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 
