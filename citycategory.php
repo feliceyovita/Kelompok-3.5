@@ -158,7 +158,7 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
         <p class="content-description"><?php echo $city_description; ?></p>
         <hr class="content-divider">
 
-        <h3 class="explore-title" id="explore">Explore The <?php echo $category_name; ?> Destination Of <?php echo $city_name; ?></h3>
+        <h3 class="explore-title" id="explore">Explore The <?php echo $category_name; ?> Of <?php echo $city_name; ?></h3>
         <div class="culinary-card">
             <?php while ($stmt->fetch()): ?>
                 <a href="tourism_place.php?tourism_id=<?php echo $tourism_id; ?>" class="restaurant" style="text-decoration: none;">

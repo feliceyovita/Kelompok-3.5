@@ -1120,7 +1120,7 @@ form.sign-in-form {
 .content-title {
     font-size: 4rem;
     font-weight: 700;
-    margin-bottom: 2rem;
+    margin-bottom: 0.8rem;
     color: #333;
 }
 
@@ -1136,7 +1136,8 @@ form.sign-in-form {
 .content-description {
     font-size: 1.128rem;
     margin-bottom: 2rem;
-    color: #333;
+    color: black;
+    font-weight: normal;
 }
 
 .content-divider {
@@ -1147,6 +1148,38 @@ form.sign-in-form {
     margin-bottom: 3rem;
 }
 
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+    .image-map-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-map-container div {
+        width: 100%;
+        /* Ensure each div takes the full width */
+        margin-bottom: 20px;
+    }
+
+    .image-map-container img,
+    .image-map-container iframe {
+        width: 100%;
+        /* Ensure the img and iframe take the full width */
+        height: auto;
+        /* Adjust height proportionally */
+    }
+}
+
+@media (max-width: 480px) {
+
+    .image-map-container img,
+    .image-map-container iframe {
+        width: 100%;
+        /* Maintain full width */
+        height: 240px;
+        /* Adjust the height as needed for smaller devices */
+    }
+}
 .explore-title {
     font-size: 2rem;
     font-weight: 700;
@@ -1386,8 +1419,8 @@ form.sign-in-form {
 }
 
 .card-description {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 0.95rem;
+    color: black;
 }
 
 /* Responsive adjustments */
@@ -1824,7 +1857,6 @@ form.sign-in-form {
     max-width: 250px;
 }
 
-
 /* rating section */
 .wrapper-rating {
     font-size: 1.2em;
@@ -1839,7 +1871,14 @@ form.sign-in-form {
     text-align: center; 
     color: #000000;
 }
-
+@media (max-width: 600px) {
+    .wrapper-rating {
+        font-size: 1em;
+        /* Sesuaikan ukuran font */
+        padding: 15px;
+        /* Kurangi padding untuk tampilan kecil */
+    }
+}
 .wrapper-rating p {
     font-weight: 500;
     font-size: 25px;
