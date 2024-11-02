@@ -9,13 +9,21 @@ body {
     padding: 0;
 }
 
-/* Navbar Section start */
+/* Navbar Section Start */
+#main-nav {
+    background-color: rgba(0, 0, 0, 0.218);
+    /* Warna abu-abu transparan sejak awal */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
+    /* Tambahkan bayangan agar terlihat lebih elegan */
+}
+
+/* Warna teks logo */
 .navbar-brand .text-logo1 {
-    color: #f8b200; 
+    color: #f8b200;
 }
 
 .navbar-brand .text-logo2 {
-    color: #1c98ed; 
+    color: #1c98ed;
 }
 
 .logo-img {
@@ -23,11 +31,7 @@ body {
     height: 50px;
 }
 
-.navbar-scrolled {
-    background-color: rgba(0, 0, 0, 0.218);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
-}
-
+/* Menu dan dropdown styling */
 ul {
     margin: 0;
     padding: 0;
@@ -42,24 +46,25 @@ li {
     padding: 0.625rem 0 0.5rem;
 }
 
+/* Profile dropdown styling */
 .profile-dropdown ul {
     flex-direction: column;
     position: absolute;
     background-color: white;
     align-items: flex-start;
     transition: all 0.3s ease;
-    width: 12rem; 
+    width: 12rem;
     right: -3rem;
     top: 3rem;
-    border-radius: 0.5rem; 
+    border-radius: 0.5rem;
     gap: 0;
     padding: 0.5rem 0;
     opacity: 0;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15); 
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
     display: none;
 }
 
-.profile-dropdown:hover > ul {
+.profile-dropdown:hover>ul {
     visibility: visible;
     opacity: 1;
     display: flex;
@@ -71,7 +76,7 @@ li {
     align-items: center;
     gap: 0.75rem;
     cursor: pointer;
-    padding: 0.75rem 1.5rem; 
+    padding: 0.75rem 1.5rem;
 }
 
 .sub-item:hover {
@@ -89,36 +94,38 @@ li {
 
 .sub-item p {
     font-size: 0.95rem;
-    color: #555555; 
+    color: #555555;
     font-weight: 500;
     margin: 0;
     flex: 1;
 }
 
+/* Dropdown styling */
 .dropdown-menu {
     position: absolute;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 0.5rem;
-    display: none; 
-    padding: 0; 
-    min-width: 120px; 
-    max-width: max-content; 
+    display: none;
+    padding: 0;
+    min-width: 120px;
+    max-width: max-content;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
 }
 
 .dropdown-menu.show {
-    display: block; 
+    display: block;
 }
 
 .dropdown-item {
-    padding: 0.25 rem 0.5rem; 
-    font-size: 0.95rem; 
+    padding: 0.25rem 0.5rem;
+    font-size: 0.95rem;
 }
 
 .dropdown-item:hover {
-    background-color: #5555550f; 
+    background-color: #5555550f;
 }
+
 /* Navbar Section End */
 
 /* Card Slider For Nature Start */
