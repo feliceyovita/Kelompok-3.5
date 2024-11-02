@@ -2000,40 +2000,67 @@ form.sign-in-form {
 /* Bookmark Card Styles */
 .bookmark-section-card {
     margin-top: 40px;
-    margin-bottom: 100px;
+    margin-bottom: -5px;
+    max-width: 480px;
+    /* Set a maximum width for the card */
+    max-height: 400px;
+    /* Set a maximum height for the card */
+    overflow: hidden;
+    /* Hide overflow content */
+    border: 1px solid #ddd;
+    /* Optional: Add a border for better visibility */
+    border-radius: 10px;
+    /* Optional: Add rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: Add shadow for depth */
 }
 
 .bookmark-section-card-img {
+    max-width: 180px;
+    /* Make the image responsive */
     height: 200px;
-    width:200px;
+    /* Fixed height for the image */
     object-fit: cover;
+    /* Maintain aspect ratio while covering the area */
 }
 
 .bookmark-section-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Membuat jarak seimbang antara elemen di atas dan di bawah */
+    align-items: center; /* Memusatkan konten secara horizontal */
     padding: 15px;
+    height: 100%; /* Memastikan tinggi body sesuai dengan tinggi card */
+    box-sizing: border-box;
 }
-
 .bookmark-section-card-title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+    /* Menghapus margin untuk jarak yang konsisten */
+    padding: 5px 0;
+    /* Menambahkan padding agar jarak antar card lebih konsisten */
 }
-
 .bookmark-section-card-text {
     font-size: 14px;
     color: #6c757d;
+    text-align: center;
 }
-
 .bookmark-section-card-btn {
     background-color: #007bff;
     color: white;
     text-transform: uppercase;
     font-weight: bold;
+    height: 33px;
+    font-size: 13px;
+    width: 120px;
+    margin-top: -8px;
+    margin-bottom: -10px;
     display: flex;
     justify-content: center;
+    /* Memusatkan teks di dalam tombol */
     align-items: center;
-    height: 40px;
-    font-size: 15px;
-    text-align: center;
 }
 /* Responsiveness for Footer Section */
 @media screen and (max-width: 992px) {
