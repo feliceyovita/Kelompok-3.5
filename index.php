@@ -482,12 +482,12 @@ $result = $con->query($query);
         <!-- Recommended Events Section End -->
     </div>
     <!-- Event section end -->
- 
+
     <!-- Footer -->
     <footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
-                 <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
+                <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
                     <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
                     <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
                 </a>

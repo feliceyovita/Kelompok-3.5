@@ -219,7 +219,8 @@ li {
 }
 
 .wikit-carousel__wrapper i:last-child {
-    right: -23px;
+    right: -10px;
+
 }
 
 .wikit-carousel__wrapper .wikit-carousel__carousel {
@@ -1625,7 +1626,7 @@ form.sign-in-form {
 }
 
 .nav-button.left {
-    left: 10px;
+    left: 3px;
     z-index: 2;
 }
 
