@@ -114,6 +114,7 @@ $result = mysqli_query($con, $query);
     <!-- Bookmark Section -->
     <div class="bookmark-section container">
         <h2 class="bookmark-section-title">Bookmark</h2>
+        <?php if (mysqli_num_rows($result) > 0) { ?>
         <div class="bookmark-section-divider"></div>
         <div class="row">
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -129,6 +130,11 @@ $result = mysqli_query($con, $query);
                 </div>
             <?php } ?>
         </div>
+        <?php } else { ?>
+            <div style="text-align: center; font-weight: bold; margin-top: 50px; margin-bottom: 250px;">
+                <p style="color:#6c757d; font-size: 18px;" >You haven't saved anything</p>
+            </div>
+        <?php } ?>
     </div>
 
 

@@ -17,12 +17,10 @@ document.getElementById('bookmarkButton').addEventListener('click', function() {
         } else if (data === 'unsaved') {
             button.innerHTML = '<i class="fa-solid fa-bookmark"></i> Save'; // Ganti teks dengan ikon dan kata 'Save'
         } else {
-            alert('Terjadi kesalahan, silakan coba lagi');
-            console.error('Server response:', data);
+            window.location.href = 'login.php';
         }
     })
     .catch(error => {
-        alert('Terjadi kesalahan, silakan coba lagi');
-        console.error('Error:', error);
+        window.location.href = 'login.php';
     });
 });

@@ -18,17 +18,44 @@ if ($result->num_rows > 0) {
 
 // Cek apakah user sudah menyimpan tempat ini dalam database
 $isBookmarked = false;
-$userId = $_SESSION['user_id']; // Pastikan sesi sudah dimulai dan user_id disimpan
-$tourismId = $tourism_id; // Pastikan ini adalah ID tempat wisata yang sedang dilihat
-
-// Query untuk memeriksa apakah data sudah ada di wishlist
-$wishlist = "SELECT * FROM wishlist WHERE user_id = $userId AND tourism_id = $tourismId";
-$hasilwishlist = mysqli_query($con, $wishlist);
-
-if (mysqli_num_rows($hasilwishlist) > 0) {
-    $isBookmarked = true;
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id']; // Pastikan sesi sudah dimulai dan user_id disimpan
+    $tourismId = $tourism_id; // Pastikan ini adalah ID tempat wisata yang sedang dilihat
+    
+    // Query untuk memeriksa apakah data sudah ada di wishlist
+    $wishlist = "SELECT * FROM wishlist WHERE user_id = $userId AND tourism_id = $tourismId";
+    $hasilwishlist = mysqli_query($con, $wishlist);
+    if (mysqli_num_rows($hasilwishlist) > 0) {
+        $isBookmarked = true;
+    }
+    $sql = "SELECT rating_value FROM ratings WHERE user_id = $userId AND tourism_id = $tourismId";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $existing_rating = $row['rating_value'] ?? null;
+    } 
+    
+} else{
+    $existing_rating=null;
 }
 
+
+$query = "SELECT rating_value FROM ratings WHERE tourism_id = ?";
+$stmt = $con->prepare($query);
+$stmt->bind_param("i", $tourism_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$totalRating = 0;
+$count = 0;
+while ($row = $result->fetch_assoc()) {
+    $totalRating += $row['rating_value'];
+    $count++;
+}
+// Hitung rata-rata rating
+$averageRating = $count > 0 ? round($totalRating / $count, 1) : 0;
+
+// Kirim ke JavaScript
+echo "<script>var averageRating = $averageRating;</script>";
 ?>
 
 <!doctype html>
@@ -146,7 +173,12 @@ if (mysqli_num_rows($hasilwishlist) > 0) {
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Rating</h2>
-                <p class="card-rating" id="dynamic-rating">☆☆☆☆☆ (0/5)</p> 
+                <p class="card-rating" id="dynamic-rating">
+                    <?php
+                        $roundedRating = floor($averageRating);
+                        $stars = str_repeat('★', $roundedRating) . str_repeat('☆', 5 - $roundedRating);
+                        echo "$stars ($roundedRating/5)";
+                    ?></p> 
                 <h2 class="card-title">Deskripsi</h2>
                 <p class="card-description" style="text-align: left; margin-top: 6px; margin-left: 15px;">
                     <?php echo $description; ?>
@@ -155,35 +187,53 @@ if (mysqli_num_rows($hasilwishlist) > 0) {
         </div>
     </div>
 
-        <!-- Rating input section -->
         <div class="wrapper-rating" style="margin-top: 20px;">
-            <p id="message">Rate Your Experience</p>
-            <div class="container-rating" style="display: flex; gap: 5px;">
-                <div class="star-container inactive" data-value="1">
-                    <i class="fa-regular fa-star"></i>
-                    <span class="number">1</span>
+            <?php if ($existing_rating): ?>
+                <!-- Jika user sudah memberikan rating -->
+                <p id="message">
+                    <?php
+                        $ratingText = "";
+                        switch ($existing_rating) {
+                            case 1:
+                                $ratingText = "Terrible";
+                                break;
+                            case 2:
+                                $ratingText = "Bad";
+                                break;
+                            case 3:
+                                $ratingText = "Good";
+                                break;
+                            case 4:
+                                $ratingText = "Satisfied";
+                                break;
+                            case 5:
+                                $ratingText = "Excellent";
+                                break;
+                        }
+                        echo $ratingText;
+                    ?>
+                </p>
+                <div class="container-rating" style="display: flex; gap: 5px;">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <div class="star-container <?php echo $i <= $existing_rating ? 'inactive' : 'active'; ?>" data-value="<?php echo $i; ?>">
+                            <i class="<?php echo $i <= $existing_rating ? 'fa-solid' : 'fa-regular'; ?> fa-star"></i>
+                            <span class="number"><?php echo $i; ?></span>
+                        </div>
+                    <?php endfor; ?>
+                    </div>
+            <?php else: ?>
+                <!-- Jika user belum memberikan rating -->
+                <p id="message">Rate Your Experience</p>
+                <div class="container-rating" style="display: flex; gap: 5px;">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <div class="star-container inactive" data-value="<?php echo $i; ?>">
+                            <i class="fa-regular fa-star"></i>
+                            <span class="number"><?php echo $i; ?></span>
+                        </div>
+                    <?php endfor; ?>
                 </div>
-                <div class="star-container inactive" data-value="2">
-                    <i class="fa-regular fa-star"></i>
-                    <span class="number">2</span>
-                </div>
-                <div class="star-container inactive" data-value="3">
-                    <i class="fa-regular fa-star"></i>
-                    <span class="number">3</span>
-                </div>
-                <div class="star-container inactive" data-value="4">
-                    <i class="fa-regular fa-star"></i>
-                    <span class="number">4</span>
-                </div>
-                <div class="star-container inactive" data-value="5">
-                    <i class="fa-regular fa-star"></i>
-                    <span class="number">5</span>
-                </div>
-            </div>
-            <button id="submit" disabled style="margin-top: 10px;">Submit</button>
-            <div id="submit-section" class="hide" style="margin-top: 10px;">
-                <p id="submit-message">Thanks for your feedback</p>
-            </div>
+                <button id="submit" disabled style="margin-top: 10px;" data-user-id="<?php echo $user_id; ?>" data-tourism-id="<?php echo $tourism_id; ?>">Submit</button>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -238,6 +288,9 @@ if (mysqli_num_rows($hasilwishlist) > 0) {
         </div>
     </footer>
     
+    <script>
+        var isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+    </script>
     <script src="js/rating.js"></script>
     <script src="js/bookmark.js"></script>
 
