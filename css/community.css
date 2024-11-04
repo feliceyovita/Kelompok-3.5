@@ -121,12 +121,13 @@ li {
 }
 
 /* Navbar Section End */
-
+/* Layout dasar */
 .content {
     display: flex;
     justify-content: space-between;
     padding: 20px;
     margin-top: 80px;
+    gap: 20px; 
 }
 
 .left-panel {
@@ -137,10 +138,87 @@ li {
 
 .main-content {
     margin-left: 220px;
-    /* Sesuaikan dengan lebar left-panel + padding */
     margin-top: -18px;
+    padding: 20px;
+    flex: 1;
+    width: calc(100% - 480px); 
 }
 
+.right-panel {
+    width: 200px;
+    position: fixed;
+    right: 20px; 
+    top: 100px;
+    background-color: #f0f2f5;
+}
+
+@media (max-width: 768px) {
+    .content {
+        display: block;
+        padding: 0; 
+    }
+
+    .right-panel {
+        display: none;
+    }
+
+    .left-panel {
+        position: relative;
+        width: 100%;
+        margin-bottom: 0;
+        padding-top: 0; 
+        padding-left: 15px;
+        padding-right: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .search-container {
+        width: 100%;
+        padding: 0 10px;
+        margin: 5px 0; 
+    }
+
+    .left-panel .option {
+        flex-direction: row;
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .left-panel .option i {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+
+    /* Main content penuh tanpa jarak tambahan */
+    .main-content {
+        margin: 0;
+        padding-top: 0; 
+        padding-left: 25px;
+        padding-right: 25px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 450px) {
+    .left-panel {
+        font-size: 9px;
+    }
+
+    .left-panel .option {
+        flex-direction: row;
+        padding: 5px;
+        font-size: 9px;
+    }
+
+    .left-panel .option i {
+        font-size: 9px;
+        margin-right: 2px;
+    }
+}
+
+/* Left Panel */
 .left-panel .option {
     background-color: rgba(255, 255, 255, 0);
     transition: background-color 0.3s ease;
@@ -165,6 +243,7 @@ li {
     color: #f8b200;
 }
 
+/* Search Box */
 .search-container {
     margin-top: 10px;
     margin-left: 15px;
@@ -198,22 +277,13 @@ li {
     font-size: 14px;
 }
 
-.main-content {
-    width: calc(100% - 260px);
-    /* Kurangi ruang untuk right panel */
-    margin-right: 30px;
-    /* Beri jarak dari right panel */
-    padding: 20px;
-    flex: 1;
-}
-
+/* Post Box */
 .post-box {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    width: calc(100% - 240px);
-    margin-right: 30px;
+    width: 100%;
 }
 
 .post-box .post-header {
@@ -236,6 +306,7 @@ li {
     background-color: #f0f2f5;
 }
 
+/* Post Actions */
 .post-box .post-actions {
     display: flex;
     justify-content: space-around;
@@ -247,16 +318,16 @@ li {
 
 .post-actions div:hover {
     color: #f8b200;
+    transition: color 0.3s ease;
 }
 
+/* Post Content */
 .post {
     background-color: white;
     padding: 20px;
-    width: 65vw;
+    width: 100%;
     border-radius: 10px;
     margin-bottom: 20px;
-    width: calc(100% - 240px);
-    margin-right: 30px;/
 }
 
 .post .post-header {
@@ -289,35 +360,20 @@ li {
     margin-top: 15px;
 }
 
+/* Divider */
 .divider {
     height: 1px;
     background-color: #ddd;
     margin: 10px 0;
 }
 
-.right-panel {
-    width: 200px;
-    position: fixed;
-    right: 0;
-    top: 100px;
-    background-color: #f0f2f5;
-    margin-right: 70px;
-}
-
-.event-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 5px;
-}
-
-/* Event card styling */
+/* Event Card Styling */
 .event-card {
     background-color: #fff;
     padding: 15px;
     text-align: center;
     margin-top: 20px;
-    width: 250px;
+    width: 100%;
     border-radius: 10px;
 }
 
@@ -335,28 +391,17 @@ li {
 
 .see-all {
     font-size: 0.8em;
-    /* Ukuran font lebih kecil */
     color: #777;
-    /* Warna abu-abu */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .see-all:hover {
     color: #1c98ed;
-    /* Warna abu-abu lebih gelap saat di-hover */
 }
 
 .event-card p {
     font-size: 14px;
     color: #474545;
     margin: 5px 0;
-}
-
-.post .post-actions {
-    display: flex;
-    justify-content: space-around;
-    color: #555555;
-    font-weight: bold;
-    cursor: pointer;
 }

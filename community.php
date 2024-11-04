@@ -9,17 +9,17 @@ $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyw
 // Jika ada keyword, lakukan pencarian
 if ($keyword != '') {
     $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
-              FROM posts p
-              JOIN users u ON p.user_id = u.user_id
-              WHERE p.content LIKE '%$keyword%'
-              ORDER BY p.created_at DESC";
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                WHERE p.content LIKE '%$keyword%'
+                ORDER BY p.created_at DESC";
     echo "<h6>Result search for : '$keyword'</h6>";
 } else {
     // Jika tidak ada keyword, tampilkan semua postingan
     $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
-              FROM posts p
-              JOIN users u ON p.user_id = u.user_id
-              ORDER BY p.created_at DESC";
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                ORDER BY p.created_at DESC";
 }
 
 $result = mysqli_query($con, $query);
