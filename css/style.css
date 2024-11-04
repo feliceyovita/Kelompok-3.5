@@ -2056,7 +2056,7 @@ form.sign-in-form {
     font-size: 13px;
     width: 120px;
     margin-top: -8px;
-    margin-bottom: -10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     /* Memusatkan teks di dalam tombol */
@@ -2142,6 +2142,34 @@ form.sign-in-form {
 }
 
 /* Responsiveness for Bookmark Section */
+@media screen and (max-width: 1200px) {
+    .bookmark-section-title {
+        font-size: 45px;
+        margin: 20px 0;
+    }
+
+    .bookmark-section-card {
+        margin-top: 25px;
+    }
+
+    .bookmark-section-card-body {
+        padding: 12px;
+    }
+
+    .bookmark-section-card-title {
+        font-size: 15px;
+    }
+
+    .bookmark-section-card-text {
+        font-size: 10px;
+    }
+
+    .bookmark-section-card-btn {
+        font-size: 10px;
+        height: 38px;
+        width: 95px;
+    }
+}
 @media screen and (max-width: 992px) {
     .bookmark-section-title {
         font-size: 40px;
@@ -2170,6 +2198,7 @@ form.sign-in-form {
     .bookmark-section-card-btn {
         font-size: 14px;
         height: 35px;
+        width: 120px;
     }
 }
 
