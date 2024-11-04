@@ -13,7 +13,7 @@ if ($keyword != '') {
               JOIN users u ON p.user_id = u.user_id
               WHERE p.content LIKE '%$keyword%'
               ORDER BY p.created_at DESC";
-    echo "<h6>Hasil pencarian untuk: '$keyword'</h6>";
+    echo "<h6>Result search for : '$keyword'</h6>";
 } else {
     // Jika tidak ada keyword, tampilkan semua postingan
     $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
@@ -184,7 +184,7 @@ $result = mysqli_query($con, $query);
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <p>Tidak ada hasil untuk pencarian: '<?= $keyword; ?>'</p>
+                    <p>No search results for : '<?= $keyword; ?>'</p>
                 <?php endif; ?>
             </div>
         </div>

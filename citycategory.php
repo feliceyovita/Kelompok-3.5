@@ -36,14 +36,17 @@ $stmt->close();
 
 // Query untuk mengambil tourismplaces yang sesuai dengan category_id dan city_id
 $tour_query = "
-    SELECT tourism_id, tourism_name, image_url
-    FROM tourismplaces
-    WHERE city_id = ? AND category_id = ?
+    SELECT tp.tourism_id, tp.tourism_name, tp.image_url, COALESCE(AVG(r.rating_value), 0) AS average_rating
+    FROM tourismplaces tp
+    LEFT JOIN ratings r ON tp.tourism_id = r.tourism_id
+    WHERE tp.city_id = ? AND tp.category_id = ?
+    GROUP BY tp.tourism_id, tp.tourism_name, tp.image_url
 ";
 $stmt = $con->prepare($tour_query);
 $stmt->bind_param("ii", $city_id, $category_id);
 $stmt->execute();
-$stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
+$stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating);
+
 ?>
 
 
@@ -166,7 +169,13 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url);
                     <h3 class="card-title" style="margin-top: 15px; font-size: 1.15rem; padding-left: 15px;">
                         <?php echo $tourism_name; ?>
                     </h3>
-                    <p class="card-rating" style="margin-top: 0%; padding-left: 15px;">Rating: ★★★★☆</p>
+                    <p class="card-rating" style="margin-top: 0%; padding-left: 15px;">
+                        <?php
+                        $roundedRating = floor($average_rating);
+                        $stars = str_repeat('★', $roundedRating) . str_repeat('☆', 5 - $roundedRating);
+                        echo "$stars ($roundedRating/5)";
+                        ?>
+                    </p>
                 </a>
             <?php endwhile; ?>
         </div>
