@@ -118,46 +118,51 @@ initEventSlider();
 
 document.addEventListener('DOMContentLoaded', function () {
     const carousels = document.querySelectorAll('.wikit-carousel');
-    
+
     carousels.forEach((carousel) => {
         const wrapper = carousel.querySelector('.wikit-carousel__carousel');
         const leftArrow = carousel.querySelector('.fa-angle-left');
         const rightArrow = carousel.querySelector('.fa-angle-right');
-        const cardWidth = 250; // Fixed width for cards
-        
-        // Calculate max scroll width for boundaries
-        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
-        
-        let scrollPosition = 0;
+        let scrollAmount = 0;
 
-        // Update scroll and boundary checks
-        const slide = (direction) => {
-            scrollPosition += direction * cardWidth;
-            scrollPosition = Math.max(0, Math.min(scrollPosition, maxScroll));
-            wrapper.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-            updateArrows();
-        };
+        // Get the card width including margin
+        const card = wrapper.querySelector('.card');
+        const cardWidth = card.offsetWidth + parseInt(getComputedStyle(card).marginRight); // Include margin right for full box width
 
         const updateArrows = () => {
-            leftArrow.style.display = scrollPosition === 0 ? 'none' : 'block';
-            rightArrow.style.display = scrollPosition >= maxScroll ? 'none' : 'block';
+            const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+            leftArrow.style.display = scrollAmount === 0 ? 'none' : 'block';
+            rightArrow.style.display = scrollAmount >= maxScroll ? 'none' : 'block';
         };
 
-        // Arrow event listeners
-        leftArrow.addEventListener('click', () => slide(-1));
-        rightArrow.addEventListener('click', () => slide(1));
+        rightArrow.addEventListener('click', () => {
+            scrollAmount += cardWidth; // Move right by one card width
+            const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+            scrollAmount = Math.min(scrollAmount, maxScroll); // Prevent overscroll
+            wrapper.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+            updateArrows();
+        });
 
-        // Initial setup for arrow visibility
+        leftArrow.addEventListener('click', () => {
+            scrollAmount -= cardWidth; // Move left by one card width
+            scrollAmount = Math.max(scrollAmount, 0); // Prevent underscroll
+            wrapper.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+            updateArrows();
+        });
+
+        // Initialize arrows visibility
         updateArrows();
         
-        // Resize event to adjust visibility
+        // Adjust on resize
         window.addEventListener('resize', () => {
-            scrollPosition = 0;
-            wrapper.scrollTo({ left: 0 });
+            const newCardWidth = wrapper.querySelector('.card').offsetWidth + parseInt(getComputedStyle(card).marginRight);
+            scrollAmount = Math.min(scrollAmount, wrapper.scrollWidth - wrapper.clientWidth); // Ensure scroll position remains valid
+            wrapper.scrollTo({ left: scrollAmount });
             updateArrows();
         });
     });
 });
+
 
 
     // Next and previous buttons functionality

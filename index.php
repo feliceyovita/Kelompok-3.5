@@ -175,67 +175,66 @@ $result = $con->query($query);
     </section>
     <!-- About Section End -->
 
-    <!-- <--card slider nature start --> 
-    <?php
-    $categoryQuery = "SELECT category_id, category_name, little_desc FROM tourismcategories";
-    $category_result = $con->query($categoryQuery);
+  <!-- <--card slider nature start --> 
+<?php
+$categoryQuery = "SELECT category_id, category_name, little_desc FROM tourismcategories";
+$category_result = $con->query($categoryQuery);
 
-    if ($category_result->num_rows > 0) {
-        while ($category = $category_result->fetch_assoc()) {
-            $categoryId = $category['category_id'];
-            $categoryName = $category['category_name'];
-            $description = $category['little_desc'];
+if ($category_result->num_rows > 0) {
+    while ($category = $category_result->fetch_assoc()) {
+        $categoryId = $category['category_id'];
+        $categoryName = $category['category_name'];
+        $description = $category['little_desc'];
 
-            echo '
-            <div id="' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="carousel-header">
-                <h2>' . $categoryName . '</h2>
-                <p>' . $description . '</p>
-                <a href="category.php?category_id=' . $categoryId . '" class="read-more-btn">Read More</a> 
-            </div>
-            <div class="wikit-carousel">
-                <div class="wikit-carousel__wrapper">
-                    <i id="left-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa fa-angle-left"></i> 
-                    <div class="wikit-carousel__carousel">';
+        echo '
+        <div id="' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="carousel-header">
+            <h2>' . htmlspecialchars($categoryName) . '</h2>
+            <p>' . htmlspecialchars($description) . '</p>
+            <a href="category.php?category_id=' . $categoryId . '" class="read-more-btn">Read More</a> 
+        </div>
+        <div class="wikit-carousel">
+            <div class="wikit-carousel__wrapper">
+                <i id="left-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa fa-angle-left"></i> 
+                <div class="wikit-carousel__carousel">';
 
-            $cityQuery = "
-            SELECT c.city_id, c.city_name, MIN(t.image_url) AS image_url
-            FROM cities c
-            LEFT JOIN tourismplaces t ON c.city_id = t.city_id
-            LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-            WHERE tc.category_id = $categoryId
-            GROUP BY c.city_id, c.city_name
-            ";
-            $city_result = $con->query($cityQuery);
+        $cityQuery = "
+        SELECT c.city_id, c.city_name, MIN(t.image_url) AS image_url
+        FROM cities c
+        LEFT JOIN tourismplaces t ON c.city_id = t.city_id
+        LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
+        WHERE tc.category_id = $categoryId
+        GROUP BY c.city_id, c.city_name
+        ";
+        $city_result = $con->query($cityQuery);
 
-            if ($city_result->num_rows > 0) {
-                while ($row = $city_result->fetch_assoc()) {
-                    $city_id = $row['city_id'];
-                    $cityName = $row['city_name'];
-                    $imageUrl = $row['image_url'] ? $row['image_url'] : 'image/background_nature.jpg';
+        if ($city_result->num_rows > 0) {
+            while ($row = $city_result->fetch_assoc()) {
+                $city_id = $row['city_id'];
+                $cityName = htmlspecialchars($row['city_name']);
+                $imageUrl = $row['image_url'] ? htmlspecialchars($row['image_url']) : 'image/background_nature.jpg';
 
-                    echo '
-                    <div class="card">
-                        <a href="citycategory.php?city_id=' . $city_id . '&category_id=' . $categoryId . '&image_url=' . $imageUrl.'" class="discover__card">
+                echo '
+                <div class="card">
+                    <a href="citycategory.php?city_id=' . $city_id . '&category_id=' . $categoryId . '&image_url=' . $imageUrl . '" class="discover__card">
                         <img src="' . $imageUrl . '" alt="img" draggable="false">
                         <div class="city-name">' . $cityName . '</div>
-                        </a>
-                    </div>';
-
-                }
-            } else {
-                echo "No cities found for this category.";
+                    </a>
+                </div>';
             }
-
-            echo '
-                    </div>
-                    <i id="right-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa fa-angle-right"></i> 
-                </div>
-            </div>';
+        } else {
+            echo '<div class="no-cities">No cities found for this category.</div>';
         }
-    } else {
-        echo "No categories found.";
+
+        echo '
+                </div>
+                <i id="right-' . strtolower(str_replace(' ', '-', $categoryName)) . '" class="fa fa-angle-right"></i> 
+            </div>
+        </div>';
     }
-    ?>
+} else {
+    echo "<div class='no-categories'>No categories found.</div>";
+}
+?>
 
 
 <!-- Event section start -->
