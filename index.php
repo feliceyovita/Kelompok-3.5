@@ -114,7 +114,7 @@ $result = $con->query($query);
                     ?>
                     <div class="item<?php echo $active; ?>">
                         <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>">
-                        <div class="content">
+                        <div class="content" style="margin-left: -30px;" >
                             <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
                             <h1>Discover</h1>
                             <h2><span style="color:#f8b200;"><?php echo $tourism_name; ?></span></h2>
@@ -249,13 +249,16 @@ $result = $con->query($query);
     </div>
 
     <!-- Calendar Event Section Start -->
-    <div class="event-calendar">
-            <h3>Calendar Event in 2024</h3>
-            <div class="calendar-container">
-                <button class="nav-button left" onclick="slideLeft()">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <div class="slider-calendar">
+   <!-- Calendar Event Section Start -->
+<div class="event-calendar">
+    <h3>Calendar Event in 2024</h3>
+    <div class="calendar-container">
+        <button class="nav-button left" onclick="slideLeft()">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="slider-calendar">
+            <!-- Repeat month-card div for each month -->
+            
                     <!-- January -->
                     <div class="month-card">
                         <div class="month-header">
@@ -448,6 +451,54 @@ $result = $con->query($query);
                             </div>
                         </div>
                     </div>
+                     <!-- December -->
+                     <div class="month-card">
+                        <div class="month-header">
+                            <h4>December</h4>
+                        </div>
+                        <div class="event-list">
+                            <div class="event-item">
+                                <span class="event-date">25</span>
+                                <span class="event-name">Christmas Day</span>
+                            </div>
+                            <div class="event-item">
+                                <span class="event-date">31</span>
+                                <span class="event-name">New Year's Eve</span>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- December -->
+                     <div class="month-card">
+                        <div class="month-header">
+                            <h4>December</h4>
+                        </div>
+                        <div class="event-list">
+                            <div class="event-item">
+                                <span class="event-date">25</span>
+                                <span class="event-name">Christmas Day</span>
+                            </div>
+                            <div class="event-item">
+                                <span class="event-date">31</span>
+                                <span class="event-name">New Year's Eve</span>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- December -->
+                     <div class="month-card">
+                        <div class="month-header">
+                            <h4>December</h4>
+                        </div>
+                        <div class="event-list">
+                            <div class="event-item">
+                                <span class="event-date">25</span>
+                                <span class="event-name">Christmas Day</span>
+                            </div>
+                            <div class="event-item">
+                                <span class="event-date">31</span>
+                                <span class="event-name">New Year's Eve</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button class="nav-button right" onclick="slideRight()">
                     <i class="bi bi-chevron-right"></i>
@@ -455,33 +506,43 @@ $result = $con->query($query);
             </div>
         </div>
 
-        <!-- Recommended Events Section Start -->
-        <div class="recommended-events">
-            <h3>Event Recommendation</h3>
-            <div class="event-grid">
-                <div class="event-card">
-                    <img src="image/event.jpg" alt="" />
-                    <h4>Lake Toba Festival</h4>
-                    <p>22 Nov - 24 Nov 2024</p>
-                    <p>Rp498.000</p>
-                </div>
-                <div class="event-card">
-                    <img src="image/event.jpg" alt="" />
-                    <h4>Pekan Raya North Sumatera</h4>
-                    <p>02 Nov - 03 Nov 2024</p>
-                    <p>Rp135.000</p>
-                </div>
-                <div class="event-card">
-                    <img src="image/event.jpg" alt="Scent of Indonesia" />
-                    <h4>Scent of Indonesia Vol. 2</h4>
-                    <p>01 Nov - 03 Nov 2024</p>
-                    <p>Rp30.000</p>
+        </div>
+        <button class="nav-button right" onclick="slideRight()">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+</div>
+    <!-- Recommended Events Section Start -->
+    <div class="recommended-events">
+        <h3>Event Recommendation</h3>
+        <div class="event-slider">
+            <div class="event-grid-wrapper">
+                <div class="event-grid">
+                    <div class="event-card">
+                        <img src="image/event.jpg" alt="Lake Toba Festival" />
+                        <h4>Lake Toba Festival</h4>
+                        <p>22 Nov - 24 Nov 2024</p>
+                        <p>Rp498.000</p>
+                    </div>
+                    <div class="event-card">
+                        <img src="image/event.jpg" alt="Pekan Raya North Sumatera" />
+                        <h4>Pekan Raya North Sumatera</h4>
+                        <p>02 Nov - 03 Nov 2024</p>
+                        <p>Rp135.000</p>
+                    </div>
+                    <div class="event-card">
+                        <img src="image/event.jpg" alt="Scent of Indonesia" />
+                        <h4>Scent of Indonesia Vol. 2</h4>
+                        <p>01 Nov - 03 Nov 2024</p>
+                        <p>Rp30.000</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Recommended Events Section End -->
     </div>
-    <!-- Event section end -->
+    <!-- Recommended Events Section End -->
+
+
 
     <!-- Footer -->
     <footer class="wikitrip-footer-section">
