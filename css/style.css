@@ -31,6 +31,8 @@ body {
     height: 50px;
 }
 
+
+
 /* Menu dan dropdown styling */
 ul {
     margin: 0;
@@ -128,6 +130,176 @@ li {
 
 /* Navbar Section End */
 
+
+.event-calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Memastikan isi di tengah */
+    margin: 20px 0;
+    /* Jarak atas dan bawah */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+
+}
+
+
+.calendar-container {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.slider-calendar {
+    display: flex;
+    transition: transform 0.3s ease;
+    flex-wrap: nowrap;
+    /* Allow items to overflow horizontally */
+}
+
+.month-card {
+    min-width: 200px;
+    /* Adjust based on your design */
+    margin: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1 1 auto;
+    /* Allow the card to grow and shrink */
+}
+
+
+.nav-button {
+    cursor: pointer;
+    user-select: none;
+    /* Prevent text selection */
+    padding: 10px;
+    background: #ddd;
+    /* Background color for buttons */
+    border: 1px solid #aaa;
+    /* Border for buttons */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-button.left {
+    left: 10px;
+    /* Positioning left button */
+}
+
+.nav-button.right {
+    right: 10px;
+    /* Positioning right button */
+}
+
+button.prev,
+button.next {
+    background-color: #007bff;
+    /* Button color */
+    color: white;
+    /* Button text color */
+    border: none;
+    /* No border */
+    border-radius: 4px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    padding: 10px;
+    /* Button padding */
+    font-size: 1.5em;
+    /* Button size */
+    position: absolute;
+    /* Position relative to the event slider */
+    top: 50%;
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust for vertical centering */
+}
+
+button.prev {
+    left: 10px;
+    /* Position left button */
+}
+
+button.next {
+    right: 10px;
+    /* Position right button */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .month-card {
+        min-width: 150px;
+        /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .month-card {
+        min-width: 100%;
+        /* Single card on very small screens */
+    }
+}
+
+/* Default styles for large screens */
+.wikit-carousel__wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.wikit-carousel__carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.card {
+    flex: 0 0 auto;
+}
+
+.nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    background: #ddd;
+    border: 1px solid #aaa;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.nav-button.left {
+    left: 10px;
+}
+
+.nav-button.right {
+    right: 10px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 50%;
+        /* 2 cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+        /* 1 card per row */
+    }
+}
+
 /* Card Slider For Nature Start */
 .wikit-carousel * {
     margin: 0;
@@ -183,36 +355,47 @@ li {
     justify-content: center;
     min-height: 50vh;
     background: #fff;
-    margin: 0;
+    margin: 10px;
     overflow: hidden;
     position: relative;
 }
 
+.wikit-carousel__carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    /* Space between cards */
+    padding: 5px;
+}
+
 .wikit-carousel__wrapper {
     max-width: 1200px;
+    margin: 0;
+    /* No extra margin */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    margin-top: 0px;
-    /* Reduce margin to bring cards closer */
-    margin-bottom: 0;
-    /* No bottom margin */
 }
 
 .wikit-carousel__wrapper i {
-    top: 50%;
+    top: 37%;
     background: #1c98ed;
     height: 45px;
-    width: 46px;
+    width: 45px;
     font-size: 1.2rem;
-    cursor: pointer;
     position: absolute;
     text-align: center;
-    line-height: 46px;
+    line-height: 45px;
     border-radius: 50%;
-    transform: translateY(-50%);
     color: white;
     z-index: 10;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
+/* Hide the left arrow on the first card */
 .wikit-carousel__wrapper i:first-child {
     left: -23px;
     display: none;
@@ -220,54 +403,49 @@ li {
 
 .wikit-carousel__wrapper i:last-child {
     right: -10px;
-
 }
 
-.wikit-carousel__wrapper .wikit-carousel__carousel {
+.wikit-carousel__carousel {
     display: flex;
-    gap: 14px;
+    gap: 0px;
     /* Space between cards */
     overflow: hidden;
     scroll-behavior: smooth;
 }
 
-.wikit-carousel__wrapper .wikit-carousel__carousel.dragging {
+.wikit-carousel__carousel .card {
+    flex: 0 0 280px;
+    /* Fixed card width */
+    flex-shrink: 0;
+    height: 300px;
+    scroll-snap-align: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    border: none;
+}
+
+.wikit-carousel__carousel .card img {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.wikit-carousel__carousel.dragging {
     cursor: grab;
     scroll-behavior: auto;
 }
 
-.wikit-carousel__wrapper .wikit-carousel__carousel.dragging .card img {
+.wikit-carousel__carousel.dragging .card img {
     pointer-events: none;
 }
 
-.wikit-carousel__wrapper .wikit-carousel__carousel .card {
-    position: relative;
-    flex: 0 0 calc(25% - 14px);
-    /* Adjust for spacing */
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    /* Remove any extra margin */
-    background: transparent;
-    /* Set card background to transparent */
-    border: none;
-}
-
-.wikit-carousel__wrapper .wikit-carousel__carousel .card img {
-    height: 250px;
-    /* Set a consistent height */
-    object-fit: cover;
-    width: 100%;
-    margin: 0;
-    /* Remove margin around the image */
-    padding: 0;
-    /* Remove padding */
-    display: block;
-    /* Ensure it's a block-level element */
-}
-
-/* City name text inside the card */
-.wikit-carousel__wrapper .wikit-carousel__carousel .card .city-name {
+/* City name text styling */
+.wikit-carousel__carousel .card .city-name {
     position: absolute;
     bottom: 10px;
     left: 10px;
@@ -275,26 +453,161 @@ li {
     font-size: 20px;
 }
 
-/* First and last card margin adjustments */
-.wikit-carousel__wrapper .wikit-carousel__carousel .card:first-child img {
+/* Margin adjustments for first and last cards */
+.wikit-carousel__carousel .card:first-child img {
     margin-left: 0;
 }
 
-.wikit-carousel__wrapper .wikit-carousel__carousel .card:last-child img {
+.wikit-carousel__carousel .card:last-child img {
     margin-right: 0;
 }
 
-/* Responsive styles */
+/* Arrow positioning */
+.wikit-carousel__wrapper i.fa-angle-left {
+    left: -17px;
+}
+
+.wikit-carousel__wrapper i.fa-angle-right {
+    right: -17px;
+}
+
+/* Responsive styling */
 @media screen and (max-width: 900px) {
-    .wikit-carousel__wrapper .wikit-carousel__carousel .card {
-        flex: 0 0 calc(33.33% - 14px);
+    .wikit-carousel__carousel .card {
+        flex: 0 0 220px;
+        /* Maintain card width */
+    }
+    /* Posisi tombol navigasi */
+    .wikit-carousel .fa-angle-left,
+    .wikit-carousel .fa-angle-right {
+        top: 35%;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .wikit-carousel {
+        width: 100%;
+    }
+
+    .wikit-carousel__carousel {
+        gap: 5px;
+    }
+
+    .wikit-carousel__carousel .card {
+        flex: 0 0 180px;
+        /* Maintain card width on smaller screens */
+    }
+
+    .wikit-carousel .fa-angle-left,
+    .wikit-carousel .fa-angle-right {
+        top: 48%;
+        /* Geser sedikit lebih ke bawah */
+        font-size: 22px;
+        /* Kurangi ukuran font */
     }
 }
 
 @media screen and (max-width: 550px) {
-    .wikit-carousel__wrapper .wikit-carousel__carousel .card {
-        flex: 0 0 100%;
+    .wikit-carousel__carousel .card {
+        flex: 0 0 150px;
+        /* Smaller card width for very small screens */
     }
+}
+
+
+.slider {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    /* Full width of the parent container */
+}
+
+.list {
+    display: flex;
+    /* Use flexbox for horizontal layout */
+    transition: transform 0.5s ease;
+    /* Smooth transition when sliding */
+    width: 100%;
+    /* Full width of the slider */
+}
+
+.item {
+    flex: 0 0 100%;
+    /* Each item takes full width */
+    max-width: 100%;
+    /* Prevent item overflow */
+    display: flex;
+    /* Allow centering content */
+    justify-content: center;
+    /* Center content horizontally */
+    align-items: center;
+    /* Center content vertically */
+}
+
+.item img {
+    width: 100%;
+    /* Make image responsive */
+    height: auto;
+    /* Maintain aspect ratio */
+    object-fit: cover;
+    /* Cover the entire area of the item */
+}
+
+.arrows {
+    position: absolute;
+    /* Position arrows on top of the slider */
+    top: 50%;
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust position */
+    width: 100%;
+    /* Full width for easy click area */
+    display: flex;
+    /* Align arrows in a row */
+    justify-content: space-between;
+    /* Space out the arrows */
+    z-index: 1;
+    /* Ensure arrows are on top of images */
+}
+
+#prev,
+#next {
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Semi-transparent background for buttons */
+    border: none;
+    /* No border */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    padding: 10px;
+    /* Some padding */
+}
+
+.thumbnail {
+    display: flex;
+    /* Use flexbox for thumbnail layout */
+    justify-content: center;
+    /* Center thumbnails */
+    margin-top: 10px;
+    /* Add space between thumbnails and slider */
+}
+
+.thumbnail .item {
+    flex: 0 0 auto;
+    /* Prevent thumbnails from growing */
+    margin: 0 5px;
+    /* Space between thumbnails */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+}
+
+.thumbnail img {
+    width: 60px;
+    /* Set a fixed width for thumbnails */
+    height: 40px;
+    /* Set a fixed height for thumbnails */
+    object-fit: cover;
+    /* Maintain aspect ratio */
 }
 
 /* css slider */
@@ -375,7 +688,7 @@ li {
     margin-left: -25px;
 }
 
-.slider .list .item.active h1, 
+.slider .list .item.active h1,
 .slider .list .item.active h2 {
     animation-delay: 1s;
 }
@@ -438,8 +751,7 @@ li {
         justify-content: start;
     }
 
-    .slider .list .item .content h1 
-    .slider .list .item .content h2{
+    .slider .list .item .content h1 .slider .list .item .content h2 {
         font-size: 60px;
     }
 
@@ -563,14 +875,14 @@ li {
 .logo-container {
     display: flex;
     align-items: center;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     margin-bottom: 2px;
-    margin-right: 85px ;
+    margin-right: 85px;
 }
 
 .auth-logo {
-    width: 100px; 
-    margin-right: 1px; 
+    width: 100px;
+    margin-right: 1px;
 }
 
 .auth-brand {
@@ -582,12 +894,13 @@ li {
 }
 
 .auth-brand .wiki {
-    color: #f8b200;;
+    color: #f8b200;
+    ;
     font-size: 3rem;
 }
 
 .auth-brand .trip {
-    color: #1c98ed; 
+    color: #1c98ed;
     font-size: 3rem;
 }
 
@@ -672,9 +985,12 @@ form.sign-in-form {
     border: none;
     cursor: pointer;
     position: absolute;
-    right: 10px; /* Sesuaikan posisi tombol */
-    top: 2px; /* Sesuaikan posisi tombol */
-    color: #acacac; /* Warna ikon */
+    right: 10px;
+    /* Sesuaikan posisi tombol */
+    top: 2px;
+    /* Sesuaikan posisi tombol */
+    color: #acacac;
+    /* Warna ikon */
 }
 
 .social-text {
@@ -1012,15 +1328,15 @@ form.sign-in-form {
         /* Mengurangi padding di perangkat kecil */
     }
 
-        .wrapper img {
-            width: 100%;
-            /* Gambar memenuhi layar di perangkat kecil */
-            margin-right: 0;
-            margin-bottom: 20px;
-            padding-left: 0;
-            /* Hapus padding untuk gambar di layar kecil */
-        }
-        }
+    .wrapper img {
+        width: 100%;
+        /* Gambar memenuhi layar di perangkat kecil */
+        margin-right: 0;
+        margin-bottom: 20px;
+        padding-left: 0;
+        /* Hapus padding untuk gambar di layar kecil */
+    }
+}
 
 .text-box {
     flex: 1;
@@ -1061,60 +1377,60 @@ form.sign-in-form {
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
-    justify-content: center; 
+    align-items: flex-start;
+    justify-content: center;
     height: 100%;
-    text-align: left; 
+    text-align: left;
     z-index: 1;
-    color: white; 
+    color: white;
     padding-left: 2rem;
 }
 
 .home__data-subtitle {
     display: block;
-    font-weight: 500; 
-    margin-bottom: 0.75rem; 
+    font-weight: 500;
+    margin-bottom: 0.75rem;
     font-size: 1.25rem;
 }
 
 .home__data-title {
-    font-size: 4rem; 
-    font-weight: 600; 
-    margin-bottom: 2rem; 
+    font-size: 4rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
 }
 
 .home__data-title b {
-    font-weight: 700; 
+    font-weight: 700;
 }
 
 .button {
     display: inline-block;
-    background-color: #1c98ed; 
+    background-color: #1c98ed;
     color: white;
     padding: 0.75rem 2rem;
     border-radius: 5px;
     text-transform: uppercase;
     font-weight: 700;
-    margin-top: 1rem; 
-    text-decoration: none; 
-    transition: background-color 0.3s ease; 
+    margin-top: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
     border: none;
 }
 
 .button:hover {
-    background-color: #1176ba; 
-    color: white; 
-    cursor: pointer; 
+    background-color: #1176ba;
+    color: white;
+    cursor: pointer;
 }
 
 /* Main content styling */
 .main-content {
-    padding: 3rem 7rem; 
+    padding: 3rem 7rem;
     background-color: #f5f5f5;
     text-align: left;
     width: 100%;
     box-sizing: border-box;
-    padding-top: 6rem; 
+    padding-top: 6rem;
 }
 
 .content-title {
@@ -1125,12 +1441,12 @@ form.sign-in-form {
 }
 
 .btn-outline-primary:hover {
-    background-color: #007bff; 
-    color: #fff; 
+    background-color: #007bff;
+    color: #fff;
 }
 
 .btn-outline-primary i {
-    margin-right: 5px; 
+    margin-right: 5px;
 }
 
 .content-description {
@@ -1142,9 +1458,9 @@ form.sign-in-form {
 
 .content-divider {
     border: none;
-    border-top: 2px solid #464343; 
-    width: 100%; 
-    margin-top: 1rem; 
+    border-top: 2px solid #464343;
+    width: 100%;
+    margin-top: 1rem;
     margin-bottom: 3rem;
 }
 
@@ -1180,6 +1496,7 @@ form.sign-in-form {
         /* Adjust the height as needed for smaller devices */
     }
 }
+
 @media (max-width: 1200px) {
     .main-content {
         padding: 3rem 2%;
@@ -1192,6 +1509,7 @@ form.sign-in-form {
         /* Add top margin to create additional space */
     }
 }
+
 @media (max-width: 575px) {
     .main-content {
         padding: 3rem 2%;
@@ -1217,6 +1535,7 @@ form.sign-in-form {
         /* Increase top margin for better spacing */
     }
 }
+
 .explore-title {
     font-size: 2rem;
     font-weight: 700;
@@ -1226,39 +1545,39 @@ form.sign-in-form {
 
 .discover__card {
     position: relative;
-    width: 300px; 
-    height: 200px; 
+    width: 300px;
+    height: 200px;
     overflow: hidden;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
 
 .discover__img {
-    width: 100%; 
+    width: 100%;
     height: 100%;
-    object-fit: cover; 
-    transition: transform 0.3s ease-in-out; 
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
 }
 
 .discover__img:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
 .discover__data {
     position: absolute;
     bottom: 1.5rem;
     left: 1rem;
-    z-index: 2; 
+    z-index: 2;
 }
 
-.discover__title, 
+.discover__title,
 .discover__description {
-    color: #ffffff; 
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); 
+    color: #ffffff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .discover__title {
-    font-size: 1.5rem; 
-    margin-bottom: 0.25rem; 
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .discover__description {
@@ -1277,7 +1596,7 @@ form.sign-in-form {
 .load-more {
     margin: 2rem auto;
     padding: 10px 20px;
-    background-color: #1c98ed; 
+    background-color: #1c98ed;
     color: white;
     border: none;
     cursor: pointer;
@@ -1288,9 +1607,10 @@ form.sign-in-form {
 }
 
 .load-more:hover {
-    background-color: #1176ba; 
-    color: white; 
+    background-color: #1176ba;
+    color: white;
 }
+
 /* General responsive adjustments */
 @media screen and (max-width: 1200px) {
     .main-content {
@@ -1508,6 +1828,7 @@ form.sign-in-form {
         padding: 10px;
     }
 }
+
 /* Ini untuk card di city-category */
 .culinary-card {
     display: flex;
@@ -1546,6 +1867,7 @@ form.sign-in-form {
     padding-left: 15px;
     margin-top: 5px;
 }
+
 @media (max-width: 992px) {
     .restaurant {
         width: calc(50% - 20px);
@@ -1559,6 +1881,7 @@ form.sign-in-form {
         /* 1 card per baris pada layar kecil */
     }
 }
+
 /* Event Container */
 .container-event {
     width: 100%;
@@ -1710,7 +2033,7 @@ form.sign-in-form {
     transform: translateY(-50%);
     z-index: 1;
     margin: 0;
-    padding: 0; 
+    padding: 0;
 }
 
 .nav-button.left {
@@ -1722,65 +2045,126 @@ form.sign-in-form {
     right: 3px;
 }
 
+/* Recommended Events Section Styles */
 .recommended-events {
-    margin-top: 20px;
-    padding: 20px;
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .recommended-events h3 {
-    font-size: 2.25rem;
     text-align: center;
-    font-weight: 600;
-    margin-top: 25px;
-    margin-bottom: 50px;
-    color: #343f4f
+    margin-bottom: 15px;
+    color: black;
+}
+
+.event-slider {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    /* Center the slider */
+}
+
+.nav-button {
+    background-color: #1c98ed;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-button.left {
+    left: 10px;
+}
+
+.nav-button.right {
+    right: 10px;
+}
+
+.event-grid-wrapper {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
 }
 
 .event-grid {
     display: flex;
-    flex-wrap: wrap;
+    gap: 15px;
     justify-content: center;
-    gap: 30px;
+    transition: transform 0.3s ease;
+
 }
 
 .event-card {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin: 10px;
-    margin-bottom: 50px;
-    padding: 0px;
-    flex-basis: 22%; 
+    flex: 0 0 260px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
-}
-
-.event-card:hover {
-    transform: scale(1.05); 
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: black;
+    min-width: 200px;
+    /* Atur sesuai kebutuhan */
+    margin-right: 15px;
+    /* Jika ada margin */
+    margin-bottom: 20px;
 }
 
 .event-card img {
     width: 100%;
-    height: auto;
-    border-radius: 10px 10px 0 0;
-    transition: opacity 0.3s ease;
-}
-
-.event-card:hover img {
-    opacity: 0.8; 
+    border-radius: 8px;
 }
 
 .event-card h4 {
-    font-size: 1.2em;
-    margin: 10px 0 5px;
-    color: #000000;
+    margin: 10px 0;
+    font-size: 16px;
+    color: black;
 }
 
 .event-card p {
-    margin: 5px 0;
-    color: #000000;
+    color: black;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-card {
+        flex: 0 0 200px;
+    }
+
+    .nav-button {
+        padding: 8px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .event-card {
+        flex: 0 0 100%;
+    }
+
+    .nav-button {
+        padding: 6px;
+        font-size: 14px;
+    }
+}
+
 /* Footer */
 .wikitrip-footer-section * {
     padding: 0;
@@ -1902,12 +2286,13 @@ form.sign-in-form {
     padding: 20px;
     border-radius: 0.5em;
     box-shadow: 0 1.25em 2.5em rgba(18, 0, 76, 0.15);
-    margin: 30px auto; 
+    margin: 30px auto;
     margin-top: 50px;
     justify-content: center;
-    text-align: center; 
+    text-align: center;
     color: #000000;
 }
+
 @media (max-width: 600px) {
     .wrapper-rating {
         font-size: 1em;
@@ -1916,6 +2301,7 @@ form.sign-in-form {
         /* Kurangi padding untuk tampilan kecil */
     }
 }
+
 .wrapper-rating p {
     font-weight: 500;
     font-size: 25px;
@@ -1926,7 +2312,7 @@ form.sign-in-form {
     display: flex;
     justify-content: center;
     align-content: center;
-    margin-top: 5px; 
+    margin-top: 5px;
     margin-bottom: 20px;
 }
 
@@ -1944,7 +2330,7 @@ form.sign-in-form {
 
 #submit {
     display: block;
-    background: linear-gradient( #00d2ff, #3a7bd5);
+    background: linear-gradient(#00d2ff, #3a7bd5);
     border: none;
     padding: 0.8em 2em;
     color: #ffffff;
@@ -1969,11 +2355,13 @@ form.sign-in-form {
 }
 
 #submit-section.show {
-  display: block; /* Show when needed */
+    display: block;
+    /* Show when needed */
 }
 
 #submit-section.hide {
-  display: none; /* Hide when needed */
+    display: none;
+    /* Hide when needed */
 }
 
 /* Bookmark Section Styles */
@@ -2027,12 +2415,16 @@ form.sign-in-form {
 .bookmark-section-card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Membuat jarak seimbang antara elemen di atas dan di bawah */
-    align-items: center; /* Memusatkan konten secara horizontal */
+    justify-content: space-between;
+    /* Membuat jarak seimbang antara elemen di atas dan di bawah */
+    align-items: center;
+    /* Memusatkan konten secara horizontal */
     padding: 15px;
-    height: 100%; /* Memastikan tinggi body sesuai dengan tinggi card */
+    height: 100%;
+    /* Memastikan tinggi body sesuai dengan tinggi card */
     box-sizing: border-box;
 }
+
 .bookmark-section-card-title {
     font-size: 18px;
     font-weight: 400;
@@ -2042,11 +2434,13 @@ form.sign-in-form {
     padding: 5px 0;
     /* Menambahkan padding agar jarak antar card lebih konsisten */
 }
+
 .bookmark-section-card-text {
     font-size: 14px;
     color: #6c757d;
     text-align: center;
 }
+
 .bookmark-section-card-btn {
     background-color: #007bff;
     color: white;
@@ -2062,6 +2456,7 @@ form.sign-in-form {
     /* Memusatkan teks di dalam tombol */
     align-items: center;
 }
+
 /* Responsiveness for Footer Section */
 @media screen and (max-width: 992px) {
     .wikitrip-footer-container {
@@ -2170,6 +2565,7 @@ form.sign-in-form {
         width: 95px;
     }
 }
+
 @media screen and (max-width: 992px) {
     .bookmark-section-title {
         font-size: 40px;
