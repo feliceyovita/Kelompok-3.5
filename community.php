@@ -8,18 +8,22 @@ $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyw
 
 // Jika ada keyword, lakukan pencarian
 if ($keyword != '') {
-    $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                WHERE p.content LIKE '%$keyword%'
-                ORDER BY p.created_at DESC";
+    $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username,
+              (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked
+              FROM posts p
+              JOIN users u ON p.user_id = u.user_id
+              LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = p.user_id
+              WHERE p.content LIKE '%$keyword%'
+              ORDER BY p.created_at DESC";
     echo "<h6>Result search for : '$keyword'</h6>";
 } else {
     // Jika tidak ada keyword, tampilkan semua postingan
-    $query = "SELECT p.user_id, p.content, p.image, p.created_at, u.username
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                ORDER BY p.created_at DESC";
+    $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username,
+              (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked
+              FROM posts p
+              JOIN users u ON p.user_id = u.user_id
+              LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = p.user_id
+              ORDER BY p.created_at DESC";
 }
 
 $result = mysqli_query($con, $query);
@@ -161,7 +165,7 @@ $result = mysqli_query($con, $query);
             <div class="posts-container">
                 <?php if (mysqli_num_rows($result) > 0): ?>
                     <?php while($row = mysqli_fetch_assoc($result)): ?>
-                        <div class="post-box">
+                        <div class="post-box" data-post-id="<?= $row['id']; ?>">
                             <div class="post-header">
                                 <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
                                 <div>
@@ -177,9 +181,21 @@ $result = mysqli_query($con, $query);
                                 <?php endif; ?>
                             </div>
                             <div class="post-actions">
-                                <div><i class="fas fa-thumbs-up"></i> Like</div>
+                                <div class="like-button <?= $row['is_liked'] ? 'liked' : ''; ?>"><i class="fas fa-thumbs-up"></i> Like</div>
                                 <div><i class="fas fa-comment"></i> Comment</div>
-                                <div><i class="fas fa-share"></i> Share</div>
+                                <div class="share-button"><i class="fas fa-share"></i> Share</div>
+                            </div>
+                            <div class="comment-section" style="display: none;">
+                                <input type="text" class="comment-input" placeholder="Tulis komentar...">
+                                <button class="comment-submit">Kirim</button>
+                                <div class="comment-list"></div>
+                            </div>
+                            <div class="share-popup" style="display: none;">
+                                <div class="share-options">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                    <i class="fab fa-whatsapp"></i> WhatssApp
+                                    <i class="fab fa-instagram"></i> Instagram
+                                </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
@@ -204,8 +220,9 @@ $result = mysqli_query($con, $query);
     </div>
     
     <!-- Bootstrap Bundle with Popper -->
+    <script src="js/post_action_community.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
 </html>
