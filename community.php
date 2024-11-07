@@ -97,6 +97,12 @@ $result = mysqli_query($con, $query);
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
+                                    <a href="profile.html" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
+                                        <i class="bi bi-person-circle material-icons-outlined"></i>
+                                        <p style="margin-left: 8px" >Profile</p>
+                                    </a>
+                                </li>
+                                <li class="sub-item">
                                     <a href="bookmark.php" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-bookmark material-icons-outlined"></i>
                                         <p style="margin-left: 8px;">Bookmark</p>
@@ -166,6 +172,13 @@ $result = mysqli_query($con, $query);
                 <?php if (mysqli_num_rows($result) > 0): ?>
                     <?php while($row = mysqli_fetch_assoc($result)): ?>
                         <div class="post-box" data-post-id="<?= $row['id']; ?>">
+                            <div class="post-options">
+                                <i class="fas fa-ellipsis-v options-icon"></i>
+                                <div class="options-dropdown">
+                                    <i class="fas fa-trash"></i>
+                                    <span>Delete Post</span>
+                                </div>
+                            </div>
                             <div class="post-header">
                                 <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
                                 <div>

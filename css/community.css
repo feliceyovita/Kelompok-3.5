@@ -284,6 +284,7 @@ li {
     border-radius: 10px;
     margin-bottom: 20px;
     width: 100%;
+    position: relative;
 }
 
 .post-box .post-header {
@@ -438,4 +439,51 @@ li {
 .share-options i {
     margin: 5px;
     cursor: pointer;
+}
+.post-options {
+    position: absolute;
+    top: 20px;
+    /* Sesuaikan sesuai kebutuhan */
+    right: 15px;
+    /* Ini akan menempatkan ikon di pojok kanan */
+    display: inline-block;
+    cursor: pointer;
+}
+.options-icon {
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.options-dropdown {
+    display: none;
+    /* Sembunyikan dropdown secara default */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    z-index: 10;
+    width: 108px;
+    border-radius: 8px;
+}
+
+.options-dropdown i {
+    font-size: 0.8em;
+    margin-right: 5px;
+}
+
+.options-dropdown span {
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.options-dropdown i:hover,
+.options-dropdown span:hover {
+    color: #f8b200;
+    /* Ubah warna menjadi kuning saat di-hover */
+}
+.post-options:hover .options-dropdown {
+    display: block;
+    /* Tampilkan dropdown saat di-hover */
 }
