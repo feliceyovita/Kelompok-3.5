@@ -1,31 +1,61 @@
 <?php
 session_start();
 include('config/conn.php');
-
-$isLoggedIn = isset($_SESSION['user_id']);
-
-$keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyword']) : '';
-
-// Jika ada keyword, lakukan pencarian
-if ($keyword != '') {
-    $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username,
-              (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked
-              FROM posts p
-              JOIN users u ON p.user_id = u.user_id
-              LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = p.user_id
-              WHERE p.content LIKE '%$keyword%'
-              ORDER BY p.created_at DESC";
-    echo "<h6>Result search for : '$keyword'</h6>";
-} else {
-    // Jika tidak ada keyword, tampilkan semua postingan
-    $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username,
-              (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked
-              FROM posts p
-              JOIN users u ON p.user_id = u.user_id
-              LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = p.user_id
-              ORDER BY p.created_at DESC";
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
 }
-$result = mysqli_query($con, $query);
+
+$user_id = $_SESSION['user_id'];
+$sql = "
+    SELECT users.username,
+           (SELECT COUNT(*) FROM posts WHERE posts.user_id = users.user_id) AS post_count,
+           (SELECT COUNT(*) FROM post_likes WHERE post_likes.user_id = users.user_id) AS like_count
+    FROM users
+    WHERE users.user_id = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
+    $post_count = $row['post_count'];
+    $like_count = $row['like_count'];
+} else {
+
+    $username = $row['username'];
+    $post_count = 0;
+    $like_count = 0;
+}
+
+$show_likes = isset($_GET['section']) && $_GET['section'] == 'likes';
+if ($show_likes) {
+    $sql = "
+        SELECT posts.id, posts.content, posts.created_at, posts.image, users.username,
+               (SELECT COUNT(*) FROM post_likes WHERE post_likes.post_id = posts.id AND post_likes.user_id = ?) AS is_liked
+        FROM posts
+        JOIN users ON posts.user_id = users.user_id
+        JOIN post_likes ON post_likes.post_id = posts.id
+        WHERE post_likes.user_id = ?
+        ORDER BY posts.created_at DESC";
+} else {
+    $sql = "
+        SELECT posts.id, posts.content, posts.created_at, posts.image, users.username,
+               (SELECT COUNT(*) FROM post_likes WHERE post_likes.post_id = posts.id AND post_likes.user_id = ?) AS is_liked
+        FROM posts
+        JOIN users ON posts.user_id = users.user_id
+        WHERE posts.user_id = ?
+        ORDER BY posts.created_at DESC";
+}
+
+$stmt = $con->prepare($sql);
+$stmt->bind_param("ii", $user_id, $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +73,7 @@ $result = mysqli_query($con, $query);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 
     <!-- Custom CSS File -->
+    <link href="css/profile.css" rel="stylesheet">
     <link href="css/community.css" rel="stylesheet">
 
     <!-- Google Fonts for Material Icons -->
@@ -50,7 +81,6 @@ $result = mysqli_query($con, $query);
 
     <title>WikiTrip Community</title>
 </head>
-
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="main-nav" style="background-color: #0a598f;">
@@ -65,12 +95,11 @@ $result = mysqli_query($con, $query);
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
+                        <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="index.php#about">About</a>
+                        <a class="nav-link text-white" href="#about">About</a>
                     </li>
-                    <!-- Destination Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Destination
@@ -81,7 +110,6 @@ $result = mysqli_query($con, $query);
                             <li><a class="dropdown-item" href="index.php#culinary-destination">Culinary destinations</a></li>
                         </ul>
                     </li>
-                    <!-- Event Dropdown -->
                     <li class="nav-item">
                         <a class="nav-link text-white" href="index.php#Event">Event</a>
                     </li>
@@ -91,15 +119,12 @@ $result = mysqli_query($con, $query);
                 </ul>
                 <div>
                     <ul>
-                        <!-- Profile Dropdown -->
                         <li class="nav-item profile-dropdown">
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
-                                        <i class="bi bi-person-circle material-icons-outlined"></i>
-                                        <p style="margin-left: 8px" >Profile</p>
-                                    </a>
+                                    <i class="bi bi-person-circle material-icons-outlined"></i>
+                                    <p>Profile</p>
                                 </li>
                                 <li class="sub-item">
                                     <a href="bookmark.php" class="bookmark-link" style="text-decoration: none; display: flex; align-items: center;">
@@ -128,48 +153,39 @@ $result = mysqli_query($con, $query);
         </div>
     </nav>
 
-    <div class="content">
-        <div class="left-panel">
-            <div class="search-container">
-                <form method="GET" action="">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" name="keyword" placeholder="Search posts..." value="<?php if(isset($_GET['keyword'])) echo $_GET['keyword']; ?>">
-                </form>
+    <div class="profile-header">
+        <div class="profile-info">
+            <div class="profile-picture-container">
+                <img alt="Profile Picture" src="https://storage.googleapis.com/a1aa/image/EscWC3kegGUHcy1u0CoVVXhILlQuyPP8EvNeAepZrrM00mcnA.jpg" width="80" class="profile-picture"/>
+                <a href="#" class="edit-icon">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
             </div>
-            <a href="index.php#nature-destination" style="text-decoration: none; color: inherit;">
-                <div class="option"><i class="fas fa-tree"></i> Natural Destination</div>
-            </a>
-            <a href="index.php#culinary-destination" style="text-decoration: none; color: inherit;">
-                <div class="option"><i class="fas fa-utensils"></i> Culinary Destination</div>
-            </a>
-            <a href="index.php#cultural-destination" style="text-decoration: none; color: inherit;">
-                <div class="option"><i class="fas fa-landmark"></i> Cultural Destination</div>
-            </a>
+            <div class="profile-details">
+                <h2><?= htmlspecialchars($username); ?></h2>
+                <div class="profile-stats">
+                    <div>
+                        <p>Activities</p>
+                        <span><?= $post_count ?> Posts  <?= $like_count ?> Likes</span>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="profile-nav">
+            <a href="#" onclick="showSection('activities')">Posts</a>
+            <a href="#" class="active" onclick="showSection('reviews')">Likes</a>
         </div>
     </div>
-
-    <div class="main-content">
-        <div class="post-box">
-        <form action="post_submit.php" method="POST" enctype="multipart/form-data">
-                <div class="post-header">
-                    <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
-                    <input type="text" name="content" placeholder="What's on your mind?" required>
-                </div>
-                <div class="post-actions" style="margin-top: 20px;">
-                    <div>
-                        <label for="image-upload"><i class="fas fa-camera"></i> Photo</label>
-                        <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
-                    </div>
-                    <button type="submit" style="background:none; border:none; color:inherit;">
-                        <div><i class="fas fa-pencil-alt"></i> Post</div>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-            <div class="posts-container">
-                <?php if (mysqli_num_rows($result) > 0): ?>
-                    <?php while($row = mysqli_fetch_assoc($result)): ?>
+    
+    <div class="content">
+        <div id="activities" class="section" style="display: none;">
+            <h3 class="divider">
+                <i class="bi bi-file-earmark-text "></i> Posts
+            </h3>
+            <div class="activity">
+                <?php if ($result->num_rows > 0): ?>
+                <div class="posts-container" >
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <div class="post-box" data-post-id="<?= $row['id']; ?>">
                             <div class="post-options">
                                 <i class="fas fa-ellipsis-v options-icon"></i>
@@ -181,15 +197,14 @@ $result = mysqli_query($con, $query);
                             <div class="post-header">
                                 <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
                                 <div>
-                                    <div class="post-author-name"><?= $row['username']; ?></div>
+                                    <div class="post-author-name"><?= htmlspecialchars($row['username']); ?></div>
                                     <div class="post-time"><?= date('d M Y H:i', strtotime($row['created_at'])); ?></div>
                                 </div>
                             </div>
                             <div class="post-content">
-                                <p><?= nl2br($row['content']); ?></p>
-                                <!-- Display image if it exists -->
+                                <p><?= nl2br(htmlspecialchars($row['content'])); ?></p>
                                 <?php if ($row['image']): ?>
-                                    <img src="uploads/<?= $row['image']; ?>" alt="Post Image" style="max-width:100%; height:auto;">
+                                    <img src="uploads/<?= htmlspecialchars($row['image']); ?>" alt="Post Image" style="max-width:100%; height:auto;">
                                 <?php endif; ?>
                             </div>
                             <div class="post-actions">
@@ -205,37 +220,67 @@ $result = mysqli_query($con, $query);
                             <div class="share-popup" style="display: none;">
                                 <div class="share-options">
                                     <i class="fab fa-facebook"></i> Facebook
-                                    <i class="fab fa-whatsapp"></i> WhatssApp
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
                                     <i class="fab fa-instagram"></i> Instagram
                                 </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
+                </div>
+            <?php else: ?>
+                <p>No posts found.</p>
+            <?php endif; ?>
+            </div>
+        </div>
+    
+        <div id="reviews" class="section" style="display: block;">
+            <h3 class="divider">
+                <i class="bi bi-hand-thumbs-up"></i> Likes
+            </h3>
+            <div class="activity">
+                <?php if ($result->num_rows > 0): ?>
+                    <div class="posts-container">
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <div class="post-box" data-post-id="<?= $row['id']; ?>">
+                                <div class="post-options">
+                                    <i class="fas fa-ellipsis-v options-icon"></i>
+                                    <div class="options-dropdown">
+                                        <i class="fas fa-trash"></i>
+                                        <span>Delete Post</span>
+                                    </div>
+                                </div>
+                                <div class="post-header">
+                                    <img src="https://storage.googleapis.com/a1aa/image/VsypAsQ3mTahONwjGX6dJASjPLkEBJy1y98zMf69JcOm92zJA.jpg" alt="User Profile Picture" height="40" width="40">
+                                    <div>
+                                        <div class="post-author-name"><?= htmlspecialchars($row['username']); ?></div>
+                                        <div class="post-time"><?= date('d M Y H:i', strtotime($row['created_at'])); ?></div>
+                                    </div>
+                                </div>
+                                <div class="post-content">
+                                    <p><?= nl2br(htmlspecialchars($row['content'])); ?></p>
+                                    <?php if ($row['image']): ?>
+                                        <img src="uploads/<?= htmlspecialchars($row['image']); ?>" alt="Post Image" style="max-width:100%; height:auto;">
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-actions">
+                                    <div class="like-button <?= $row['is_liked'] ? 'liked' : ''; ?>"><i class="fas fa-thumbs-up"></i> Like</div>
+                                    <div><i class="fas fa-comment"></i> Comment</div>
+                                    <div class="share-button"><i class="fas fa-share"></i> Share</div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
                 <?php else: ?>
-                    <p>No search results for : '<?= $keyword; ?>'</p>
+                    <p>No likes found.</p>
                 <?php endif; ?>
             </div>
         </div>
-
-        <div class="right-panel">
-            <div class="event-card">
-                <div class="event-header">
-                    <h4><b>Upcoming Events</b></h4>
-                    <a href="index.php#Event" class="see-all">See All</a>
-                </div>
-                <img src="image/event.jpg" alt="Lake Toba Festival" />
-                <h4>Lake Toba Festival</h4>
-                <p>22 Nov - 24 Nov 2024</p>
-                <p>Rp498.000</p>
-            </div>
-        </div>
     </div>
-    
-    <!-- Bootstrap Bundle with Popper -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/profile.js"></script>
     <script src="js/post_action_community.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
-    
 </body>
 </html>
