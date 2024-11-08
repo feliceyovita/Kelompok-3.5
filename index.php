@@ -76,7 +76,7 @@ $result = $con->query($query);
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
+                                    <a href="profile.html" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-person-circle material-icons-outlined"></i>
                                         <p style="margin-left: 8px" >Profile</p>
                                     </a>

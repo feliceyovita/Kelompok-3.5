@@ -25,6 +25,16 @@ if ($keyword != '') {
               LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = p.user_id
               ORDER BY p.created_at DESC";
 }
+
+$post_id = $row['id'];
+$comment_query = "SELECT c.content, c.created_at, u.username 
+                  FROM comments c
+                  JOIN users u ON c.user_id = u.user_id
+                  WHERE c.post_id = $post_id
+                  ORDER BY c.created_at ASC";
+$comment_result = mysqli_query($con, $comment_query);
+
+
 $result = mysqli_query($con, $query);
 ?>
 
@@ -47,6 +57,10 @@ $result = mysqli_query($con, $query);
 
     <!-- Google Fonts for Material Icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+
 
     <title>WikiTrip Community</title>
 </head>
@@ -96,7 +110,7 @@ $result = mysqli_query($con, $query);
                             <div class="bi bi-person-circle text-white fs-4 me-2"></div>
                             <ul>
                                 <li class="sub-item">
-                                    <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
+                                    <a href="profile.html" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-person-circle material-icons-outlined"></i>
                                         <p style="margin-left: 8px" >Profile</p>
                                     </a>
@@ -193,22 +207,42 @@ $result = mysqli_query($con, $query);
                                 <?php endif; ?>
                             </div>
                             <div class="post-actions">
-                                <div class="like-button <?= $row['is_liked'] ? 'liked' : ''; ?>"><i class="fas fa-thumbs-up"></i> Like</div>
-                                <div><i class="fas fa-comment"></i> Comment</div>
-                                <div class="share-button"><i class="fas fa-share"></i> Share</div>
+                            <div class="like-button" data-post-id="<?= $row['id']; ?>" data-liked="<?= $row['is_liked']; ?>">
+                                <i class="fas fa-thumbs-up"></i> Like
                             </div>
-                            <div class="comment-section" style="display: none;">
-                                <input type="text" class="comment-input" placeholder="Tulis komentar...">
-                                <button class="comment-submit">Kirim</button>
-                                <div class="comment-list"></div>
+
+                            <div class="comment-button" data-post-id="<?= $row['id']; ?>">
+                                <i class="fas fa-comment"></i> Comment
                             </div>
-                            <div class="share-popup" style="display: none;">
-                                <div class="share-options">
-                                    <i class="fab fa-facebook"></i> Facebook
-                                    <i class="fab fa-whatsapp"></i> WhatssApp
-                                    <i class="fab fa-instagram"></i> Instagram
-                                </div>
+                            <div class="share-button" data-post-id="<?= $row['id']; ?>">
+                                <i class="fas fa-share"></i> Share
                             </div>
+                            </div>
+                            <?php
+        $post_id = $row['id'];
+        $comment_query = "SELECT c.comment, c.created_at, u.username 
+                          FROM comments c
+                          JOIN users u ON c.user_id = u.user_id
+                          WHERE c.post_id = $post_id
+                          ORDER BY c.created_at ASC";
+        $comment_result = mysqli_query($con, $comment_query);
+        ?>
+        
+        <div class="comments-section">
+            <?php if (mysqli_num_rows($comment_result) > 0): ?>
+                <?php while ($comment = mysqli_fetch_assoc($comment_result)): ?>
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author"><?= htmlspecialchars($comment['username']); ?></span>
+                            <span class="comment-date"><?= date('d M Y H:i', strtotime($comment['created_at'])); ?></span>
+                        </div>
+                        <div class="comment-content"><?= nl2br(htmlspecialchars($comment['comment'])); ?></div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p class="no-comments">No comments yet. Be the first to comment!</p>
+            <?php endif; ?>
+        </div>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -236,6 +270,129 @@ $result = mysqli_query($con, $query);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-    
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const isLiked = this.getAttribute('data-liked');
+
+            fetch('like_action.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `post_id=${postId}`,
+            })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'liked') {
+                    this.classList.add('liked');
+                    this.setAttribute('data-liked', 'true');
+                } else if (result === 'unliked') {
+                    this.classList.remove('liked');
+                    this.setAttribute('data-liked', 'false');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+    document.querySelector('.comment-button').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Tulis Komentar',
+            html: `<input type="text" id="commentInput" class="swal2-input" placeholder="Tulis komentar...">`,
+            showCancelButton: true,
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Kirim',
+            preConfirm: () => {
+                const comment = document.getElementById('commentInput').value;
+                if (!comment) {
+                    Swal.showValidationMessage('Komentar tidak boleh kosong');
+                }
+                return comment;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const comment = result.value;
+                const postId = this.getAttribute('data-post-id');
+
+                fetch('comment_action.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `post_id=${postId}&comment=${encodeURIComponent(comment)}`,
+                })
+                .then(response => response.text())
+                .then(result => {
+                    if (result === 'success') {
+                        Swal.fire('Komentar berhasil dikirim!', '', 'success');
+                    } else {
+                        Swal.fire('Gagal mengirim komentar', '', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Terjadi kesalahan', '', 'error');
+                });
+            }
+        });
+    });
+
+    // Implementasi untuk bagian share dengan pilihan metode
+    const shareButtons = document.querySelectorAll('.share-button');
+
+    shareButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = button.closest('.post-box').getAttribute('data-post-id');
+
+            // Tampilkan pilihan metode share dengan SweetAlert2
+            Swal.fire({
+                title: 'Bagikan melalui',
+                input: 'select',
+                inputOptions: {
+                    whatsapp: 'WhatsApp',
+                    email: 'Email',
+                    other: 'Other'
+                },
+                inputPlaceholder: 'Pilih metode',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Bagikan',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    const selectedMethod = result.value;
+
+                    // Kirim pilihan share ke server hanya setelah memilih metode
+                    fetch('share_action.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `post_id=${postId}&method=${encodeURIComponent(selectedMethod)}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Shared!', data.message, 'success');
+                        } else {
+                            Swal.fire('Error!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error!', 'Something went wrong!', 'error');
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        });
+    });
+});
+
+</script>
+
 </body>
 </html>
