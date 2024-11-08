@@ -95,10 +95,10 @@ $result = $stmt->get_result();
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active text-white" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#about">About</a>
+                        <a class="nav-link text-white" href="index.php#about">About</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -179,9 +179,10 @@ $result = $stmt->get_result();
     
     <div class="content">
         <div id="activities" class="section" style="display: none;">
-            <h3 class="divider">
-                <i class="bi bi-file-earmark-text "></i> Posts
-            </h3>
+                <i class="bi bi-file-earmark-text">
+                    <p>Posts</p>
+                </i> 
+                <h3 class="divider"></h3>
             <div class="activity">
                 <?php if ($result->num_rows > 0): ?>
                 <div class="posts-container" >
@@ -234,9 +235,10 @@ $result = $stmt->get_result();
         </div>
     
         <div id="reviews" class="section" style="display: block;">
-            <h3 class="divider">
-                <i class="bi bi-hand-thumbs-up"></i> Likes
-            </h3>
+            <i class="bi bi-file-earmark-text">
+                <p>Likes</p>
+            </i> 
+            <h3 class="divider"></h3>
             <div class="activity">
                 <?php if ($result->num_rows > 0): ?>
                     <div class="posts-container">
