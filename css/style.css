@@ -1418,7 +1418,7 @@ form.sign-in-form {
 
 .main_background {
     position: relative;
-    height: 90vh;
+    height: 100vh;
     width: 100%;
     overflow: hidden;
 }
