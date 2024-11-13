@@ -2,6 +2,7 @@ let items = document.querySelectorAll('.slider .list .item');
 let next = document.getElementById('next');
 let prev = document.getElementById('prev');
 let thumbnails = document.querySelectorAll('.thumbnail .item');
+let sliderItems = document.querySelectorAll('.slider .list .item');
 
 // config param
 let countItem = items.length;
@@ -44,6 +45,16 @@ function showSlider(){
         next.click();
     }, 5000)
 }
+
+sliderItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+        let tourismId = this.getAttribute('data-id');
+        if (tourismId) {
+            window.location.href = 'tourism_place.php?tourism_id=' + tourismId;
+        }
+    });
+});
+
 function setPositionThumbnail () {
     let thumbnailActive = document.querySelector('.thumbnail .item.active');
     let rect = thumbnailActive.getBoundingClientRect();
