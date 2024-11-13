@@ -4,7 +4,7 @@ include('config/conn.php');
 
 $isLoggedIn = isset($_SESSION['user_id']);
 
-$query = "SELECT tourism_name, image_url FROM tourismplaces WHERE (tourism_id - 1) % 7 = 0 LIMIT 5";
+$query = "SELECT tourism_name, image_url, tourism_id FROM tourismplaces WHERE (tourism_id - 1) % 7 = 0 LIMIT 5";
 $result = $con->query($query);
 ?>
 
@@ -118,7 +118,7 @@ $result = $con->query($query);
                     $tourism_name = $row['tourism_name'];
                     $image_url = $row['image_url'];
                     ?>
-                    <div class="item<?php echo $active; ?>">
+                    <div class="item<?php echo $active; ?>" data-id="<?php echo $row['tourism_id']; ?>">
                         <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>">
                         <div class="content" style="margin-left: -30px;" >
                             <p>Welcome To <span style="color: #f8b200;">SUMATERA UTARA</span></p>
