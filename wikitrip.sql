@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 22, 2024 at 02:45 PM
+-- Generation Time: Nov 29, 2024 at 02:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,7 +111,45 @@ CREATE TABLE `posts` (
 --
 
 INSERT INTO `posts` (`id`, `user_id`, `content`, `image`, `created_at`) VALUES
-(15, 2, 'pantainya masih sepi...', 'pantai_barat.jpg', '2024-10-22 12:16:47');
+(15, 2, 'pantainya masih sepi...', 'pantai_barat.jpg', '2024-10-22 12:16:47'),
+(21, 2, 'hallo whatssup', '', '2024-11-25 19:01:15'),
+(34, 1, 'jdjfhufur', '38-provinsi.jpg', '2024-11-28 12:02:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_comments`
+--
+
+CREATE TABLE `post_comments` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_likes`
+--
+
+CREATE TABLE `post_likes` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `post_likes`
+--
+
+INSERT INTO `post_likes` (`id`, `post_id`, `user_id`) VALUES
+(29, 15, 1),
+(100, 34, 1),
+(112, 34, 2),
+(113, 21, 2);
 
 -- --------------------------------------------------------
 
@@ -132,7 +170,12 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`rating_id`, `tourism_id`, `user_id`, `rating_value`, `time`) VALUES
-(1, 73, 2, 4, NULL);
+(1, 73, 2, 4, NULL),
+(2, 70, 2, 4, '2024-11-08 01:20:25'),
+(3, 81, 2, 5, '2024-11-08 01:21:24'),
+(4, 82, 2, 3, '2024-11-08 01:22:00'),
+(5, 82, 1, 5, '2024-11-13 23:59:42'),
+(6, 86, 1, 5, '2024-11-27 22:12:15');
 
 -- --------------------------------------------------------
 
@@ -281,16 +324,17 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(32) NOT NULL,
   `email` varchar(128) NOT NULL,
-  `password_hash` varchar(255) NOT NULL
+  `password_hash` varchar(255) NOT NULL,
+  `profile_picture` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `email`, `password_hash`) VALUES
-(1, 'dini', 'dinisahfitriiiii@gmail.com', '$2y$10$Yp.i7zM0uY/TAYjtykqovOFpIVELweFfhQW7fp3bnAauxTBdetFCq'),
-(2, 'amir', 'amirhuseinsarumpaet2001@gmail.com', '$2y$10$NxXv8VpXaM7kMtFgCqorSOOkKocSSwtqD3/M79MntZ5yNBeDIs97K');
+INSERT INTO `users` (`user_id`, `username`, `email`, `password_hash`, `profile_picture`) VALUES
+(1, 'dini', 'dinisahfitriiiii@gmail.com', '$2y$10$Yp.i7zM0uY/TAYjtykqovOFpIVELweFfhQW7fp3bnAauxTBdetFCq', 'uploads/default_profile_picture.jpg'),
+(2, 'amir', 'amirhuseinsarumpaet2001@gmail.com', '$2y$10$NxXv8VpXaM7kMtFgCqorSOOkKocSSwtqD3/M79MntZ5yNBeDIs97K', 'uploads/profile_pictures/674492cacfd64_Screenshot 2023-11-06 091911.png');
 
 -- --------------------------------------------------------
 
@@ -304,6 +348,14 @@ CREATE TABLE `wishlist` (
   `tourism_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`wishlist_id`, `user_id`, `tourism_id`, `created_at`) VALUES
+(1, 2, 74, '2024-11-07 17:50:37'),
+(4, 2, 38, '2024-11-07 17:52:10');
 
 --
 -- Indexes for dumped tables
@@ -328,6 +380,22 @@ ALTER TABLE `cities`
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_posts_user_id` (`user_id`);
+
+--
+-- Indexes for table `post_comments`
+--
+ALTER TABLE `post_comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `post_likes`
+--
+ALTER TABLE `post_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `ratings`
@@ -387,13 +455,25 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `post_comments`
+--
+ALTER TABLE `post_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+
+--
+-- AUTO_INCREMENT for table `post_likes`
+--
+ALTER TABLE `post_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tourismcategories`
@@ -411,96 +491,23 @@ ALTER TABLE `tourismplaces`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
--- Table structure for table `post_likes`
---
-
-CREATE TABLE `post_likes` (
-  `id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `post_likes`
---
-ALTER TABLE `post_likes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `post_likes`
---
-ALTER TABLE `post_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `post_likes`
+-- Constraints for table `posts`
 --
-ALTER TABLE `post_likes`
-  ADD CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
-
---
--- Table structure for table `post_comments`
---
-
-CREATE TABLE `post_comments` (
-  `id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `comment_text` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `post_comments`
---
-ALTER TABLE `post_comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `post_id` (`post_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `post_comments`
---
-ALTER TABLE `post_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- Constraints for dumped tables
---
+ALTER TABLE `posts`
+  ADD CONSTRAINT `fk_posts_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `post_comments`
@@ -508,11 +515,13 @@ ALTER TABLE `post_comments`
 ALTER TABLE `post_comments`
   ADD CONSTRAINT `post_comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `post_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
 --
--- Constraints for table `posts`
+-- Constraints for table `post_likes`
 --
-ALTER TABLE `posts`
-  ADD CONSTRAINT `fk_posts_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+ALTER TABLE `post_likes`
+  ADD CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `ratings`
@@ -534,7 +543,6 @@ ALTER TABLE `tourismplaces`
 ALTER TABLE `wishlist`
   ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`tourism_id`) REFERENCES `tourismplaces` (`tourism_id`) ON DELETE CASCADE;
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
