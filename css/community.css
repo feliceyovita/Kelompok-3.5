@@ -429,17 +429,23 @@ li {
 
 .share-popup {
     background: #ffffff;
-    border: 1px solid #ccc;
     padding: 10px;
     position: absolute;
     top: 50px;
-    left: 50px;
+    right: 10px;
+    display: none;
+}
+
+.share-options {
+    display: flex;
+    flex-direction: column;
 }
 
 .share-options i {
     margin: 5px;
     cursor: pointer;
 }
+
 .post-options {
     position: absolute;
     top: 20px;
@@ -481,9 +487,28 @@ li {
 .options-dropdown i:hover,
 .options-dropdown span:hover {
     color: #f8b200;
-    /* Ubah warna menjadi kuning saat di-hover */
 }
 .post-options:hover .options-dropdown {
     display: block;
-    /* Tampilkan dropdown saat di-hover */
+    
+}
+
+.like-count {
+    font-size: 0.65em;
+}
+
+.comment-item {
+    margin-bottom: 10px;
+}
+.comment-username {
+    font-size: 14px;
+    font-weight: bold;
+}
+.comment-text {
+    font-size: 13px;
+    color: #333;
+}
+.comment-time {
+    font-size: 8px;
+    color: #666;
 }

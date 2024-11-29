@@ -1,11 +1,40 @@
 <?php
 session_start();
 include('config/conn.php');
+include('php_tools/event_rrs.php');
 
 $isLoggedIn = isset($_SESSION['user_id']);
 
-$query = "SELECT tourism_name, image_url, tourism_id FROM tourismplaces WHERE (tourism_id - 1) % 7 = 0 LIMIT 5";
+$query = "SELECT tp.tourism_name, tp.image_url, tp.tourism_id, COALESCE(avg_ratings.average_rating, 0) AS average_rating
+FROM tourismplaces tp
+LEFT JOIN (
+    SELECT tourism_id, AVG(rating_value) AS average_rating
+    FROM ratings
+    GROUP BY tourism_id
+) AS avg_ratings ON tp.tourism_id = avg_ratings.tourism_id
+ORDER BY average_rating DESC, tp.tourism_id ASC
+LIMIT 5";
 $result = $con->query($query);
+
+// for event calendar
+$rss_data->registerXPathNamespace('content', 'http://purl.org/rss/1.0/modules/content/');
+$events_by_month = [];
+
+foreach ($rss_data->channel->item as $item) {
+    $date = date_create((string)$item->pubDate);
+    $month = date_format($date, 'F'); 
+    $day = date_format($date, 'd'); 
+
+    $event_name = (string)$item->title;
+
+    if (!isset($events_by_month[$month])) {
+        $events_by_month[$month] = [];
+    }
+    $events_by_month[$month][] = [
+        'date' => $day,
+        'name' => $event_name,
+    ];
+}
 ?>
 
 <!doctype html>
@@ -89,7 +118,7 @@ $result = $con->query($query);
                                 </li>
                                 <li class="sub-item">
                                     <?php if (isset($_SESSION['user_id'])): ?>
-                                        <a href="logout.php" style="text-decoration: none; display: flex; align-items: center;">
+                                        <a href="php_tools/logout.php" style="text-decoration: none; display: flex; align-items: center;">
                                             <i class="bi bi-box-arrow-left material-icons-outlined"></i>
                                             <p style="margin-left: 8px;">Logout</p>
                                         </a>
@@ -263,248 +292,27 @@ if ($category_result->num_rows > 0) {
         </button>
         <div class="slider-calendar">
             <!-- Repeat month-card div for each month -->
-            
-                    <!-- January -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>January</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">01</span>
-                                <span class="event-name">New Year's Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">15</span>
-                                <span class="event-name">Festival A</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- February -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>February</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">14</span>
-                                <span class="event-name">Valentine's Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">20</span>
-                                <span class="event-name">Festival B</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- March -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>March</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">01</span>
-                                <span class="event-name">New Year's Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">17</span>
-                                <span class="event-name">Festival C</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- April -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>April</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">01</span>
-                                <span class="event-name">April Fools' Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">25</span>
-                                <span class="event-name">Festival D</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- May -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>May</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">01</span>
-                                <span class="event-name">Labor Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">20</span>
-                                <span class="event-name">Festival E</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- June -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>June</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">01</span>
-                                <span class="event-name">New Year's Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">15</span>
-                                <span class="event-name">Festival F</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- July -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>July</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">04</span>
-                                <span class="event-name">Independence Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">20</span>
-                                <span class="event-name">Festival G</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- August -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>August</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">15</span>
-                                <span class="event-name">Festival H</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">30</span>
-                                <span class="event-name">National Day</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- September -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>September</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">21</span>
-                                <span class="event-name">Festival I</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">30</span>
-                                <span class="event-name">Harvest Festival</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- October -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>October</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">31</span>
-                                <span class="event-name">Halloween</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">15</span>
-                                <span class="event-name">Festival J</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- November -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>November</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">11</span>
-                                <span class="event-name">Veterans Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">30</span>
-                                <span class="event-name">Festival K</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- December -->
-                    <div class="month-card">
-                        <div class="month-header">
-                            <h4>December</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">25</span>
-                                <span class="event-name">Christmas Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">31</span>
-                                <span class="event-name">New Year's Eve</span>
-                            </div>
-                        </div>
-                    </div>
-                     <!-- December -->
-                     <div class="month-card">
-                        <div class="month-header">
-                            <h4>December</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">25</span>
-                                <span class="event-name">Christmas Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">31</span>
-                                <span class="event-name">New Year's Eve</span>
-                            </div>
-                        </div>
-                    </div>
-                     <!-- December -->
-                     <div class="month-card">
-                        <div class="month-header">
-                            <h4>December</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">25</span>
-                                <span class="event-name">Christmas Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">31</span>
-                                <span class="event-name">New Year's Eve</span>
-                            </div>
-                        </div>
-                    </div>
-                     <!-- December -->
-                     <div class="month-card">
-                        <div class="month-header">
-                            <h4>December</h4>
-                        </div>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <span class="event-date">25</span>
-                                <span class="event-name">Christmas Day</span>
-                            </div>
-                            <div class="event-item">
-                                <span class="event-date">31</span>
-                                <span class="event-name">New Year's Eve</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                // Generate HTML untuk setiap bulan
+                foreach ($events_by_month as $month => $events) {
+                    echo '<div class="month-card">';
+                    echo '<div class="month-header"><h4>' . htmlspecialchars($month) . '</h4></div>';
+                    echo '<div class="event-list">';
+                    $limited_events = array_slice($events, 0, 2);
+                    foreach ($limited_events as $event) {
+                        echo '<div class="event-item">';
+                        echo '<span class="event-date">' . htmlspecialchars($event['date']) . '</span>';
+                        echo '<span class="event-name">' . htmlspecialchars($event['name']) . '</span>';
+                        echo '</div>';
+                    }
+
+                    // Tampilkan "more" jika ada lebih dari 3 acara
+                    if (count($events) > 3) {
+                        echo '<div class="more-events">...and more events</div>';
+                    }
+                    echo '</div></div>';
+                }
+                ?>
                 <button class="nav-button right" onclick="slideRight()">
                     <i class="bi bi-chevron-right"></i>
                 </button>
@@ -517,32 +325,41 @@ if ($category_result->num_rows > 0) {
         </button>
     </div>
 </div>
-    <!-- Recommended Events Section Start -->
+    <!-- event recomendations start -->
     <div class="recommended-events">
         <h3>Event Recommendation</h3>
         <div class="event-slider">
-            <div class="event-grid-wrapper">
+                    <div class="event-grid-wrapper">
                 <div class="event-grid">
-                    <div class="event-card">
-                        <img src="image/event.jpg" alt="Lake Toba Festival" />
-                        <h4>Lake Toba Festival</h4>
-                        <p>22 Nov - 24 Nov 2024</p>
-                        <p>Rp498.000</p>
-                    </div>
-                    <div class="event-card">
-                        <img src="image/event.jpg" alt="Pekan Raya North Sumatera" />
-                        <h4>Pekan Raya North Sumatera</h4>
-                        <p>02 Nov - 03 Nov 2024</p>
-                        <p>Rp135.000</p>
-                    </div>
-                    <div class="event-card">
-                        <img src="image/event.jpg" alt="Scent of Indonesia" />
-                        <h4>Scent of Indonesia Vol. 2</h4>
-                        <p>01 Nov - 03 Nov 2024</p>
-                        <p>Rp30.000</p>
-                    </div>
+                    <?php
+                    if ($rss_data) {
+                        $count = 0;
+                        foreach ($rss_data->channel->item as $item) {
+                            if ($count >= 10) break;
+
+                            $title = $item->title;
+                            $link = $item->link;
+                            $description = strip_tags($item->description);
+                            $pubDate = date("d M Y", strtotime($item->pubDate));
+                            $content_encoded = (string)$item->children('content', true)->encoded;
+                            preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $content_encoded, $matches);
+                            $image_url = isset($matches[1]) ? $matches[1] : 'image/event.jpg';
+                            echo "
+                            <div class='event-card'>
+                                <img src='$image_url' alt='$title' />
+                                <h4><a href='$link' target='_blank'>$title</a></h4>
+                                <p>$pubDate</p>
+                                <p>$description</p>
+                            </div>";
+
+                            $count++;
+                        }
+                    } else {
+                        echo "<p>Tidak ada event yang tersedia saat ini.</p>";
+                    }
+                    ?>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
     <!-- Recommended Events Section End -->
@@ -550,55 +367,7 @@ if ($category_result->num_rows > 0) {
 
 
     <!-- Footer -->
-    <footer class="wikitrip-footer-section">
-        <div class="wikitrip-footer-container">
-            <div class="wikitrip-footer-column">
-                <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
-                    <img src="image/logo_wikitrip.png" alt="Logo" class="logo-img me-2">
-                    <span class="text-logo1">WIKI</span><span class="text-logo2">TRIP</span>
-                </a>
-                <p class="wikitrip-footer-paragraph">"Wikitrip offers insights into the beauty and culture of North
-                    Sumatra,
-                    guiding travelers through unforgettable experiences."</p>
-            </div>
-            <div class="wikitrip-footer-column">
-                <h3 class="wikitrip-footer-text-office">
-                    Office
-                    <div class="wikitrip-footer-underline"><span></span></div>
-                </h3>
-                <p>Jl. Universitas No.9</p>
-                <p>Padang Bulan, Medan</p>
-                <p>Sumatera Utara, Indonesia</p>
-                <p class="wikitrip-footer-email">info.wikitrip@gmail.com</p>
-                <p class="wikitrip-footer-phone">+62 821 7777 9090</p>
-            </div>
-            <div class="wikitrip-footer-column">
-                <h3>
-                    Menu
-                    <div class="wikitrip-footer-underline"><span></span></div>
-                </h3>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#nature-destination">Destination</a></li>
-                    <li><a href="#Event">Event</a></li>
-                    <li><a href="community.php">Community</a></li>
-                </ul>
-            </div>
-            <div class="wikitrip-footer-column">
-                <h3>
-                    Social Media
-                    <div class="wikitrip-footer-underline"><span></span></div>
-                </h3>
-                <div class="wikitrip-footer-social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-google-plus"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
 
     <script src="js/script.js"></script>
     <script src="js/app.js"></script>

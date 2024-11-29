@@ -30,4 +30,13 @@ if ($isLiked) {
         echo json_encode(["message" => "Error unliking post."]);
     }
 }
+$count_query = "SELECT COUNT(*) AS like_count FROM post_likes WHERE post_id = ?";
+$count_stmt = $con->prepare($count_query);
+$count_stmt->bind_param("i", $postId);
+$count_stmt->execute();
+$count_result = $count_stmt->get_result();
+$like_count = $count_result->fetch_assoc()['like_count'];
+echo json_encode(['success' => true, 'like_count' => $like_count]);
+header("Location: community.php");
+exit();
 ?>
