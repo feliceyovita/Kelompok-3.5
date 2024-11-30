@@ -56,6 +56,22 @@ $averageRating = $count > 0 ? round($totalRating / $count, 1) : 0;
 
 // Kirim ke JavaScript
 echo "<script>var averageRating = $averageRating;</script>";
+
+$query = "SELECT tourism_id, tourism_name, map_url FROM tourismplaces WHERE tourism_id = $tourism_id";
+$result = mysqli_query($con, $query);
+
+if ($row = mysqli_fetch_assoc($result)) {
+    $iframe = $row['map_url'];
+    preg_match('/!2d(-?\d+(\.\d+)?)!3d(-?\d+(\.\d+)?)/', $iframe, $matches);
+    $longitude = $matches[1];
+    $latitude = $matches[3];
+    $apiKey = '57ebcc195051e20431d693d383e76a1e';
+    $weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&appid=$apiKey";
+    $weatherData = file_get_contents($weatherUrl);
+    $weather = json_decode($weatherData, true);
+} else {
+    $error = "Data tidak ditemukan untuk ID = $tourism_id.";
+}
 ?>
 
 <!doctype html>
@@ -191,6 +207,28 @@ echo "<script>var averageRating = $averageRating;</script>";
                 </p>
             </div>
         </div>
+    </div>
+
+    <!-- wheater -->
+    <div class="container my-4">
+        <?php if (isset($error)) : ?>
+            <div class="alert alert-danger text-center"><?= $error; ?></div>
+        <?php else : ?>
+            <div class="row">
+                <!-- Cuaca -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: black;">Cuaca di <?= htmlspecialchars($row['tourism_name']); ?>:</h5>
+                            <p class="card-text" style="color: black;"><strong>🌡️ Temperatur:</strong> <?= $weather['main']['temp']; ?>°C</p>
+                            <p class="card-text" style="color: black;"><strong>🌥️ Kondisi:</strong> <?= ucfirst($weather['weather'][0]['description']); ?></p>
+                            <p class="card-text" style="color: black;"><strong>💨 Kecepatan Angin:</strong> <?= $weather['wind']['speed']; ?> m/s</p>
+                            <p class="card-text" style="color: black;"><strong>🌧️ Kelembapan:</strong> <?= $weather['main']['humidity']; ?>%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
         <div class="wrapper-rating" style="margin-top: 20px;">
