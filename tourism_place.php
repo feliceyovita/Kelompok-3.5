@@ -210,23 +210,26 @@ if ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <!-- wheater -->
-    <div class="container my-4">
-        <?php if (isset($error)) : ?>
+    <div class="container my-4" style="display: flex; justify-content: center; align-items: center;">        <?php if (isset($error)) : ?>
             <div class="alert alert-danger text-center"><?= $error; ?></div>
         <?php else : ?>
-            <div class="row">
-                <!-- Cuaca -->
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title" style="color: black; margin-bottom: 15px;">Weather Prediction in <?= htmlspecialchars($row['tourism_name']); ?>:</h5>
-                            <p class="card-text" style="color: black;"><strong>🌡️ Temperature:</strong> <?= $weather['main']['temp']; ?>°C</p>
-                            <p class="card-text" style="color: black;"><strong>🌥️ Condition:</strong> <?= ucfirst($weather['weather'][0]['description']); ?></p>
-                            <p class="card-text" style="color: black;"><strong>💨 Wind velocity:</strong> <?= $weather['wind']['speed']; ?> m/s</p>
-                            <p class="card-text" style="color: black;"><strong>🌧️ Humidity:</strong> <?= $weather['main']['humidity']; ?>%</p>
-                        </div>
-                    </div>
+            <div class="widget">
+                <div class="details">
+                <div class="temperature"><?= $weather['main']['temp']; ?>°</div>
+                <div class="summary">
+                    <p class="summaryText"><?= ucfirst($weather['weather'][0]['description']); ?></p>
                 </div>
+                <div class="precipitation">Humidity: <?= $weather['main']['humidity']; ?>%</div>
+                <div class="wind">Wind: <?= $weather['wind']['speed']; ?> </div>
+                </div>
+                <div class="pictoBackdrop"></div>
+                <div class="pictoFrame"></div>
+                <div class="pictoCloudBig"></div>
+                <div class="pictoCloudFill"></div>
+                <div class="pictoCloudSmall"></div>
+                <div class="iconCloudBig"></div>
+                <div class="iconCloudFill"></div>
+                <div class="iconCloudSmall"></div>
             </div>
         <?php endif; ?>
     </div>
