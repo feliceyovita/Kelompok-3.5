@@ -2703,3 +2703,50 @@ form.sign-in-form {
         height: 28px;
     }
 }
+
+.slider-calendar {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+.nav-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.nav-button.left {
+    margin-right: 10px;
+}
+
+.nav-button.right {
+    margin-left: 10px;
+}
+
+.month-header img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.recommended-events .event-list p {
+    color: #000;
+    font-size: 15px;
+}
+.recommended-events .event-list h4 a {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.recommended-events .event-list h4 a:hover {
+    color: #003873;
+}
+.recommended-events {
+    margin-left: auto;
+    margin-right: 60px;
+    width: 90%;
+    /* Pastikan lebarnya sesuai kebutuhan */
+}

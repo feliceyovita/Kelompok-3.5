@@ -498,17 +498,19 @@ li {
 }
 
 .comment-item {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .comment-username {
     font-size: 14px;
     font-weight: bold;
 }
 .comment-text {
-    font-size: 13px;
+    font-size: 15px;
+    margin-top: 5px;
+    margin-left: 50px;
     color: #333;
 }
 .comment-time {
-    font-size: 8px;
+    font-size: 10px;
     color: #666;
 }

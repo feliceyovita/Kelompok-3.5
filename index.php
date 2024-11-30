@@ -325,44 +325,53 @@ if ($category_result->num_rows > 0) {
         </button>
     </div>
 </div>
-    <!-- event recomendations start -->
-    <div class="recommended-events">
-        <h3>Event Recommendation</h3>
-        <div class="event-slider">
-                    <div class="event-grid-wrapper">
-                <div class="event-grid">
-                    <?php
-                    if ($rss_data) {
-                        $count = 0;
-                        foreach ($rss_data->channel->item as $item) {
-                            if ($count >= 10) break;
 
-                            $title = $item->title;
-                            $link = $item->link;
-                            $description = strip_tags($item->description);
-                            $pubDate = date("d M Y", strtotime($item->pubDate));
-                            $content_encoded = (string)$item->children('content', true)->encoded;
-                            preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $content_encoded, $matches);
-                            $image_url = isset($matches[1]) ? $matches[1] : 'image/event.jpg';
-                            echo "
-                            <div class='event-card'>
-                                <img src='$image_url' alt='$title' />
-                                <h4><a href='$link' target='_blank'>$title</a></h4>
-                                <p>$pubDate</p>
-                                <p>$description</p>
-                            </div>";
+<!-- Event Recommendation Section Start -->
+<div class="recommended-events">
+    <h3>Event Recommendation</h3>
+    <div class="calendar-container">
+        <button class="nav-button left" onclick="slideLeft()">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="slider-calendar">
+            <?php
+            if ($rss_data) {
+                $count = 0;
+                foreach ($rss_data->channel->item as $item) {
+                    if ($count >= 10) break;
 
-                            $count++;
-                        }
-                    } else {
-                        echo "<p>Tidak ada event yang tersedia saat ini.</p>";
-                    }
-                    ?>
-                </div>
-                </div>
+                    $title = $item->title;
+                    $link = $item->link;
+                    $description = strip_tags($item->description);
+                    $pubDate = date("d M Y", strtotime($item->pubDate));
+                    $content_encoded = (string)$item->children('content', true)->encoded;
+                    preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $content_encoded, $matches);
+                    $image_url = isset($matches[1]) ? $matches[1] : 'image/event.jpg';
+
+                    echo '<div class="month-card">';
+                    echo '<div class="month-header">';
+                    echo '<img src="' . htmlspecialchars($image_url) . '" alt="' . htmlspecialchars($title) . '" />';
+                    echo '</div>';
+                    echo '<div class="event-list">';
+                    echo '<h4><a href="' . htmlspecialchars($link) . '" target="_blank">' . htmlspecialchars($title) . '</a></h4>';
+                    echo '<p>' . htmlspecialchars($pubDate) . '</p>';
+                    echo '<p>' . htmlspecialchars($description) . '</p>';
+                    echo '</div></div>';
+
+                    $count++;
+                }
+            } else {
+                echo "<p>Tidak ada event yang tersedia saat ini.</p>";
+            }
+            ?>
         </div>
+        <button class="nav-button right" onclick="slideRight()">
+            <i class="bi bi-chevron-right"></i>
+        </button>
     </div>
-    <!-- Recommended Events Section End -->
+</div>
+<!-- Event Recommendation Section End -->
+
 
 
 
