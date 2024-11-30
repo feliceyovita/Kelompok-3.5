@@ -288,7 +288,7 @@ button.next {
 
 @media (max-width: 768px) {
     .card {
-        width: 50%;
+        width: 100%;
         /* 2 cards per row */
     }
 }
@@ -1877,7 +1877,7 @@ form.sign-in-form {
     }
 
     .card-description {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 
     .card {
@@ -2749,4 +2749,274 @@ form.sign-in-form {
     margin-right: 60px;
     width: 90%;
     /* Pastikan lebarnya sesuai kebutuhan */
+}
+
+/* weather */
+
+.widget {
+    background: linear-gradient(to bottom right, #3cc0fe 20%, #0066ff);
+    width: 50vw;
+    height: 300px;
+    border-radius: 6px;
+    box-shadow: 0px 60px 80px -20px rgba(39, 165, 253, 0.4);
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.pictoBackdrop {
+    position: absolute;
+    height: 200;
+    width: 560px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background: linear-gradient(160deg, rgba(60, 192, 254, 0.7) 40%, rgba(0, 102, 255, 0.6));
+    right: -40px;
+    top: -90px;
+}
+
+.pictoFrame {
+    position: absolute;
+    background: #34373e;
+    border-radius: 50%;
+    box-shadow: 0px 50px 60px -20px #0066ff;
+    height: 200px;
+    width: 200;
+    right: 80px;
+    top: 25px;
+}
+
+.pictoCloudBig {
+    position: absolute;
+    border-radius: 50%;
+    background: #aacbe6;
+    box-shadow: 20px 20px 80px -20px #aacbe6;
+    height: 130;
+    width: 130;
+    top: 80px;
+    right: 115px;
+}
+
+
+.pictoCloudSmall {
+    position: absolute;
+    border-radius: 50%;
+    background: #d2e9fa;
+    height: 120;
+    width: 120;
+    top: 100;
+    right: 150;
+}
+
+.iconCloudBig {
+    position: absolute;
+    border-radius: 50%;
+    background: #9cd0ff;
+    height: 36px;
+    width: 36px;
+    top: 119px;
+    left: 80px;
+}
+
+.iconCloudSmall {
+    position: absolute;
+    border-radius: 50%;
+    height: 23.4px;
+    width: 23.4px;
+    background: #d2e9fa;
+    top: 130px;
+    left: 70px;
+}
+
+.iconCloudFill {
+    position: absolute;
+    height: 16.38px;
+    width: 16.38px;
+    background: #9cd0ff;
+    top: 137.1px;
+    left: 80px;
+}
+
+.details {
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    margin-left: 60px;
+}
+
+.temperature {
+    color: white;
+    font-weight: 300;
+    font-size: 4em;
+}
+
+.summary {
+    color: #d2e9fa;
+    font-size: 2em;
+    font-weight: 300;
+    width: 350px;
+    margin-top: -16px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #9cd0ff;
+    margin-left: 8px;
+}
+
+.summaryText {
+    font-size: 1.2em;
+    margin: 0;
+    margin-left: 59px;
+}
+
+.precipitation,
+.wind {
+    color: #d2e9fa;
+    font-size: 1.6em;
+    font-weight: 300;
+    margin-left: 8px;
+}
+
+.precipitation {
+    margin-top: 16px;
+}
+
+.wind {
+    margin-top: 4px;
+}
+
+/* Responsivitas untuk layar lebih besar */
+@media screen and (max-width: 1200px) {
+    .widget {
+        width: 280px;
+        height: 280px;
+    }
+
+    .pictoFrame {
+        height: 180px;
+        width: 180px;
+        right: 60px;
+        top: 20px;
+    }
+
+    .pictoCloudBig {
+        height: 110px;
+        width: 110px;
+        top: 70px;
+        right: 100px;
+    }
+
+    .pictoCloudSmall {
+        height: 100px;
+        width: 100px;
+        top: 90px;
+        right: 130px;
+    }
+
+    .details {
+        margin-left: 40px;
+        margin-top: 20px;
+    }
+
+    .temperature {
+        font-size: 3em;
+    }
+
+    .summary {
+        font-size: 1.8em;
+    }
+
+    .precipitation,
+    .wind {
+        font-size: 1.4em;
+    }
+}
+
+/* Responsivitas untuk tablet */
+@media screen and (max-width: 768px) {
+    .widget {
+        width: 100vw;
+        height: auto;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .pictoFrame {
+        height: 150px;
+        width: 150px;
+        right: 20px;
+        top: 10px;
+    }
+
+    .pictoCloudBig {
+        height: 90px;
+        width: 90px;
+        top: 60px;
+        right: 80px;
+    }
+
+    .pictoCloudSmall {
+        height: 80px;
+        width: 80px;
+        top: 70px;
+        right: 110px;
+    }
+
+    .details {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .temperature {
+        font-size: 2.5em;
+    }
+
+    .summary {
+        font-size: 1.5em;
+    }
+
+    .precipitation,
+    .wind {
+        font-size: 1.2em;
+    }
+}
+
+/* Responsivitas untuk ponsel */
+@media screen and (max-width: 480px) {
+    .widget {
+        width: 95vw;
+        padding: 16px;
+    }
+
+    .pictoFrame {
+        height: 100px;
+        width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .temperature {
+        font-size: 2.5em;
+    }
+
+    .summary {
+        font-size: 1.2em;
+    }
+
+    .precipitation,
+    .wind {
+        font-size: 1em;
+    }
+
+    .details {
+        margin: 0;
+        text-align: center;
+    }
+
+    .pictoCloudBig,
+    .pictoCloudSmall {
+        display: none; /* Menyembunyikan awan besar dan kecil di ponsel */
+    }
 }
