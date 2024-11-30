@@ -191,7 +191,7 @@ if ($row = mysqli_fetch_assoc($result)) {
         </div>
 
     <!-- Separate container for the card -->
-    <div class="card-container" style="max-width: 1200px; margin: auto;">
+    <div class="card-container" style="max-width: 1150px; margin: auto;">
         <div class="card" style="margin-top: 20px;">
             <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
                 <h2 class="card-title">Rating</h2>
@@ -201,7 +201,7 @@ if ($row = mysqli_fetch_assoc($result)) {
                         $stars = str_repeat('★', $roundedRating) . str_repeat('☆', 5 - $roundedRating);
                         echo "$stars ($roundedRating/5)";
                     ?></p> 
-                <h2 class="card-title">Deskripsi</h2>
+                <h2 class="card-title">Description</h2>
                 <p class="card-description" style="text-align: left; margin-top: 6px; margin-left: 15px;">
                     <?php echo $description; ?>
                 </p>
@@ -216,14 +216,14 @@ if ($row = mysqli_fetch_assoc($result)) {
         <?php else : ?>
             <div class="row">
                 <!-- Cuaca -->
-                <div class="col-md-4">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title" style="color: black;">Cuaca di <?= htmlspecialchars($row['tourism_name']); ?>:</h5>
-                            <p class="card-text" style="color: black;"><strong>🌡️ Temperatur:</strong> <?= $weather['main']['temp']; ?>°C</p>
-                            <p class="card-text" style="color: black;"><strong>🌥️ Kondisi:</strong> <?= ucfirst($weather['weather'][0]['description']); ?></p>
-                            <p class="card-text" style="color: black;"><strong>💨 Kecepatan Angin:</strong> <?= $weather['wind']['speed']; ?> m/s</p>
-                            <p class="card-text" style="color: black;"><strong>🌧️ Kelembapan:</strong> <?= $weather['main']['humidity']; ?>%</p>
+                            <h5 class="card-title" style="color: black; margin-bottom: 15px;">Weather Prediction in <?= htmlspecialchars($row['tourism_name']); ?>:</h5>
+                            <p class="card-text" style="color: black;"><strong>🌡️ Temperature:</strong> <?= $weather['main']['temp']; ?>°C</p>
+                            <p class="card-text" style="color: black;"><strong>🌥️ Condition:</strong> <?= ucfirst($weather['weather'][0]['description']); ?></p>
+                            <p class="card-text" style="color: black;"><strong>💨 Wind velocity:</strong> <?= $weather['wind']['speed']; ?> m/s</p>
+                            <p class="card-text" style="color: black;"><strong>🌧️ Humidity:</strong> <?= $weather['main']['humidity']; ?>%</p>
                         </div>
                     </div>
                 </div>
