@@ -2127,6 +2127,7 @@ form.sign-in-form {
     box-sizing: border-box;
     text-align: center;
     justify-content: center;
+    margin-bottom: 100px;
 }
 
 .recommended-events h3 {
