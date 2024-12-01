@@ -1,76 +1,78 @@
 <?php
 session_start();
 include('config/conn.php');
-$tourism_id = isset($_GET['tourism_id']) ? (int)$_GET['tourism_id'] : 0;
-$query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $tourism_id";
-$result = $con->query($query);
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+// Get tourism_id from the URL
+$tourism_id = isset($_GET['tourism_id']) ? (int)$_GET['tourism_id'] : 0;
+
+// Fetch tourism details
+$query = "SELECT tourism_name, image_url, map_url, description FROM tourismplaces WHERE tourism_id = $1";
+$result = pg_query_params($con, $query, [$tourism_id]);
+
+if ($result && pg_num_rows($result) > 0) {
+    $row = pg_fetch_assoc($result);
     $tourism_name = $row['tourism_name'];
     $image_url = $row['image_url'];
     $map_url = $row['map_url'];
     $description = $row['description'];
 } else {
     echo "Data tidak ditemukan.";
-    exit; 
+    exit;
 }
 
-// Cek apakah user sudah menyimpan tempat ini dalam database
+// Check if the user has bookmarked this place
 $isBookmarked = false;
+$existing_rating = null;
+
 if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id']; // Pastikan sesi sudah dimulai dan user_id disimpan
-    $tourismId = $tourism_id; // Pastikan ini adalah ID tempat wisata yang sedang dilihat
-    
-    // Query untuk memeriksa apakah data sudah ada di wishlist
-    $wishlist = "SELECT * FROM wishlist WHERE user_id = $userId AND tourism_id = $tourismId";
-    $hasilwishlist = mysqli_query($con, $wishlist);
-    if (mysqli_num_rows($hasilwishlist) > 0) {
+    $userId = $_SESSION['user_id']; // Ensure user_id exists in the session
+
+    // Check if the place is in the wishlist
+    $wishlistQuery = "SELECT 1 FROM wishlist WHERE user_id = $1 AND tourism_id = $2";
+    $wishlistResult = pg_query_params($con, $wishlistQuery, [$userId, $tourism_id]);
+    if ($wishlistResult && pg_num_rows($wishlistResult) > 0) {
         $isBookmarked = true;
     }
-    $sql = "SELECT rating_value FROM ratings WHERE user_id = $userId AND tourism_id = $tourismId";
-    $result = mysqli_query($con, $sql);
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $existing_rating = $row['rating_value'] ?? null;
-    } 
-    
-} else{
-    $existing_rating=null;
+
+    // Fetch the user's existing rating for this place
+    $ratingQuery = "SELECT rating_value FROM ratings WHERE user_id = $1 AND tourism_id = $2";
+    $ratingResult = pg_query_params($con, $ratingQuery, [$userId, $tourism_id]);
+    if ($ratingResult && $ratingRow = pg_fetch_assoc($ratingResult)) {
+        $existing_rating = $ratingRow['rating_value'];
+    }
 }
 
+// Calculate the average rating for the place
+$ratingQuery = "SELECT AVG(rating_value) AS average_rating FROM ratings WHERE tourism_id = $1";
+$ratingResult = pg_query_params($con, $ratingQuery, [$tourism_id]);
 
-$query = "SELECT rating_value FROM ratings WHERE tourism_id = ?";
-$stmt = $con->prepare($query);
-$stmt->bind_param("i", $tourism_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$totalRating = 0;
-$count = 0;
-while ($row = $result->fetch_assoc()) {
-    $totalRating += $row['rating_value'];
-    $count++;
+$averageRating = 0;
+if ($ratingResult && $ratingRow = pg_fetch_assoc($ratingResult)) {
+    $averageRating = round($ratingRow['average_rating'], 1);
 }
-// Hitung rata-rata rating
-$averageRating = $count > 0 ? round($totalRating / $count, 1) : 0;
 
-// Kirim ke JavaScript
+// Pass the average rating to JavaScript
 echo "<script>var averageRating = $averageRating;</script>";
 
-$query = "SELECT tourism_id, tourism_name, map_url FROM tourismplaces WHERE tourism_id = $tourism_id";
-$result = mysqli_query($con, $query);
+// Get weather information if map_url is available
+$longitude = null;
+$latitude = null;
+if ($map_url) {
+    preg_match('/!2d(-?\d+(\.\d+)?)!3d(-?\d+(\.\d+)?)/', $map_url, $matches);
+    if ($matches) {
+        $longitude = $matches[1];
+        $latitude = $matches[3];
 
-if ($row = mysqli_fetch_assoc($result)) {
-    $iframe = $row['map_url'];
-    preg_match('/!2d(-?\d+(\.\d+)?)!3d(-?\d+(\.\d+)?)/', $iframe, $matches);
-    $longitude = $matches[1];
-    $latitude = $matches[3];
-    $apiKey = '57ebcc195051e20431d693d383e76a1e';
-    $weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&appid=$apiKey";
-    $weatherData = file_get_contents($weatherUrl);
-    $weather = json_decode($weatherData, true);
-} else {
-    $error = "Data tidak ditemukan untuk ID = $tourism_id.";
+        // Fetch weather data using OpenWeather API
+        $apiKey = '57ebcc195051e20431d693d383e76a1e';
+        $weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&appid=$apiKey";
+        $weatherData = file_get_contents($weatherUrl);
+        $weather = json_decode($weatherData, true);
+    }
+}
+
+if (!isset($longitude) || !isset($latitude)) {
+    $error = "Could not extract coordinates from map URL.";
 }
 ?>
 
@@ -144,7 +146,7 @@ if ($row = mysqli_fetch_assoc($result)) {
                                 <li class="sub-item">
                                     <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-person-circle material-icons-outlined"></i>
-                                        <p style="margin-left: 8px" >Profile</p>
+                                        <p style="margin-left: 8px">Profile</p>
                                     </a>
                                 </li>
                                 <li class="sub-item">
@@ -173,14 +175,14 @@ if ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </nav>
-    
-    <div class="main-content"> 
+
+    <div class="main-content">
         <h1 class="content-title"><?php echo $tourism_name; ?></h1>
         <button id="bookmarkButton" class="btn btn-outline-primary" data-tourism-id="<?php echo $tourismId; ?>">
             <i class="fa-solid fa-bookmark"></i> <?php echo $isBookmarked ? 'Unsave' : 'Save'; ?>
-        </button>      
+        </button>
         <hr class="content-divider">
-        
+
         <div class="image-map-container" style="display: flex; gap: 20px; margin-bottom: 20px;">
             <div style="flex: 1;">
                 <img src="<?php echo $image_url; ?>" alt="<?php echo $tourism_name; ?>" style="width: 100%; height: 320px; margin-bottom: 20px;">
@@ -190,74 +192,74 @@ if ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
 
-    <!-- Separate container for the card -->
-    <div class="card-container" style="max-width: 1150px; margin: auto;">
-        <div class="card" style="margin-top: 20px;">
-            <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
-                <h2 class="card-title">Rating</h2>
-                <p class="card-rating" id="dynamic-rating">
-                    <?php
+        <!-- Separate container for the card -->
+        <div class="card-container" style="max-width: 1150px; margin: auto;">
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-body" style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <h2 class="card-title">Rating</h2>
+                    <p class="card-rating" id="dynamic-rating">
+                        <?php
                         $roundedRating = floor($averageRating);
                         $stars = str_repeat('★', $roundedRating) . str_repeat('☆', 5 - $roundedRating);
                         echo "$stars ($roundedRating/5)";
-                    ?></p> 
-                <h2 class="card-title">Description</h2>
-                <p class="card-description" style="text-align: left; margin-top: 6px; margin-left: 15px;">
-                    <?php echo $description; ?>
-                </p>
+                        ?></p>
+                    <h2 class="card-title">Description</h2>
+                    <p class="card-description" style="text-align: left; margin-top: 6px; margin-left: 15px;">
+                        <?php echo $description; ?>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- wheater -->
-    <div class="container my-4" style="display: flex; justify-content: center; align-items: center;">        <?php if (isset($error)) : ?>
-            <div class="alert alert-danger text-center"><?= $error; ?></div>
-        <?php else : ?>
-            <div class="widget">
-                <div class="details">
-                <div class="temperature"><?= $weather['main']['temp']; ?>°</div>
-                <div class="summary">
-                    <p class="summaryText"><?= ucfirst($weather['weather'][0]['description']); ?></p>
+        <!-- wheater -->
+        <div class="container my-4" style="display: flex; justify-content: center; align-items: center;"> <?php if (isset($error)) : ?>
+                <div class="alert alert-danger text-center"><?= $error; ?></div>
+            <?php else : ?>
+                <div class="widget">
+                    <div class="details">
+                        <div class="temperature"><?= $weather['main']['temp']; ?>°</div>
+                        <div class="summary">
+                            <p class="summaryText"><?= ucfirst($weather['weather'][0]['description']); ?></p>
+                        </div>
+                        <div class="precipitation">Humidity: <?= $weather['main']['humidity']; ?>%</div>
+                        <div class="wind">Wind: <?= $weather['wind']['speed']; ?> </div>
+                    </div>
+                    <div class="pictoBackdrop"></div>
+                    <div class="pictoFrame"></div>
+                    <div class="pictoCloudBig"></div>
+                    <div class="pictoCloudFill"></div>
+                    <div class="pictoCloudSmall"></div>
+                    <div class="iconCloudBig"></div>
+                    <div class="iconCloudFill"></div>
+                    <div class="iconCloudSmall"></div>
                 </div>
-                <div class="precipitation">Humidity: <?= $weather['main']['humidity']; ?>%</div>
-                <div class="wind">Wind: <?= $weather['wind']['speed']; ?> </div>
-                </div>
-                <div class="pictoBackdrop"></div>
-                <div class="pictoFrame"></div>
-                <div class="pictoCloudBig"></div>
-                <div class="pictoCloudFill"></div>
-                <div class="pictoCloudSmall"></div>
-                <div class="iconCloudBig"></div>
-                <div class="iconCloudFill"></div>
-                <div class="iconCloudSmall"></div>
-            </div>
-        <?php endif; ?>
-    </div>
+            <?php endif; ?>
+        </div>
 
         <div class="wrapper-rating" style="margin-top: 20px;">
             <?php if ($existing_rating): ?>
                 <!-- Jika user sudah memberikan rating -->
                 <p id="message">
                     <?php
-                        $ratingText = "";
-                        switch ($existing_rating) {
-                            case 1:
-                                $ratingText = "Terrible";
-                                break;
-                            case 2:
-                                $ratingText = "Bad";
-                                break;
-                            case 3:
-                                $ratingText = "Good";
-                                break;
-                            case 4:
-                                $ratingText = "Satisfied";
-                                break;
-                            case 5:
-                                $ratingText = "Excellent";
-                                break;
-                        }
-                        echo $ratingText;
+                    $ratingText = "";
+                    switch ($existing_rating) {
+                        case 1:
+                            $ratingText = "Terrible";
+                            break;
+                        case 2:
+                            $ratingText = "Bad";
+                            break;
+                        case 3:
+                            $ratingText = "Good";
+                            break;
+                        case 4:
+                            $ratingText = "Satisfied";
+                            break;
+                        case 5:
+                            $ratingText = "Excellent";
+                            break;
+                    }
+                    echo $ratingText;
                     ?>
                 </p>
                 <div class="container-rating" style="display: flex; gap: 5px;">
@@ -267,7 +269,7 @@ if ($row = mysqli_fetch_assoc($result)) {
                             <span class="number"><?php echo $i; ?></span>
                         </div>
                     <?php endfor; ?>
-                    </div>
+                </div>
             <?php else: ?>
                 <!-- Jika user belum memberikan rating -->
                 <p id="message">Rate Your Experience</p>
@@ -283,10 +285,10 @@ if ($row = mysqli_fetch_assoc($result)) {
             <?php endif; ?>
         </div>
     </div>
-    
+
     <!-- footer -->
     <?php include 'footer.php'; ?>
-    
+
     <script>
         var isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
     </script>

@@ -3,7 +3,7 @@ session_start();
 include('config/conn.php');
 include('php_tools/event_rrs.php');
 
-$keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyword']) : '';
+$keyword = isset($_GET['keyword']) ? pg_escape_string($con, $_GET['keyword']) : '';
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 
 $profilePicture = 'uploads/default_profile_picture.jpg';
@@ -13,8 +13,8 @@ $events_by_month = [];
 
 foreach ($rss_data->channel->item as $item) {
     $date = date_create((string)$item->pubDate);
-    $month = date_format($date, 'F'); 
-    $day = date_format($date, 'd'); 
+    $month = date_format($date, 'F');
+    $day = date_format($date, 'd');
 
     $event_name = (string)$item->title;
 
@@ -27,97 +27,96 @@ foreach ($rss_data->channel->item as $item) {
     ];
 }
 
-
+// Fetch user profile picture if logged in
 if (isset($_SESSION['user_id']) && isset($con)) {
-    $sql = "SELECT profile_picture FROM users WHERE user_id = ?";
-    $stmt = $con->prepare($sql);
+    $sql = "SELECT profile_picture FROM users WHERE user_id = $1";
+    $result = pg_query_params($con, $sql, [$_SESSION['user_id']]);
 
-    if ($stmt) {
-        $stmt->bind_param("i", $_SESSION['user_id']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            $profilePicture = $user['profile_picture'] ?? $profilePicture;
-        }
-        $stmt->close();
+    if ($result && pg_num_rows($result) > 0) {
+        $user = pg_fetch_assoc($result);
+        $profilePicture = $user['profile_picture'] ?? $profilePicture;
     } else {
-        error_log("Error preparing SQL statement: " . $con->error);
+        error_log("Error fetching profile picture: " . pg_last_error($con));
     }
 }
 
+// Fetch posts
 if ($user_id !== NULL) {
-    // Pengguna login
+    // User is logged in
     if ($keyword != '') {
-        $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
-                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
-                LEFT JOIN post_comments pc ON pc.post_id = p.id
-                WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
-                GROUP BY p.id
-                ORDER BY p.created_at DESC";
+        $query = "
+            SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
+                   CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END AS is_liked,
+                   (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                   (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.user_id
+            LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $1
+            WHERE p.content ILIKE $2 OR u.username ILIKE $2
+            GROUP BY p.id, u.username, u.profile_picture, l.id
+            ORDER BY p.created_at DESC";
+        $params = [$user_id, '%' . $keyword . '%'];
         echo "<h6>Result search for : '$keyword'</h6>";
     } else {
-        $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
-                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
-                LEFT JOIN post_comments pc ON pc.post_id = p.id
-                GROUP BY p.id
-                ORDER BY p.created_at DESC";
+        $query = "
+            SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
+                   CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END AS is_liked,
+                   (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                   (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.user_id
+            LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $1
+            GROUP BY p.id, u.username, u.profile_picture, l.id
+            ORDER BY p.created_at DESC";
+        $params = [$user_id];
     }
 } else {
-    // Pengguna tidak login
+    // User is not logged in
     if ($keyword != '') {
-        $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                LEFT JOIN post_likes pl ON pl.post_id = p.id
-                LEFT JOIN post_comments pc ON pc.post_id = p.id
-                WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
-                GROUP BY p.id
-                ORDER BY p.created_at DESC";
-    echo "<h6>Result search for : '$keyword'</h6>";
+        $query = "
+            SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
+                   (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                   (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.user_id
+            WHERE p.content ILIKE $1 OR u.username ILIKE $1
+            GROUP BY p.id, u.username, u.profile_picture
+            ORDER BY p.created_at DESC";
+        $params = ['%' . $keyword . '%'];
+        echo "<h6>Result search for : '$keyword'</h6>";
     } else {
-        $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                FROM posts p
-                JOIN users u ON p.user_id = u.user_id
-                LEFT JOIN post_likes pl ON pl.post_id = p.id
-                LEFT JOIN post_comments pc ON pc.post_id = p.id
-                GROUP BY p.id
-                ORDER BY p.created_at DESC";
+        $query = "
+            SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
+                   (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                   (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.user_id
+            GROUP BY p.id, u.username, u.profile_picture
+            ORDER BY p.created_at DESC";
+        $params = [];
     }
 }
-$result = mysqli_query($con, $query);
 
-function getComments($post_id, $con) {
-    $query = "SELECT c.comment_text, c.created_at, u.username, u.profile_picture 
-            FROM post_comments c
-            JOIN users u ON c.user_id = u.user_id
-            WHERE c.post_id = $post_id
-            ORDER BY c.created_at DESC";
-$result = mysqli_query($con, $query);
+$result = pg_query_params($con, $query, $params);
+
+function getComments($post_id, $con)
+{
+    $query = "
+        SELECT c.comment_text, c.created_at, u.username, u.profile_picture 
+        FROM post_comments c
+        JOIN users u ON c.user_id = u.user_id
+        WHERE c.post_id = $1
+        ORDER BY c.created_at DESC";
+    $result = pg_query_params($con, $query, [$post_id]);
     $comments = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $row['profile_picture'] = !empty($row['profile_picture']) ?$row['profile_picture'] : 'uploads/default_profile_picture.jpg';
+    while ($row = pg_fetch_assoc($result)) {
+        $row['profile_picture'] = !empty($row['profile_picture']) ? $row['profile_picture'] : 'uploads/default_profile_picture.jpg';
         $comments[] = $row;
     }
     return $comments;
 }
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +130,7 @@ $result = mysqli_query($con, $query);
 
     <!-- Icons CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
     <!-- Custom CSS File -->
     <link href="css/community.css" rel="stylesheet">
@@ -144,14 +143,14 @@ $result = mysqli_query($con, $query);
 
 
 <body>
-    <?php include'navbar.php'; ?>
+    <?php include 'navbar.php'; ?>
 
     <div class="content">
         <div class="left-panel">
             <div class="search-container">
                 <form method="GET" action="">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" name="keyword" placeholder="Search posts..." value="<?php if(isset($_GET['keyword'])) echo $_GET['keyword']; ?>">
+                    <input type="text" name="keyword" placeholder="Search posts..." value="<?php if (isset($_GET['keyword'])) echo $_GET['keyword']; ?>">
                 </form>
             </div>
             <a href="index.php#nature-destination" style="text-decoration: none; color: inherit;">
@@ -168,9 +167,9 @@ $result = mysqli_query($con, $query);
 
     <div class="main-content">
         <div class="post-box">
-        <form action="post_submit.php" method="POST" enctype="multipart/form-data">
+            <form action="post_submit.php" method="POST" enctype="multipart/form-data">
                 <div class="post-header">
-                <img alt="Profile Picture" src="<?= $profilePicture; ?>" height="40" width="40" >
+                    <img alt="Profile Picture" src="<?= $profilePicture; ?>" height="40" width="40">
                     <input type="text" name="content" placeholder="What's on your mind?" required>
                 </div>
                 <div class="post-actions" style="margin-top: 20px;">
@@ -184,10 +183,10 @@ $result = mysqli_query($con, $query);
                 </div>
             </form>
         </div>
-            <?php
-            $source_page = 'community'; 
-            include 'post.php'; 
-            ?>
+        <?php
+        $source_page = 'community';
+        include 'post.php';
+        ?>
         <div class="right-panel">
             <div class="event-card">
                 <div class="event-header">
@@ -227,12 +226,13 @@ $result = mysqli_query($con, $query);
             </div>
         </div>
     </div>
-    
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="js/post_action.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
-    
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
 </body>
+
 </html>

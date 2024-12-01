@@ -43,7 +43,7 @@
                             <li class="sub-item">
                                 <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                     <i class="bi bi-person-circle material-icons-outlined"></i>
-                                    <p style="margin-left: 8px" >Profile</p>
+                                    <p style="margin-left: 8px">Profile</p>
                                 </a>
                             </li>
                             <li class="sub-item">

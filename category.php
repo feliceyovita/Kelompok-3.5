@@ -1,16 +1,25 @@
-<?php 
+<?php
 session_start();
 include('config/conn.php');
 $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 1;
 
 // Query untuk mengambil data dari tabel tourismcategories
-$category_query = "SELECT category_name, title_categories, desc_categories, background_image FROM tourismcategories WHERE category_id = ?";
-$stmt = $con->prepare($category_query);
-$stmt->bind_param("i", $category_id);
-$stmt->execute();
-$stmt->bind_result($category_name, $title_categories, $desc_categories, $background_image);
-$stmt->fetch();
-$stmt->close();
+$category_query = "
+    SELECT category_name, title_categories, desc_categories, background_image 
+    FROM tourismcategories 
+    WHERE category_id = $1
+";
+$category_result = pg_query_params($con, $category_query, array($category_id));
+
+if ($category_result && pg_num_rows($category_result) > 0) {
+    $category_data = pg_fetch_assoc($category_result);
+    $category_name = $category_data['category_name'];
+    $title_categories = $category_data['title_categories'];
+    $desc_categories = $category_data['desc_categories'];
+    $background_image = $category_data['background_image'];
+} else {
+    die("Category not found.");
+}
 
 // Query untuk mengambil data kota dan jumlah tour dari tabel cities dan tourismplaces
 $city_query = "
@@ -18,13 +27,14 @@ $city_query = "
     FROM cities c
     LEFT JOIN tourismplaces t ON c.city_id = t.city_id
     LEFT JOIN tourismcategories tc ON t.category_id = tc.category_id
-    WHERE tc.category_id = ?
+    WHERE tc.category_id = $1
     GROUP BY c.city_id, c.city_name
 ";
-$stmt = $con->prepare($city_query);
-$stmt->bind_param("i", $category_id);
-$stmt->execute();
-$stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
+$city_result = pg_query_params($con, $city_query, array($category_id));
+
+if (!$city_result) {
+    die("Error fetching city data: " . pg_last_error($con));
+}
 ?>
 
 <!doctype html>
@@ -95,7 +105,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                                 <li class="sub-item">
                                     <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-person-circle material-icons-outlined"></i>
-                                        <p style="margin-left: 8px" >Profile</p>
+                                        <p style="margin-left: 8px">Profile</p>
                                     </a>
                                 </li>
                                 <li class="sub-item">
@@ -104,22 +114,22 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
                                         <p style="margin-left: 8px;">Bookmark</p>
                                     </a>
                                 </li>
-                                </li>
-                                <li class="sub-item">
-                                    <?php if (isset($_SESSION['user_id'])): ?>
-                                        <a href="php_tools/logout.php" style="text-decoration: none; display: flex; align-items: center;">
-                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                            <p style="margin-left: 8px;">Logout</p>
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
-                                            <i class="bi bi-box-arrow-left material-icons-outlined"></i>
-                                            <p style="margin-left: 8px;">Login</p>
-                                        </a>
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
                         </li>
+                        <li class="sub-item">
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <a href="php_tools/logout.php" style="text-decoration: none; display: flex; align-items: center;">
+                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                    <p style="margin-left: 8px;">Logout</p>
+                                </a>
+                            <?php else: ?>
+                                <a href="login.php" style="text-decoration: none; display: flex; align-items: center;">
+                                    <i class="bi bi-box-arrow-left material-icons-outlined"></i>
+                                    <p style="margin-left: 8px;">Login</p>
+                                </a>
+                            <?php endif; ?>
+                        </li>
+                    </ul>
+                    </li>
                     </ul>
                 </div>
             </div>
@@ -147,13 +157,17 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
 
         <!-- Discover Grid for Cities -->
         <div class="discover__grid">
-            <?php while ($stmt->fetch()): ?>
-                <?php $image_url = $image_url ? $image_url : 'image/default.jpg'; ?>
-                <a href="citycategory.php?city_id=<?php echo $city_id;  ?>&category_id=<?php echo $category_id; ?>&image_url=<?php echo $image_url?>" class="discover__card">
-                    <img src="<?php echo $image_url; ?>" alt="<?php echo $city_name; ?>" class="discover__img">
+            <?php while ($row = pg_fetch_assoc($city_result)): ?>
+                <?php
+                $city_name = htmlspecialchars($row['city_name']);
+                $image_url = $row['image_url'] ? htmlspecialchars($row['image_url']) : 'image/default.jpg';
+                $tour_count = htmlspecialchars($row['tour_count']);
+                ?>
+                <a href="citycategory.php?city_id=<?= $row['city_id']; ?>&category_id=<?= $category_id; ?>&image_url=<?= $image_url; ?>" class="discover__card">
+                    <img src="<?= $image_url; ?>" alt="<?= $city_name; ?>" class="discover__img">
                     <div class="discover__data">
-                        <h2 class="discover__title"><?php echo $city_name; ?></h2>
-                        <span class="discover__description"><?php echo $tour_count; ?> tours available</span>
+                        <h2 class="discover__title"><?= $city_name; ?></h2>
+                        <span class="discover__description"><?= $tour_count; ?> tours available</span>
                     </div>
                 </a>
             <?php endwhile; ?>
@@ -162,7 +176,7 @@ $stmt->bind_result($city_id, $city_name, $image_url, $tour_count);
     </div>
 
     <?php include 'footer.php'; ?>
-    
+
     <script src="js/nature.js"></script>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

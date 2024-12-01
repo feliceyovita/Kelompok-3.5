@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 include('config/conn.php');
 if (!isset($_SESSION['user_id'])) {
@@ -13,10 +13,15 @@ $query = "
     SELECT tp.tourism_id, tp.tourism_name, tp.image_url, tp.description 
     FROM wishlist w
     JOIN tourismplaces tp ON w.tourism_id = tp.tourism_id
-    WHERE w.user_id = $userId
+    WHERE w.user_id = $1
 ";
-$result = mysqli_query($con, $query);
+$result = pg_query_params($con, $query, array($userId));
+
+if (!$result) {
+    die("Error in query execution: " . pg_last_error($con));
+}
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -43,27 +48,27 @@ $result = mysqli_query($con, $query);
     <?php include 'navbar.php'; ?>
 
     <!-- Bookmark Section -->
-    <div class="bookmark-section container" style ="margin-bottom: 40px">
+    <div class="bookmark-section container">
         <h2 class="bookmark-section-title">Bookmark</h2>
-        <?php if (mysqli_num_rows($result) > 0) { ?>
-        <div class="bookmark-section-divider"></div>
-        <div class="row">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="col-md-4">
-                    <div class="bookmark-section-card card">
-                        <img class="bookmark-section-card-img card-img-top" src="<?php echo $row['image_url']; ?>" alt="Destination Image">
-                        <div class="bookmark-section-card-body card-body">
-                            <h5 class="bookmark-section-card-title card-title"><?php echo $row['tourism_name']; ?></h5>
-                            <p class="bookmark-section-card-text card-text">explore so you can share your own experience.</p>
-                            <a href="tourism_place.php?tourism_id=<?php echo $row['tourism_id']; ?>" class="bookmark-section-card-btn btn btn-primary">View Details</a>
+        <?php if (pg_num_rows($result) > 0) { ?>
+            <div class="bookmark-section-divider"></div>
+            <div class="row">
+                <?php while ($row = pg_fetch_assoc($result)) { ?>
+                    <div class="col-md-4">
+                        <div class="bookmark-section-card card">
+                            <img class="bookmark-section-card-img card-img-top" src="<?php echo htmlspecialchars($row['image_url']); ?>" alt="Destination Image">
+                            <div class="bookmark-section-card-body card-body">
+                                <h5 class="bookmark-section-card-title card-title"><?php echo htmlspecialchars($row['tourism_name']); ?></h5>
+                                <p class="bookmark-section-card-text card-text">Explore so you can share your own experience.</p>
+                                <a href="tourism_place.php?tourism_id=<?php echo htmlspecialchars($row['tourism_id']); ?>" class="bookmark-section-card-btn btn btn-primary">View Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
-        </div>
+                <?php } ?>
+            </div>
         <?php } else { ?>
             <div style="text-align: center; font-weight: bold; margin-top: 50px; margin-bottom: 250px;">
-                <p style="color:#6c757d; font-size: 18px;" >You haven't saved anything</p>
+                <p style="color:#6c757d; font-size: 18px;">You haven't saved anything</p>
             </div>
         <?php } ?>
     </div>

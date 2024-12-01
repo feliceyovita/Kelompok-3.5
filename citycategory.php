@@ -7,48 +7,52 @@ $city_id = isset($_GET['city_id']) ? intval($_GET['city_id']) : 0;
 $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
 $image_url = isset($_GET['image_url']) ? $_GET['image_url'] : 0;
 
-
 // Query untuk mengambil informasi kota dari tabel cities
 $city_query = "
     SELECT city_name, description
     FROM cities
-    WHERE city_id = ?
+    WHERE city_id = $1
 ";
-$stmt = $con->prepare($city_query);
-$stmt->bind_param("i", $city_id);
-$stmt->execute();
-$stmt->bind_result($city_name, $city_description);
-$stmt->fetch();
-$stmt->close();
+$city_result = pg_query_params($con, $city_query, array($city_id));
+
+if ($city_result && pg_num_rows($city_result) > 0) {
+    $city_data = pg_fetch_assoc($city_result);
+    $city_name = $city_data['city_name'];
+    $city_description = $city_data['description'];
+} else {
+    $city_name = "Unknown City";
+    $city_description = "No description available.";
+}
 
 // Query untuk mengambil category_name dari tabel tourismcategories
 $category_query = "
     SELECT category_name
     FROM tourismcategories
-    WHERE category_id = ?
+    WHERE category_id = $1
 ";
-$stmt = $con->prepare($category_query);
-$stmt->bind_param("i", $category_id);
-$stmt->execute();
-$stmt->bind_result($category_name);
-$stmt->fetch();
-$stmt->close();
+$category_result = pg_query_params($con, $category_query, array($category_id));
+
+if ($category_result && pg_num_rows($category_result) > 0) {
+    $category_data = pg_fetch_assoc($category_result);
+    $category_name = $category_data['category_name'];
+} else {
+    $category_name = "Unknown Category";
+}
 
 // Query untuk mengambil tourismplaces yang sesuai dengan category_id dan city_id
 $tour_query = "
     SELECT tp.tourism_id, tp.tourism_name, tp.image_url, COALESCE(AVG(r.rating_value), 0) AS average_rating
     FROM tourismplaces tp
     LEFT JOIN ratings r ON tp.tourism_id = r.tourism_id
-    WHERE tp.city_id = ? AND tp.category_id = ?
+    WHERE tp.city_id = $1 AND tp.category_id = $2
     GROUP BY tp.tourism_id, tp.tourism_name, tp.image_url
 ";
-$stmt = $con->prepare($tour_query);
-$stmt->bind_param("ii", $city_id, $category_id);
-$stmt->execute();
-$stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating);
+$tour_result = pg_query_params($con, $tour_query, array($city_id, $category_id));
 
+if (!$tour_result) {
+    die("Error fetching tourism places: " . pg_last_error($con));
+}
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -65,7 +69,7 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating)
 
     <!-- style css -->
     <link rel="stylesheet" href="css/style.css">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -121,7 +125,7 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating)
                                 <li class="sub-item">
                                     <a href="profile.php" class="profile-link" style="text-decoration: none; display: flex; align-items: center;">
                                         <i class="bi bi-person-circle material-icons-outlined"></i>
-                                        <p style="margin-left: 8px" >Profile</p>
+                                        <p style="margin-left: 8px">Profile</p>
                                     </a>
                                 </li>
                                 <li class="sub-item">
@@ -151,7 +155,7 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating)
         </div>
     </nav>
 
-    <div class="main_background"> 
+    <div class="main_background">
         <img src="<?php echo $image_url; ?>" alt="<?php echo $city_name; ?>" class="mainback_img">
         <div class="home__container container" style="align-items: center" ;>
             <div class="home__data">
@@ -169,17 +173,22 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating)
 
         <h3 class="explore-title" id="explore">Explore The <?php echo $category_name; ?> Of <?php echo $city_name; ?></h3>
         <div class="culinary-card">
-            <?php while ($stmt->fetch()): ?>
-                <a href="tourism_place.php?tourism_id=<?php echo $tourism_id; ?>" class="restaurant" style="text-decoration: none;">
-                    <img src="<?php echo $tour_image_url; ?>" class="restaurant-img">
+            <?php while ($tour_row = pg_fetch_assoc($tour_result)): ?>
+                <?php
+                $tourism_name = htmlspecialchars($tour_row['tourism_name']);
+                $tour_image_url = $tour_row['image_url'] ? htmlspecialchars($tour_row['image_url']) : 'image/default.jpg';
+                $tourism_id = htmlspecialchars($tour_row['tourism_id']);
+                $average_rating = round($tour_row['average_rating'], 1);
+                ?>
+                <a href="tourism_place.php?tourism_id=<?= $tourism_id; ?>" class="restaurant" style="text-decoration: none;">
+                    <img src="<?= $tour_image_url; ?>" class="restaurant-img" alt="<?= $tourism_name; ?>">
                     <h3 class="card-title" style="margin-top: 15px; font-size: 1.15rem; padding-left: 15px;">
-                        <?php echo $tourism_name; ?>
+                        <?= $tourism_name; ?>
                     </h3>
                     <p class="card-rating" style="margin-top: 0%; padding-left: 15px;">
                         <?php
-                        $roundedRating = floor($average_rating);
-                        $stars = str_repeat('★', $roundedRating) . str_repeat('☆', 5 - $roundedRating);
-                        echo "$stars ($roundedRating/5)";
+                        $stars = str_repeat('★', floor($average_rating)) . str_repeat('☆', 5 - floor($average_rating));
+                        echo "$stars ($average_rating/5)";
                         ?>
                     </p>
                 </a>
@@ -198,4 +207,4 @@ $stmt->bind_result($tourism_id, $tourism_name, $tour_image_url, $average_rating)
 
 </body>
 
-</html> 
+</html>
