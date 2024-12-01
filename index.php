@@ -333,7 +333,7 @@ if ($category_result->num_rows > 0) {
         <button class="nav-button left" onclick="slideLeft()">
             <i class="bi bi-chevron-left"></i>
         </button>
-        <div class="slider-calendar">
+        <div class="slider-events">
             <?php
             if ($rss_data) {
                 $count = 0;
