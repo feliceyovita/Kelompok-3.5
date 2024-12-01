@@ -1,11 +1,32 @@
 <?php
 session_start();
 include('config/conn.php');
+include('php_tools/event_rrs.php');
 
 $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($con, $_GET['keyword']) : '';
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 
 $profilePicture = 'uploads/default_profile_picture.jpg';
+
+$rss_data->registerXPathNamespace('content', 'http://purl.org/rss/1.0/modules/content/');
+$events_by_month = [];
+
+foreach ($rss_data->channel->item as $item) {
+    $date = date_create((string)$item->pubDate);
+    $month = date_format($date, 'F'); 
+    $day = date_format($date, 'd'); 
+
+    $event_name = (string)$item->title;
+
+    if (!isset($events_by_month[$month])) {
+        $events_by_month[$month] = [];
+    }
+    $events_by_month[$month][] = [
+        'date' => $day,
+        'name' => $event_name,
+    ];
+}
+
 
 if (isset($_SESSION['user_id']) && isset($con)) {
     $sql = "SELECT profile_picture FROM users WHERE user_id = ?";
@@ -29,64 +50,64 @@ if ($user_id !== NULL) {
     // Pengguna login
     if ($keyword != '') {
         $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                  (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
-                  (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                  (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                  FROM posts p
-                  JOIN users u ON p.user_id = u.user_id
-                  LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
-                  LEFT JOIN post_comments pc ON pc.post_id = p.id
-                  WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
-                  GROUP BY p.id
-                  ORDER BY p.created_at DESC";
+                (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
+                LEFT JOIN post_comments pc ON pc.post_id = p.id
+                WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
+                GROUP BY p.id
+                ORDER BY p.created_at DESC";
         echo "<h6>Result search for : '$keyword'</h6>";
     } else {
         $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                  (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
-                  (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                  (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                  FROM posts p
-                  JOIN users u ON p.user_id = u.user_id
-                  LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
-                  LEFT JOIN post_comments pc ON pc.post_id = p.id
-                  GROUP BY p.id
-                  ORDER BY p.created_at DESC";
+                (CASE WHEN l.id IS NOT NULL THEN 1 ELSE 0 END) AS is_liked,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                LEFT JOIN post_likes l ON l.post_id = p.id AND l.user_id = $user_id
+                LEFT JOIN post_comments pc ON pc.post_id = p.id
+                GROUP BY p.id
+                ORDER BY p.created_at DESC";
     }
 } else {
     // Pengguna tidak login
     if ($keyword != '') {
         $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                  (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                  (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                  FROM posts p
-                  JOIN users u ON p.user_id = u.user_id
-                  LEFT JOIN post_likes pl ON pl.post_id = p.id
-                  LEFT JOIN post_comments pc ON pc.post_id = p.id
-                  WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
-                  GROUP BY p.id
-                  ORDER BY p.created_at DESC";
-        echo "<h6>Result search for : '$keyword'</h6>";
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                LEFT JOIN post_likes pl ON pl.post_id = p.id
+                LEFT JOIN post_comments pc ON pc.post_id = p.id
+                WHERE p.content LIKE '%$keyword%' OR u.username LIKE '%$keyword%'
+                GROUP BY p.id
+                ORDER BY p.created_at DESC";
+    echo "<h6>Result search for : '$keyword'</h6>";
     } else {
         $query = "SELECT p.id, p.user_id, p.content, p.image, p.created_at, u.username, u.profile_picture,
-                  (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
-                  (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
-                  FROM posts p
-                  JOIN users u ON p.user_id = u.user_id
-                  LEFT JOIN post_likes pl ON pl.post_id = p.id
-                  LEFT JOIN post_comments pc ON pc.post_id = p.id
-                  GROUP BY p.id
-                  ORDER BY p.created_at DESC";
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) AS like_count,
+                (SELECT COUNT(*) FROM post_comments WHERE post_id = p.id) AS comment_count
+                FROM posts p
+                JOIN users u ON p.user_id = u.user_id
+                LEFT JOIN post_likes pl ON pl.post_id = p.id
+                LEFT JOIN post_comments pc ON pc.post_id = p.id
+                GROUP BY p.id
+                ORDER BY p.created_at DESC";
     }
 }
 $result = mysqli_query($con, $query);
 
 function getComments($post_id, $con) {
     $query = "SELECT c.comment_text, c.created_at, u.username, u.profile_picture 
-              FROM post_comments c
-              JOIN users u ON c.user_id = u.user_id
-              WHERE c.post_id = $post_id
-              ORDER BY c.created_at DESC";
-    $result = mysqli_query($con, $query);
+            FROM post_comments c
+            JOIN users u ON c.user_id = u.user_id
+            WHERE c.post_id = $post_id
+            ORDER BY c.created_at DESC";
+$result = mysqli_query($con, $query);
     $comments = [];
     while ($row = mysqli_fetch_assoc($result)) {
         $row['profile_picture'] = !empty($row['profile_picture']) ?$row['profile_picture'] : 'uploads/default_profile_picture.jpg';
@@ -173,10 +194,36 @@ function getComments($post_id, $con) {
                     <h4><b>Upcoming Events</b></h4>
                     <a href="index.php#Event" class="see-all">See All</a>
                 </div>
-                <img src="image/event.jpg" alt="Lake Toba Festival" />
-                <h4>Lake Toba Festival</h4>
-                <p>22 Nov - 24 Nov 2024</p>
-                <p>Rp498.000</p>
+                <?php
+                if ($rss_data) {
+                    $count = 0;
+                    foreach ($rss_data->channel->item as $item) {
+                        if ($count >= 1) break;
+
+                        $title = $item->title;
+                        $link = $item->link;
+                        $description = strip_tags($item->description);
+                        $pubDate = date("d M Y", strtotime($item->pubDate));
+                        $content_encoded = (string)$item->children('content', true)->encoded;
+                        preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $content_encoded, $matches);
+                        $image_url = isset($matches[1]) ? $matches[1] : 'image/event.jpg';
+
+                        echo '<div class="month-card">';
+                        echo '<div class="month-header">';
+                        echo '<img src="' . htmlspecialchars($image_url) . '" alt="' . htmlspecialchars($title) . '" />';
+                        echo '</div>';
+                        echo '<div class="event-list">';
+                        echo '<h4><a href="' . htmlspecialchars($link) . '" target="_blank">' . htmlspecialchars($title) . '</a></h4>';
+                        echo '<p>' . htmlspecialchars($pubDate) . '</p>';
+                        echo '<p>' . htmlspecialchars($description) . '</p>';
+                        echo '</div></div>';
+
+                        $count++;
+                    }
+                } else {
+                    echo "<p>Tidak ada event yang tersedia saat ini.</p>";
+                }
+                ?>
             </div>
         </div>
     </div>
