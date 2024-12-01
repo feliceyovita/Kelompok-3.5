@@ -43,7 +43,7 @@ $result = mysqli_query($con, $query);
     <?php include 'navbar.php'; ?>
 
     <!-- Bookmark Section -->
-    <div class="bookmark-section container">
+    <div class="bookmark-section container" style ="margin-bottom: 40px">
         <h2 class="bookmark-section-title">Bookmark</h2>
         <?php if (mysqli_num_rows($result) > 0) { ?>
         <div class="bookmark-section-divider"></div>
