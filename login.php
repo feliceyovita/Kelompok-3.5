@@ -32,6 +32,7 @@ if (isset($_POST['signup'])) {
   $username = $_POST['username'];
   $email = $_POST['email'];
   $password = $_POST['password'];
+  $default_profile_picture = 'uploads/default_profile_picture.jpg';
 
   if (empty($username) || empty($email) || empty($password)) {
       $error[] = 'Please fill all columns';
@@ -41,7 +42,7 @@ if (isset($_POST['signup'])) {
           $error[] = 'Username or Email already exist';
       } else {
           $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-          $query = mysqli_query($con, "INSERT INTO users (username, email, password_hash) VALUES ('$username', '$email', '$hashed_password')");
+          $query = mysqli_query($con, "INSERT INTO users (username, email, password_hash, profile_picture) VALUES ('$username', '$email', '$hashed_password', '$default_profile_picture')");
           if ($query) {
               header("Location: login.php");
               exit();
