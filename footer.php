@@ -1,4 +1,4 @@
-<footer class="wikitrip-footer-section" style="margin-top: 80px;">
+<footer class="wikitrip-footer-section">
         <div class="wikitrip-footer-container">
             <div class="wikitrip-footer-column">
                 <a class="navbar-brand logo fw-bold fs-4 d-flex align-items-center" href="#page-top">
