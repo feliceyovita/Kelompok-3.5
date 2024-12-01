@@ -1,12 +1,35 @@
-function showSection(sectionId) {
-    document.getElementById('activities').style.display = 'none';
-    document.getElementById('reviews').style.display = 'none';
+const showPostsButton = document.getElementById('show-posts');
+const showLikesButton = document.getElementById('show-likes');
+const postsSection = document.getElementById('activities');
+const likesSection = document.getElementById('reviews');
 
-    document.getElementById(sectionId).style.display = 'block';
+showPostsButton.addEventListener('click', (event) => {
+    postsSection.style.display = 'block'; // Tampilkan Posts
+    likesSection.style.display = 'none'; // Sembunyikan Likes
+});
 
-    document.querySelectorAll('.profile-nav a').forEach((link) => {
-        link.classList.remove('active');
-    });
+showLikesButton.addEventListener('click', (event) => {
+    postsSection.style.display = 'none'; // Sembunyikan Posts
+    likesSection.style.display = 'block'; // Tampilkan Likes
+});
 
-    document.querySelector(`.profile-nav a[onclick="showSection('${sectionId}')"]`).classList.add('active');
+var modal = document.getElementById("uploadModal");
+var closeBtn = document.getElementsByClassName("close")[0];
+var editIcon = document.getElementById("editProfilePicture");
+var profilePictureElement = document.getElementById("profilePicture");
+
+
+editIcon.addEventListener("click", function(e) {
+    e.preventDefault();
+    modal.style.display = "block";
+});
+
+closeBtn.onclick = function() {
+    modal.style.display = "none";
 }
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+

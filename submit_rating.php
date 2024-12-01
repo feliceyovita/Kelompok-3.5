@@ -11,41 +11,38 @@ $userId = $_SESSION['user_id'];
 $tourismId = $_POST['tourism_id'];
 $ratingValue = $_POST['rating'];
 
-// Cek validitas input
+// Validate input
 if (empty($tourismId) || empty($ratingValue) || $ratingValue < 1 || $ratingValue > 5) {
     echo 'invalid_input';
     exit();
 }
 
-// Masukkan rating ke database
-$sql = "INSERT INTO ratings (user_id, tourism_id, rating_value, time) VALUES ('$userId', '$tourismId', '$ratingValue', NOW())
-        ON DUPLICATE KEY UPDATE rating_value='$ratingValue', time=NOW()";
+// Insert or update rating in the database
+$sql = "
+    INSERT INTO ratings (user_id, tourism_id, rating_value, time)
+    VALUES ($1, $2, $3, NOW())
+    ON CONFLICT (user_id, tourism_id)
+    DO UPDATE SET rating_value = $3, time = NOW()
+";
+$result = pg_query_params($con, $sql, [$userId, $tourismId, $ratingValue]);
 
-if ($con->query($sql) === TRUE) {
+if ($result) {
     echo 'success';
 } else {
-    echo 'error: ' . $con->error;
+    echo 'error: ' . pg_last_error($con);
+    exit();
 }
 
-$query = "SELECT rating_value FROM ratings WHERE tourism_id = ?";
-$stmt = $con->prepare($query);
-$stmt->bind_param("i", $tourism_id);
-$stmt->execute();
-$result = $stmt->get_result();
+// Calculate the average rating
+$query = "SELECT AVG(rating_value) AS average_rating FROM ratings WHERE tourism_id = $1";
+$result = pg_query_params($con, $query, [$tourismId]);
 
-$totalRating = 0;
-$count = 0;
-
-while ($row = $result->fetch_assoc()) {
-    $totalRating += $row['rating_value'];
-    $count++;
+if ($result) {
+    $row = pg_fetch_assoc($result);
+    $averageRating = round($row['average_rating'], 1);
+    // Return the new average as response
+    echo $averageRating;
+} else {
+    echo 'error: ' . pg_last_error($con);
+    exit();
 }
-
-// Hitung rata-rata rating
-$averageRating = $count > 0 ? round($totalRating / $count, 1) : 0;
-
-// Kembalikan rata-rata baru sebagai respons
-echo $averageRating;
-
-$con->close();
-?>

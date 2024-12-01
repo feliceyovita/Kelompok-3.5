@@ -13,19 +13,19 @@ $action = $_POST['action'];
 
 if ($action === 'save') {
     // Simpan data ke wishlist
-    $query = "INSERT INTO wishlist (user_id, tourism_id) VALUES ($userId, $tourismId)";
-    if (mysqli_query($con, $query)) {
+    $query = "INSERT INTO wishlist (user_id, tourism_id) VALUES ($1, $2)";
+    $result = pg_query_params($con, $query, array($userId, $tourismId));
+    if ($result) {
         echo 'saved';
     } else {
         echo 'error';
     }
 } elseif ($action === 'unsave') {
-    // Hapus data dari wishlist
-    $query = "DELETE FROM wishlist WHERE user_id = $userId AND tourism_id = $tourismId";
-    if (mysqli_query($con, $query)) {
+    $query = "DELETE FROM wishlist WHERE user_id = $1 AND tourism_id = $2";
+    $result = pg_query_params($con, $query, array($userId, $tourismId));
+    if ($result) {
         echo 'unsaved';
     } else {
         echo 'error';
     }
 }
-?>
