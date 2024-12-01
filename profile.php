@@ -131,12 +131,34 @@ function getComments($post_id, $con) {
         <div class="profile-info">
             <div class="profile-picture-container">
                 <img alt="Profile Picture" src="<?= $profilePicture; ?>" width="80" class="profile-picture"/>
-                <a href="#" class="edit-icon" onclick="document.getElementById('uploadModal').style.display='block'; return false;">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
-                <a href="delete_picture.php?user_id=<?= $user_id; ?>" class="delete-icon" onclick="return confirm('Are you sure you want to delete your profile picture?');">
-                    <i class="fas fa-trash-alt"></i>
-                </a>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $user_id): ?>
+                    <a href="delete_picture.php?user_id=<?= $user_id; ?>" class="delete-icon" onclick="return confirm('Are you sure you want to delete your profile picture?');">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    <a href="#" class="edit-icon" onclick="document.getElementById('uploadModal').style.display='block'; return false;">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <div class="delete-account">
+                        <!-- Tombol Delete Account -->
+                        <a href="#" onclick="document.getElementById('confirmDelete').style.display='block';" 
+                        style="font-size: 10px; color: red; text-decoration: none;">
+                            Delete Account
+                        </a>
+                    </div>
+
+                    <!-- Modal (Pop-up) untuk konfirmasi password -->
+                    <div id="confirmDelete" class="modal" style="display:none;">
+                        <div class="modal-content">
+                            <span class="close" onclick="document.getElementById('confirmDelete').style.display='none';">&times;</span>
+                            <h3>Delete Account</h3>
+                            <p>To delete your account, please enter your password for confirmation:</p>
+                            <form action="delete_account.php" method="POST">
+                                <input type="password" name="password" required placeholder="Enter your password" />
+                                <button type="submit" name="confirm_delete">Confirm Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <div id="uploadModal" class="modal" style="display: none;">
                 <div class="modal-content">
