@@ -372,6 +372,7 @@ li {
     width: 110%;
     border-radius: 10px;
     margin-left: -27px;
+    max-height: 500px;
 }
 
 .event-card img {
@@ -381,9 +382,10 @@ li {
 }
 
 .event-card h4 {
-    font-size: 16px;
+    font-size: 14px;
     color: #1c98ed;
-    margin: 10px 0;
+    margin: 7px 0;
+    text-decoration: none;
 }
 
 .see-all {
@@ -398,7 +400,7 @@ li {
 }
 
 .event-card p {
-    font-size: 14px;
+    font-size: 12px;
     color: #474545;
     margin: 5px 0;
 }
